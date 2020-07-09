@@ -158,8 +158,8 @@ var View = {
         var color, nodeStyle = this.nodeStyle;
         switch (attr) {
         case 'walkable':
-            if(value){color = nodeStyle.blocked.fill;}
-            else if(!this.isHillAt){color = nodeStyle.hill.fill;}
+            if(!value){color = nodeStyle.blocked.fill;}
+            // else if(this.isHillAt){color = nodeStyle.hill.fill;}
             else{color = nodeStyle.normal.fill}
             // color = value ? nodeStyle.normal.fill : nodeStyle.blocked.fill;
             this.setHillAt(gridX, gridY, false);
@@ -167,7 +167,7 @@ var View = {
             break;
         case 'hill':
             if(value){color = nodeStyle.hill.fill;}
-            else if(!this.isWalkableAt){color = nodeStyle.blocked.fill;}
+            // else if(!this.isWalkableAt){color = nodeStyle.blocked.fill;}
             else{color = nodeStyle.normal.fill}
             // color = value ? nodeStyle.normal.fill : nodeStyle.hill.fill;
             this.setWalkableAt(gridX, gridY, true);

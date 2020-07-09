@@ -27,9 +27,6 @@ AstarSearch.prototype.minFscore = function(openList,cellDetails){
             minF=cellDetails[openList[i].x][openList[i].y].f
             index=i
         }//  if f value is same then choose wrt h value
-        else if(cellDetails[openList[i].x][openList[i].y].f = minF){
-                if(cellDetails[openList[i].x][openList[i].y].g < cellDetails[openList[index].x][openList[index].y].g){index=i}
-        }
     }//end for
     return index
 }//end function
@@ -53,6 +50,7 @@ AstarSearch.prototype.successor = function(cellDetails, cell, parentNode, endNod
     // If the cell isn't in the oprn list or if it there and we have f cost less that the previous one then update it
         if(cellDetails[cell.x][cell.y].f == Number.MAX_VALUE || cellDetails[cell.x][cell.y].f > fnew){
             openList.push(cell);
+            cell.opened = true;
             cellDetails[cell.x][cell.y].f = fnew;
             cellDetails[cell.x][cell.y].g = gnew;
             cellDetails[cell.x][cell.y].h = hnew;
@@ -103,14 +101,15 @@ AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
 
 // // TODO: check if same node is being pushed (can it be pushed?)
     openList.push(sourceNode);
+    sourceNode.opened = true;
 
     while(openList.length != 0){
         index=this.minFscore(openList, cellDetails)
         cell=openList[index]
-        cell.opened;
+
         if(index>-1){openList.splice(index, 1)}
         closedList[cell.x][cell.y] = true;
-
+        cell.closed = true;
         //get neighbours
         [neighbours,weights] = grid.getNeighbours(cell)
         // console.log(neighbours, weights)
@@ -119,10 +118,12 @@ AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
             if(foundDest){break}
         }// end for loop
             if(foundDest){break}
+            console.log(openList)
     } //end while loop
 
      if (foundDest == 0) {return 'not found'}
      else{
+         // console.log(closedList)
          // console.log(cellDetails)
          return Util.backtrace(cellDetails, endNode)}
  };

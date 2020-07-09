@@ -3,21 +3,27 @@ var Grid = require('../core/Grid.js')
 var A_star = require('./A_star.js')
 var Distance = require('./distance.js')
 var astar = new A_star(Distance.euclidean);
-
-// var Dijkstra = require('../finder/Dijkstra.js')
-// var dj = new Dijkstra();
 //
-// var BFS = require('../finder/BreadthFirstSearch.js')
-// var bf = new BFS();
-
+// // var Dijkstra = require('../finder/Dijkstra.js')
+// // var dj = new Dijkstra();
+// //
+// // var BFS = require('../finder/BreadthFirstSearch.js')
+// // var bf = new BFS();
 //
-var grid = new Grid(5,5);
-var startX = 0;
-var  startY = 0;
-var endX = 0;
-var endY = 4;
-var nodeA=new Node(0,1);
-nodeA.hill = true
+// //
+var grid = new Grid(10,10);
+var startX = 5;
+var  startY = 5;
+var endX = 5;
+var endY = 9;
+grid.setHillAt(5,6, true)
+// grid.setHillAt(1,0, true)
+// nodeA.hill = true
+// console.log(nodeA)
+// var start=new Node(0,0);
+// [n,w]=grid.getNeighbours(start);
+// console.log(n,w)
+// console.log(grid.isterrain(0,1,start))
 // var block=[[3,1],[3,0],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7],[3,8],[6,9],[6,8],[7,6],[7,7],[7,8]];
 // var block=[[2,4],[2,3],[2,2],[4,2]];
 // var terrain = [];

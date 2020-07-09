@@ -1,0 +1,58 @@
+{
+  "name": "pf_mars",
+  "version": "1.0.0",
+  "description": "Earth is no safe place to live. Lets build tools to hover at mars.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server --mode development",
+    "build": "webpack --mode development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Meeta14/pf_mars.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Meeta14/pf_mars/issues"
+  },
+  "homepage": "https://github.com/Meeta14/pf_mars#readme",
+  "devDependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "clean-webpack-plugin": "^2.0.1",
+    "css-loader": "^3.6.0",
+    "file-loader": "^6.0.0",
+    "html-webpack-plugin": "^4.3.0",
+    "jquery": "^3.5.1",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
+    "colors": "^1.0.3",
+    "del": "^0.1.3",
+    "gulp": "^3.8.10",
+    "gulp-browserify": "^0.5.0",
+    "gulp-concat": "^2.4.1",
+    "gulp-jshint": "^1.9.0",
+    "gulp-mocha": "^2.0.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglify": "^1.0.1",
+    "inquirer": "^0.8.0",
+    "jshint-stylish": "^1.0.0",
+    "jsonfile": "^2.0.0",
+    "mocha": "2.0.x",
+    "semver": "^4.2.0",
+    "shelljs": "^0.3.0",
+    "should": "4.3.x"
+  },
+  "dependencies": {
+    "jquery-ui": "^1.12.1",
+    "nodemon": "^2.0.4",
+    "raphael": "^2.3.0",
+    "heap": "0.2.5"
+  }
+}

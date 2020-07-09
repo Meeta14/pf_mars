@@ -113,7 +113,6 @@ AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
 
         //get neighbours
         [neighbours,weights] = grid.getNeighbours(cell)
-        console.log(weights)
         for (var i = 0; i < weights.length; i++) {
             foundDest = this.successor(cellDetails, neighbours[i], cell, endNode, weights[i], closedList, grid, openList)
             if(foundDest){break}

@@ -28,7 +28,7 @@ AstarSearch.prototype.minFscore = function(openList,cellDetails){
             index=i
         }//  if f value is same then choose wrt h value
         else if(cellDetails[openList[i].x][openList[i].y].f = minF){
-                if(cellDetails[openList[i].x][openList[i].y].h < cellDetails[openList[index].x][openList[index].y].h){index=i}
+                if(cellDetails[openList[i].x][openList[i].y].g < cellDetails[openList[index].x][openList[index].y].g){index=i}
         }
     }//end for
     return index
@@ -113,6 +113,7 @@ AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
 
         //get neighbours
         [neighbours,weights] = grid.getNeighbours(cell)
+        // console.log(neighbours, weights)
         for (var i = 0; i < weights.length; i++) {
             foundDest = this.successor(cellDetails, neighbours[i], cell, endNode, weights[i], closedList, grid, openList)
             if(foundDest){break}

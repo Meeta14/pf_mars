@@ -113,6 +113,7 @@ Grid.prototype.getNeighbours=function(node){
 };
 
 Grid.prototype.isWalkableAt = function(x, y) {
+	console.log('a')
     return this.isInside(x, y) && this.nodes[y][x].walkable;
 };
 
@@ -125,6 +126,7 @@ Grid.prototype.setWalkableAt = function(x, y, walkable) {
 };
 
 Grid.prototype.setHillAt = function(x, y, hill) {
+	console.log(x,y)
     this.nodes[y][x].hill = hill;
 };
 

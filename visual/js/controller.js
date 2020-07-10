@@ -234,7 +234,26 @@ $.extend(Controller, {
             text: 'Clear Walls',
             enabled: true,
             callback: $.proxy(this.reset, this),
-        });
+        },
+        {
+            id: 4,
+            text: 'obstacles',
+            enabled: true,
+            callback: $.proxy(this.drawWall, this),
+        },
+        {
+            id: 5,
+            text: 'Hill',
+            enabled: true,
+            callback: $.proxy(this.drawHill, this),
+        },
+        // {
+        //     id: 6,
+        //     text: 'Valley',
+        //     enabled: true,
+        //     callback: $.proxy(this.reset, this),
+        // }
+    );
         // => [starting, draggingStart, draggingEnd, drawingStart, drawingEnd]
     },
     onstarting: function(event, from, to) {
@@ -489,11 +508,7 @@ $.extend(Controller, {
             }
         });
     },
-    /**
-     * When initializing, this method will be called to set the positions
-     * of start node and end node.
-     * It will detect user's display size, and compute the best positions.
-     */
+
     setDefaultStartEndPos: function() {
         var width, height,
             marginRight, availWidth,

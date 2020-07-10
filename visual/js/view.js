@@ -162,7 +162,7 @@ var View = {
             // else if(this.isHillAt){color = nodeStyle.hill.fill;}
             else{color = nodeStyle.normal.fill}
             // color = value ? nodeStyle.normal.fill : nodeStyle.blocked.fill;
-            this.setHillAt(gridX, gridY, false);
+            // this.setHillAt(gridX, gridY, false);
             this.setWalkableAt(gridX, gridY, value);
             break;
         case 'hill':
@@ -170,7 +170,7 @@ var View = {
             // else if(!this.isWalkableAt){color = nodeStyle.blocked.fill;}
             else{color = nodeStyle.normal.fill}
             // color = value ? nodeStyle.normal.fill : nodeStyle.hill.fill;
-            this.setWalkableAt(gridX, gridY, true);
+            // this.setWalkableAt(gridX, gridY, true);
             this.setHillAt(gridX, gridY, value); //check name
             break;
         // case 'valley':
@@ -190,10 +190,10 @@ var View = {
             this.colorizeNode(this.rects[gridY][gridX], color);
             this.setCoordDirty(gridX, gridY, true);
             break;
-        case 'parent':
-            // XXX: Maybe draw a line from this node to its parent?
-            // This would be expensive.
-            break;
+        // case 'parent':
+        //     // XXX: Maybe draw a line from this node to its parent?
+        //     // This would be expensive.
+        //     break;
         default:
             console.error('unsupported operation: ' + attr + ':' + value);
             return;

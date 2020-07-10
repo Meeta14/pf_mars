@@ -56,9 +56,9 @@
             <input type="radio" name="astar_heuristic" value="euclidean"/>
             <label class="option_label">Euclidean</label> <br>
             <!-- <input type="radio" name="astar_heuristic" value="octile"/>
-            <label class="option_label">Octile</label> <br>
-            <input type="radio" name="astar_heuristic" value="chebyshev"/>
-            <label class="option_label">Chebyshev</label> <br> -->
+            <label class="option_label">Octile</label> <br> -->
+            <input type="radio" name="astar_heuristic" value="diagonal"/>
+            <label class="option_label">Diagonal</label> <br>
           </div>
 
           <header class="option_header">
@@ -108,7 +108,7 @@
           </div>
         </div> -->
 
-        <!-- <h3 id="breadthfirst_header"><a href="#">Breadth-First-Search</a></h3>
+        <h3 id="breadthfirst_header"><a href="#">Breadth-First-Search</a></h3>
         <div id="breadthfirst_section" class="finder_section">
           <header class="option_header">
             <h3>Options</h3>
@@ -116,13 +116,13 @@
           <div class="optional sub_options">
             <input type="checkbox" class="allow_diagonal" checked>
             <label class="option_label">Allow Diagonal</label> <br>
-            <input type="checkbox" class="bi-directional">
-            <label class="option_label">Bi-directional</label> <br>
-            <input type="checkbox" class="dont_cross_corners">
-            <label class="option_label">Don't Cross Corners</label> <br>
+            <!-- <input type="checkbox" class="bi-directional">
+            <label class="option_label">Bi-directional</label> <br> -->
+            <!-- <input type="checkbox" class="dont_cross_corners">
+            <label class="option_label">Don't Cross Corners</label> <br> -->
           </div>
-        </div> -->
-<!--
+        </div>
+
         <h3 id="bestfirst_header"><a href="#">Best-First-Search</a></h3>
         <div id="bestfirst_section" class="finder_section">
           <header class="option_header">
@@ -131,12 +131,12 @@
           <div id="bestfirst_heuristic" class="sub_options">
             <input type="radio" name="bestfirst_heuristic" value="manhattan" checked />
             <label class="option_label">Manhattan</label> <br>
-            <input type="radio" name="bestfirst_heuristic" value="euclidean"/>
+            <!-- <input type="radio" name="bestfirst_heuristic" value="euclidean"/>
             <label class="option_label">Euclidean</label> <br>
             <input type="radio" name="bestfirst_heuristic" value="octile"/>
             <label class="option_label">Octile</label> <br>
             <input type="radio" name="bestfirst_heuristic" value="chebyshev"/>
-            <label class="option_label">Chebyshev</label> <br>
+            <label class="option_label">Chebyshev</label> <br> -->
           </div>
 
           <header class="option_header">
@@ -145,10 +145,10 @@
           <div class="optional sub_options">
             <input type="checkbox" class="allow_diagonal" checked>
             <label class="option_label">Allow Diagonal</label> <br>
-            <input type="checkbox" class="bi-directional">
+            <!-- <input type="checkbox" class="bi-directional">
             <label class="option_label">Bi-directional</label> <br>
             <input type="checkbox" class="dont_cross_corners">
-            <label class="option_label">Don't Cross Corners</label> <br>
+            <label class="option_label">Don't Cross Corners</label> <br> -->
           </div>
         </div>
 
@@ -160,14 +160,14 @@
           <div class="optional sub_options">
             <input type="checkbox" class="allow_diagonal" checked>
             <label class="option_label">Allow Diagonal</label> <br>
-            <input type="checkbox" class="bi-directional">
+            <!-- <input type="checkbox" class="bi-directional">
             <label class="option_label">Bi-directional</label> <br>
             <input type="checkbox" class="dont_cross_corners">
-            <label class="option_label">Don't Cross Corners</label> <br>
+            <label class="option_label">Don't Cross Corners</label> <br> -->
           </div>
         </div>
 
-        <h3 id="jump_point_header"><a href="#">Jump Point Search</a></h3>
+        <!-- <h3 id="jump_point_header"><a href="#">Jump Point Search</a></h3>
         <div id="jump_point_section" class="finder_section">
           <header class="option_header">
             <h3>Heuristic</h3>
@@ -209,6 +209,7 @@
           <header class="option_header">
             <h3>Options</h3>
           </header>
+
           <div class="optional sub_options">
             <input type="checkbox" class="track_recursion" checked>
             <label class="option_label">Visualize recursion</label> <br>
@@ -219,10 +220,22 @@
     </div><!-- #algorithm_panel -->
 
     <div id="play_panel" class="panel right_panel">
+      <div id="play_new">
       <button id="button1" class="control_button">Start Search</button>
       <button id="button2" class="control_button">Pause Search</button>
       <button id="button3" class="control_button">Clear Walls</button>
     </div>
+      <div id="play_new">
+      <button id="button4" class="control_button">Obstacle</button>
+      <button id="button5" class="control_button">Hill</button>
+      <button id="button6" class="control_button">Valley</button>
+    </div>
+    </div>
+    <!-- <div id="block_panel" class="panel right_panel">
+      <button id="button4" class="control_button">Obstacle</button>
+      <button id="button5" class="control_button">Hill</button>
+      <button id="button6" class="control_button">Valley</button>
+    </div> -->
 
     <div id="stats"></div>
 

@@ -7,7 +7,7 @@ var pathfinding = {
     // 'Heuristic'                 : require('./core/Heuristic'),
     'Distance'                  : require('./finders/distance'),
     'AstarSearch'               : require('./finders/A_star'),
-    // 'BestFirstFinder'           : require('./finders/BestFirstFinder'),
+    'BestFirstFinder'           : require('./finders/BestFirstSearch'),
     // 'BreadthFS'                 : require('./finders/BreadthFirstSearch'),
     // 'DijkstraFinder'            : require('./finders/DijkstraFinder'),
     // 'BiAStarFinder'             : require('./finders/BiAStarFinder'),

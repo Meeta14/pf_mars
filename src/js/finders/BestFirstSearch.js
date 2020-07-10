@@ -1,6 +1,6 @@
 var PriorityQueue=require('./PQ.js')
 var Distance = require('./distance.js')
-var Util     = require('../core/util.js')
+var Util     = require('../core/Util.js')
 
 class CellAttributes {
     constructor(f, node){

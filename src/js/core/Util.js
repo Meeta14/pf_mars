@@ -1,22 +1,22 @@
 
-//function to return path from the end node
-// function backtrace(cellDetails,node){
-// 	var path=[[node.x,node.y]];
-// 	x=node.x;
-// 	y=node.y;
-// 	while(!( cellDetails[x][y].parent_i == x && cellDetails[x][y].parent_j==y )){
-// 		tempx=cellDetails[x][y].parent_i;
-// 		tempy=cellDetails[x][y].parent_j;
-// 		x=tempx
-// 		y=tempy
-// 		path.push([x,y])
-//
-// 	}
-// 	// console.log('path', path)
-// 	return path.reverse();
-// }
+// function to return path from the end node
+function backtrace2(cellDetails,node){
+	var path=[[node.x,node.y]];
+	x=node.x;
+	y=node.y;
+	while(!( cellDetails[x][y].parent_i == x && cellDetails[x][y].parent_j==y )){
+		tempx=cellDetails[x][y].parent_i;
+		tempy=cellDetails[x][y].parent_j;
+		x=tempx
+		y=tempy
+		path.push([x,y])
 
-exports.backtrace=backtrace;
+	}
+	// console.log('path', path)
+	return path.reverse();
+}
+
+exports.backtrace2=backtrace2;
 
 function pathLength(path) {
 // change // TODO: add terrain path

@@ -36,8 +36,8 @@ BestFirstSearch.prototype.findPath= function(startX, startY, endX, endY, grid){
     // 2d array that holds details of cell
     let cellDetails = [];
 
-    for(let i = 0; i < values[0]; i++) {
-        for (let j = 0; j < values[1]; j++){
+    for(let i = 0; i < values[1]; i++) {
+        for (let j = 0; j < values[0]; j++){
             cellDetails[i] = [...(cellDetails[i] ? cellDetails[i] : []),
                 new CellAttributes(Number.MAX_VALUE , -1, -1)
         ];

@@ -3,15 +3,14 @@ var Util     = require('../core/Util.js')
 // var Node = require('../core/Node.js');
 
 class CellAttributes {
-    constructor(f, node){
+    constructor(f, i, j){
       this.f = f;
-      this.parent=node;
+      this.parent_i=i;
+			this.parent_j=j;
     }
 }
 
-function Dijkstra(obj){
-
-}
+function Dijkstra(obj){}
 
 Dijkstra.prototype.findPath= function(startX, startY, endX, endY, grid){
 
@@ -25,15 +24,23 @@ Dijkstra.prototype.findPath= function(startX, startY, endX, endY, grid){
     // check if source and destination is same
     if(sourceNode.x == endNode.x && sourceNode.y == endNode.y){return [];}
 
-    var values = grid.dimention();
+    var values =  grid.dimention();
     //declaring openlist as priority queue(it is ordered according to f value)
-    var openList = new PriorityQueue(comparator = (nodeA, nodeB) => cellDetails[nodeA.x][nodeA.y].f < cellDetails[nodeB.x][nodeB.y].f);
+    var openList = [];// new PriorityQueue(comparator = (nodeA, nodeB) => cellDetails[nodeA.x][nodeA.y].f < cellDetails[nodeB.x][nodeB.y].f);
 
+		closedList=[];
+    var i,j;
+    for(i=0;i<values[0];++i){
+      closedList.push([]);
+      for(j=0;j<values[1];++j){
+        closedList[i].push(false);
+      }
+    }
     // 2d array that holds details of cell
     let cellDetails = [];
 
-    for(let i = 0; i < values[0]; i++) {
-        for (let j = 0; j < values[1]; j++){
+    for(let i = 0; i < values[1]; i++) {
+        for (let j = 0; j < values[0]; j++){
             cellDetails[i] = [...(cellDetails[i] ? cellDetails[i] : []),
                 new CellAttributes(Number.MAX_VALUE , -1, -1)
         ];
@@ -41,44 +48,69 @@ Dijkstra.prototype.findPath= function(startX, startY, endX, endY, grid){
   }
     // parameters of starting node
     cellDetails[sourceNode.x][sourceNode.y].f = 0.0;
-    cellDetails[sourceNode.x][sourceNode.y].parent = sourceNode;
+		cellDetails[sourceNode.x][sourceNode.y].parent_i = sourceNode.x;
+    cellDetails[sourceNode.x][sourceNode.y].parent_j = sourceNode.y;
 
     openList.push(sourceNode);
     sourceNode.opened=true;
 
     var foundDest = false; //flag variable to check if destination has been found
 
-		while(openList.size() != 0){
-	    	cell=openList.pop()
-	    	var min=Number.MAX_VALUE;
+		while(openList.length!= 0){
 
-	        if(cell.x == endNode.x && cell.y == endNode.y){
-	        	foundDest=true;
-	        	break;
-	        }
-	        else{
-	          cell.opened=false;
-		        cell.closed = true;
-		        //get neighbours
-		        [neighbours,weights] = grid.getNeighbours(cell)  //neighbours
-		        var i;
-		        for(i=0;i<neighbours.length;++i){
-		        	newg=cellDetails[cell.x][cell.y].f+weights[i]
-		        	cellDetails[neighbours[i].x][neighbours[i].y].g=Math.min(newg,cellDetails[neighbours[i].x][neighbours[i].y].g);
-
-		        }
-		        neighbours.forEach(function(node){
-							if(!node.closed){
-								openList.push(node);
-								node.opened=true;
-								cellDetails[node.x][node.y].parent=cell;
-							}});
-		    }
-
-	    } //end while loop
+	    	cell=openList[0]
+				openList.splice(0, 1)
+				closedList[cell.x][cell.y] = true;
+				cell.closed = true;
+	    	// var min=Number.MAX_VALUE;
+				[neighbours,weights] = grid.getNeighbours(cell)
+				// console.log(neighbours, weights)
+				for (var i = 0; i < weights.length; i++) {
+					// console.log('f', closedList[cell.x][cell.y] == false)
+						if(neighbours[i].x == endNode.x && neighbours[i].y == endNode.y){
+							cellDetails[neighbours[i].x][neighbours[i].y].parent_i = cell.x;
+							cellDetails[neighbours[i].x][neighbours[i].y].parent_j = cell.y;
+							foundDest=true;
+							break;
+						}
+						else if(closedList[neighbours[i].x][neighbours[i].y] == false){
+									fnew = cellDetails[cell.x][cell.y].f + weights;
+									if(cellDetails[neighbours[i].x][neighbours[i].y].f == Number.MAX_VALUE || cellDetails[neighbours[i].x][neighbours[i].y].f > fnew){
+							            openList.push(neighbours[i]);
+							            neighbours[i].opened = true;
+							            cellDetails[neighbours[i].x][neighbours[i].y].f = fnew;
+							            cellDetails[neighbours[i].x][neighbours[i].y].parent_i = cell.x;
+							            cellDetails[neighbours[i].x][neighbours[i].y].parent_j = cell.y;
+							            }
+							        }
+						}//end for loop
+						console.log(openList)
+						if(foundDest){break};
+	        } //end while loop
+	    //     else{
+			// 			closedList[cell.x][cell.y] = true;
+		  //       cell.closed = true;
+		  //       //get neighbours
+		  //         //neighbours
+		  //       var i;
+		  //       for(i=0;i<neighbours.length;++i){
+			//
+		  //       	newf=cellDetails[cell.x][cell.y].f+weights[i]
+		  //       	cellDetails[neighbours[i].x][neighbours[i].y].f=Math.min(newf,cellDetails[neighbours[i].x][neighbours[i].y].f);
+			//
+		  //       }
+		  //       neighbours.forEach(function(node){
+			// 				if(!node.closed){
+			// 					openList.push(node);
+			// 					node.opened=true;
+			// 					cellDetails[node.x][node.y].parent=cell;
+			// 				}});
+		  //   }
+			//
+	    // } //end while loop
 
      if (foundDest == 0) {return 'not found'}
-     else{return Util.backtrace(cellDetails, endNode)}
+     else{return Util.backtrace2(cellDetails, endNode)}
  }
 
 module.exports=Dijkstra;

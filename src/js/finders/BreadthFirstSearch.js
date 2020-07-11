@@ -36,14 +36,14 @@ BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
    // 2d array that holds details of cell i.e parents of cell
    let cellDetails = [];
 
-   for(let i = 0; i < values[0]; i++) {
-      for (let j = 0; j < values[1]; j++){
+   for(let i = 0; i < values[1]; i++) {
+      for (let j = 0; j < values[0]; j++){
            cellDetails[i] = [...(cellDetails[i] ? cellDetails[i] : []),
                new CellAttributes(-1)
       ];
      }
  }
- console.log(cellDetails)
+ // console.log(cellDetails)
     // parameters of starting node
    cellDetails[sourceNode.x][sourceNode.y].parent = sourceNode;
 
@@ -68,11 +68,11 @@ BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
                foundDest = true;
             }
             // if it is not blocked(get neighbour func takes care of it) and not visited yet
-            else if(neighbours[i].closed !=  true && grid.isInside(endX, endY)){
+            else if(neighbours[i].closed !=  true){
                openList.push(neighbours[i]);
                // closedList[neighbours[i].x][neighbours[i].y] = true;
                neighbours[i].opened = true;
-               console.log(cell)
+               // console.log(cell)
                cellDetails[neighbours[i].x][neighbours[i].y].parent = cell;
             }
 

@@ -2,13 +2,13 @@ var PQ=require('../finders/PQ.js')
 var Node=require('./Node.js')
 var Grid=require('./grid.js')
 // var BFS=require('../finders/BestFirstSearch.js')
-var BFS=require('../finders/Dijkstra.js')
-// var BFS=require('../finders/BreadthFirstSearch.js')
+// var BFS=require('../finders/Dijkstra.js')
+var BFS=require('../finders/BreadthFirstSearch.js')
 // var BFS=require('../finders/A_star.js')
 
 
 var bfs=new BFS();
-var grid=new Grid(4,4);
+var grid=new Grid(5,4);
 
 // grid.setWalkableAt(0,1,0);
 startX=0;

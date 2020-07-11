@@ -24,14 +24,14 @@ BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
     var foundDest = false;
     // making 2d array for visited list
     var values = grid.dimention();
-   //  closedList=[];
-   //  var i,j;
-   //  for(i = 0; i < values[0]; ++i){
-   //    closedList.push([]);
-   //    for(j = 0; j < values[1]; ++j){
-   //      closedList[i].push(false);
-   //    }// end for
-   // }// end for
+    closedList=[];
+    var i,j;
+    for(i = 0; i < values[1]; ++i){
+      closedList.push([]);
+      for(j = 0; j < values[0]; ++j){
+        closedList[i].push(false);
+      }// end for
+   }// end for
 
    // 2d array that holds details of cell i.e parents of cell
    let cellDetails = [];
@@ -54,9 +54,10 @@ BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
     while(openList.length != 0){
       // console.log(openList)
       //current cell in consideration
-        cell = openList.pop()
-        // closedList[cell.x][cell.y] = true;
-        cell.closed = true;
+         cell=openList[0]
+         openList.splice(0, 1)
+         closedList[cell.x][cell.y] = true;
+         cell.closed = true;
          //get neighbours
          [neighbours,weights] = grid.getNeighbours(cell)
          for (var i = 0; i < weights.length; i++) {
@@ -68,7 +69,7 @@ BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
                foundDest = true;
             }
             // if it is not blocked(get neighbour func takes care of it) and not visited yet
-            else if(neighbours[i].closed !=  true){
+            else if(closedList[neighbours[i].x][neighbours[i].y] != true){
                openList.push(neighbours[i]);
                // closedList[neighbours[i].x][neighbours[i].y] = true;
                neighbours[i].opened = true;
@@ -79,6 +80,7 @@ BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
 
          }// end for loop
              if(foundDest){break}
+             // console.log(openList)
     } //end while loop
 
       if (foundDest == 0) {return 'not found'}

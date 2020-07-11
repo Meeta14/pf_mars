@@ -2,12 +2,11 @@ var Distance = require('./distance.js')
 var Util     = require('../core/Util.js')
 
 class CellAttributes {
-    constructor(f, g, h, i, j){
+    constructor(f, g, h, node){
       this.g = g;
       this.f = f;
       this.h = h;
-      this.parent_i = i
-      this.parent_j = j
+      this.parent = node;
     }
 }
 
@@ -34,8 +33,7 @@ AstarSearch.prototype.minFscore = function(openList,cellDetails){
 AstarSearch.prototype.successor = function(cellDetails, cell, parentNode, endNode, weight, closedList, grid, openList){
     htype = this.htype;
     if(cell.x == endNode.x && cell.y == endNode.y){
-    cellDetails[cell.x][cell.y].parent_i = parentNode.x;
-    cellDetails[cell.x][cell.y].parent_j = parentNode.y;
+    cellDetails[cell.x][cell.y].parent = parentNode;
     return true;
     // break;
     }
@@ -54,8 +52,7 @@ AstarSearch.prototype.successor = function(cellDetails, cell, parentNode, endNod
             cellDetails[cell.x][cell.y].f = fnew;
             cellDetails[cell.x][cell.y].g = gnew;
             cellDetails[cell.x][cell.y].h = hnew;
-            cellDetails[cell.x][cell.y].parent_i = parentNode.x;
-            cellDetails[cell.x][cell.y].parent_j = parentNode.y;
+            cellDetails[cell.x][cell.y].parent = parentNode;
             }
         }
     return false;
@@ -96,8 +93,7 @@ AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
     cellDetails[sourceNode.x][sourceNode.y].f = 0.0;
     cellDetails[sourceNode.x][sourceNode.y].g = 0.0;
     cellDetails[sourceNode.x][sourceNode.y].h = 0.0;
-    cellDetails[sourceNode.x][sourceNode.y].parent_i = sourceNode.x;
-    cellDetails[sourceNode.x][sourceNode.y].parent_j = sourceNode.y;
+    cellDetails[sourceNode.x][sourceNode.y].parent = sourceNode;
 
 // // TODO: check if same node is being pushed (can it be pushed?)
     openList.push(sourceNode);
@@ -118,7 +114,6 @@ AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
             if(foundDest){break}
         }// end for loop
             if(foundDest){break}
-            console.log(openList)
     } //end while loop
 
      if (foundDest == 0) {return 'not found'}

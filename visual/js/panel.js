@@ -19,9 +19,6 @@ var Panel = {
             top: $algo.offset().top + $algo.outerHeight() + 20
         });
         $('#button2').attr('disabled', 'disabled');
-        $('#button4').attr('enabled', 'disabled');
-        $('#button5').attr('enabled', 'disabled');
-        $('#button6').attr('enabled', 'disabled');
         // $('#block_panel').css({
         //     top: $algo.offset().top + $algo.outerHeight() + 100
         // });
@@ -50,7 +47,7 @@ var Panel = {
         case 'breadthfirst_header':
             allowDiagonal = typeof $('#breadthfirst_section ' +
                                      '.allow_diagonal:checked').val() !== 'undefined';
-                finder = new PF.BreadthFirstSearch({
+                finder = new PF.BreadthFS({
                     allowDiagonal: allowDiagonal
                 });
             break;
@@ -60,21 +57,27 @@ var Panel = {
                                      '.allow_diagonal:checked').val() !== 'undefined';
             heuristic = $('input[name=bestfirst_heuristic]:checked').val();
                 finder = new PF.BestFirstSearch({
-                    allowDiagonal: allowDiagonal,
-                    dontCrossCorners: dontCrossCorners,
-                    heuristic: PF.Heuristic[heuristic]
+                    distance : PF.Distance[distance]
                 });
             break;
 
         case 'dijkstra_header':
             allowDiagonal = typeof $('#dijkstra_section ' +
                                      '.allow_diagonal:checked').val() !== 'undefined';
-                finder = new PF.DijkstraFinder({
+                finder = new PF.Dijkstra({
                     allowDiagonal: allowDiagonal
                 });
             break;
         }
 
         return finder;
+    },
+
+    getTerrain: function(){
+        selected_header = $(
+            '#play_panel '+
+            '.ui-accordion-header[aria-selected=true]'
+        ).attr('id');
+        return this.id
     }
 };

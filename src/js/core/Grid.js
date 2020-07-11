@@ -45,17 +45,6 @@ Array.prototype.equals = function (arr) {
     return this.length == arr.length && this.every((u, i) => u === arr[i]);
 }
 
-//function to check if array is present in list of blocked nodes
-// Grid.prototype.isBlock=function(x,y,block){
-// var i;
-// for(i=0;i<block.length ; ++i){
-// 	if(block[i].equals([x,y])){
-// 		return true;
-// 	}
-// }
-// return false;
-// }
-
 //function to check if array is present in list of terrain nodes
 Grid.prototype.isterrain=function(x, y, node){
 	// var x=node.x, y=node.y;
@@ -113,7 +102,7 @@ Grid.prototype.getNeighbours=function(node){
 };
 
 Grid.prototype.isWalkableAt = function(x, y) {
-	console.log('a')
+	// console.log('a')
     return this.isInside(x, y) && this.nodes[y][x].walkable;
 };
 
@@ -126,7 +115,7 @@ Grid.prototype.setWalkableAt = function(x, y, walkable) {
 };
 
 Grid.prototype.setHillAt = function(x, y, hill) {
-	console.log(x,y)
+	// console.log(x,y)
     this.nodes[y][x].hill = hill;
 };
 

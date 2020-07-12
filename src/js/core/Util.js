@@ -46,4 +46,7 @@ function backtrace(cellDetails,node){
 }
 exports.backtrace=backtrace;
 
-// exports.backtraceBF=backtraceBF;
+ function backtracebi(cellDetails, startNode, endNode){
+	 return 'found'
+ }
+exports.backtracebi=backtracebi;

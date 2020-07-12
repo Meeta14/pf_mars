@@ -55,7 +55,7 @@ BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
       // console.log(openList)
       //current cell in consideration
          cell=openList[0]
-         openList.splice(0, 1)
+         openList.shift()
          closedList[cell.x][cell.y] = true;
          cell.closed = true;
          //get neighbours

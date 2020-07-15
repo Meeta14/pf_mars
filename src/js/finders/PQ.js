@@ -4,7 +4,7 @@ const left = i => (i << 1) + 1;
 const right = i => (i + 1) << 1;
 
 class PriorityQueue {
-  constructor(comparator = (a,b)=>a>b) {
+  constructor(comparator = (a, b) => a > b) {
     this._heap = [];
     this._comparator = comparator;
   }
@@ -17,28 +17,55 @@ class PriorityQueue {
   peek() {
     return this._heap[top];
   }
+  // find(node){
+  //   let iter=top;
+
+  //   while(iter<this.size() ){
+  //     if(node.isequal(this._heap[iter])){
+
+  //       return iter;
+  //     }
+  //     // if(right(iter)==this.size()-1 && left(iter)<this.size()){
+  //     //   console.log(iter,"reached1");
+  //     //   pos=this.find(left(iter));
+  //     //   if(iter>=0){
+  //     //     return pos;
+  //     //   }
+  //     // }
+  //     // else if(left(iter)==this.size()-1 && right(iter)<this.size()){
+  //     //   console.log("reached2");
+  //     //   iter=right(iter);
+  //     // }
+  //     else if(left(iter)<this.size()){
+  //       pos=this.find(left(iter));
+  //       if(pos>=0)
+  //     }
+    
+  //   }
+  //   return -1;
+  // }
   push(...nodes) {
-    nodes.forEach(node => {
+    nodes.forEach(node=> {
       this._heap.push(node);
       this._siftUp();
     });
     return this.size();
   }
   pop() {
-    const poppedNode = this.peek();
+    const poppedValue = this.peek();
     const bottom = this.size() - 1;
     if (bottom > top) {
       this._swap(top, bottom);
     }
     this._heap.pop();
     this._siftDown();
-    return poppedNode;
+    return poppedValue;
   }
-  replace(node) {
-    const replacedNode = this.peek();
-    this._heap[top] = node;
+  replace(value) {
+    const replacedValue = this.peek();
+    this._heap[top] = value;
     this._siftDown();
-    return replacedNode;
+    return replacedValue;
   }
   _greater(i, j) {
     return this._comparator(this._heap[i], this._heap[j]);
@@ -66,21 +93,3 @@ class PriorityQueue {
   }
 }
 module.exports=PriorityQueue;
-
-// // Default comparison semantics
-// const queue = new PriorityQueue();
-// queue.push(10, 20, 30, 40, 50);
-// console.log('Top:', queue.peek()); //=> 50
-// console.log('Size:', queue.size()); //=> 5
-// console.log('Contents:');
-// while (!queue.isEmpty()) {
-//   console.log(queue.pop()); //=> 40, 30, 20, 10
-// }
-
-// // Pairwise comparison semantics
-// const pairwiseQueue = new PriorityQueue((a, b) => a[1] > b[1]);
-// pairwiseQueue.push(['low', 0], ['medium', 5], ['high', 10]);
-// console.log('\nContents:');
-// while (!pairwiseQueue.isEmpty()) {
-//   console.log(pairwiseQueue.pop()[0]); //=> 'high', 'medium', 'low'
-// }

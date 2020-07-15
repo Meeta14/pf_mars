@@ -11,7 +11,7 @@ var astar = new A_star(Distance.euclidean);
 // // var bf = new BFS();
 //
 // //
-var grid = new Grid(10,10);
+var grid = new Grid(20,20);
 var startX = 5;
 var  startY = 5;
 var endX = 5;

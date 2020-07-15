@@ -58,7 +58,7 @@ var View = {
         stroke: 'yellow',
         'stroke-width': 3,
     },
-    supportedOperations: ['opened', 'closed', 'tested'],  //'hill','valley'
+    supportedOperations: ['opened', 'closed', 'tested','hill'],  //'hill','valley'
     init: function(opts) {
         this.numCols      = opts.numCols;
         this.numRows      = opts.numRows;
@@ -159,10 +159,10 @@ var View = {
         switch (attr) {
         case 'walkable':
             if(!value){color = nodeStyle.blocked.fill;}
-            // else if(this.isHillAt){color = nodeStyle.hill.fill;}
+            // else if(this.grid.isHillAt(gridX, gridY)){color = nodeStyle.hill.fill;}
             else{color = nodeStyle.normal.fill}
             // color = value ? nodeStyle.normal.fill : nodeStyle.blocked.fill;
-            // this.setHillAt(gridX, gridY, false);
+            // this.setHillAt(gridX, gridY, true);
             this.setWalkableAt(gridX, gridY, value);
             break;
         case 'hill':
@@ -171,7 +171,7 @@ var View = {
             else{color = nodeStyle.normal.fill}
             // color = value ? nodeStyle.normal.fill : nodeStyle.hill.fill;
             // this.setWalkableAt(gridX, gridY, true);
-            this.setHillAt(gridX, gridY, value); //check name
+            this.setHillAt(gridX, gridY, value);
             break;
         // case 'valley':
         //     color = value ? nodeStyle.normal.fill : nodeStyle.valley.fill;
@@ -190,10 +190,10 @@ var View = {
             this.colorizeNode(this.rects[gridY][gridX], color);
             this.setCoordDirty(gridX, gridY, true);
             break;
-        // case 'parent':
-        //     // XXX: Maybe draw a line from this node to its parent?
-        //     // This would be expensive.
-        //     break;
+        case 'parent':
+            // XXX: Maybe draw a line from this node to its parent?
+            // This would be expensive.
+            break;
         default:
             console.error('unsupported operation: ' + attr + ':' + value);
             return;
@@ -223,6 +223,7 @@ var View = {
         if (value) {
             // clear blocked node
             if (node) {
+                console.log(node)
                 this.colorizeNode(node, this.rects[gridY][gridX].attr('fill'));
                 this.zoomNode(node);
                 setTimeout(function() {
@@ -345,9 +346,7 @@ var View = {
             Math.floor(pageY / this.nodeSize)
         ];
     },
-    /**
-     * helper function to convert the grid coordinate to page coordinate
-     */
+
     toPageCoordinate: function(gridX, gridY) {
         return [
             gridX * this.nodeSize,

@@ -139,7 +139,7 @@ $.extend(Controller, {
         // => erasingWall
     },
     ondrawHill: function(event, from, to, gridX, gridY) {
-        this.setHillAt(gridX, gridY, false);
+        this.setHillAt(gridX, gridY, true);
         // => drawingWall
     },
     oneraseHill: function(event, from, to, gridX, gridY) {
@@ -326,10 +326,6 @@ $.extend(Controller, {
         });
     },
 
-    /**
-     * Define setters and getters of PF.Node, then we can get the operations
-     * of the pathfinding.
-     */
     hookPathFinding: function() {
 
         PF.Node.prototype = {

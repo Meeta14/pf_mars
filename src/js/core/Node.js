@@ -6,7 +6,7 @@ function Node(x,y,walkable,hill){
 	this.hill=(hill === undefined ? false : hill);
 }
 
-Node.prototype.isEqual = function(nodeA){
+Node.prototype.isequal = function(nodeA){
 	if(nodeA.x == this.x && nodeA.y == this.y) {return true;}
 	else{return false;}
 }

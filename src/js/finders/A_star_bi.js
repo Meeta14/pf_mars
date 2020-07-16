@@ -19,6 +19,8 @@ function AstarSearchBi(obj){
     // if there is choice between distance then h type = manhattan by default
     if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
     else{this.htype = obj.htype}
+if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
+    else{this.diagonal=obj.diagonal}
 }
 
 AstarSearchBi.prototype.minFscore = function(openList,cellDetails){
@@ -127,7 +129,7 @@ AstarSearchBi.prototype.findPath = function(startX, startY, endX, endY, grid){
         closedList[cell.x][cell.y] = true;
         cell.closed = true;
         //get neighbours
-        [neighbours,weights] = grid.getNeighbours(cell)
+        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
         // console.log(neighbours, weights)
         for (var i = 0; i < weights.length; i++) {
             // cellDetails[neighbours[i].x][neighbours[i].y].visitedBy = 1;
@@ -144,7 +146,7 @@ AstarSearchBi.prototype.findPath = function(startX, startY, endX, endY, grid){
         closedList[cell.x][cell.y] = true;
         cell.closed = true;
         //get neighbours
-        [neighbours,weights] = grid.getNeighbours(cell)
+        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
         // console.log(neighbours, weights)
         for (var i = 0; i < weights.length; i++) {
             // cellDetails[neighbours[i].x][neighbours[i].y].visitedBy = 2;

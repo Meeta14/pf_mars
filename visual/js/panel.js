@@ -26,7 +26,7 @@ var Panel = {
     },
 
     getFinder: function() {
-        var finder, selected_header, distance, allowDiagonal;//, biDirectional, dontCrossCorners, weight, trackRecursion, timeLimit;
+        var finder, selected_header, distance, allowDiagonal,diagonal;//, biDirectional, dontCrossCorners, weight, trackRecursion, timeLimit;
 
         selected_header = $(
             '#algorithm_panel ' +
@@ -40,7 +40,8 @@ var Panel = {
                                      '.allow_diagonal:checked').val() !== 'undefined';
             distance = $('input[name=astar_heuristic]:checked').val();
                 finder = new PF.AstarSearch({
-                    distance: PF.Distance[distance]
+                    htype: PF.Distance[distance],
+                    diagonal: allowDiagonal
                 });
             break;
 
@@ -48,16 +49,18 @@ var Panel = {
             allowDiagonal = typeof $('#breadthfirst_section ' +
                                      '.allow_diagonal:checked').val() !== 'undefined';
                 finder = new PF.BreadthFS({
-                    allowDiagonal: allowDiagonal
+                    diagonal: allowDiagonal,
+                    diagonal: allowDiagonal
                 });
             break;
 
         case 'bestfirst_header':
             allowDiagonal = typeof $('#bestfirst_section ' +
                                      '.allow_diagonal:checked').val() !== 'undefined';
-            heuristic = $('input[name=bestfirst_heuristic]:checked').val();
+            distance = $('input[name=bestfirst_heuristic]:checked').val();
                 finder = new PF.BestFirstSearch({
-                    distance : PF.Distance[distance]
+                    htype : PF.Distance[distance],
+                    diagonal: allowDiagonal
                 });
             break;
 
@@ -65,7 +68,7 @@ var Panel = {
             allowDiagonal = typeof $('#dijkstra_section ' +
                                      '.allow_diagonal:checked').val() !== 'undefined';
                 finder = new PF.Dijkstra({
-                    allowDiagonal: allowDiagonal
+                    diagonal: allowDiagonal
                 });
             break;
         }

@@ -7,7 +7,10 @@ class CellAttributes {
     }
 }
 
-function BreadthFS(obj){}
+function BreadthFS(obj){
+  if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
+    else{this.diagonal=obj.diagonal}
+}
 
 BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
   // check if source and destination is inside the grid
@@ -59,7 +62,7 @@ BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
          closedList[cell.x][cell.y] = true;
          cell.closed = true;
          //get neighbours
-         [neighbours,weights] = grid.getNeighbours(cell)
+         [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
          for (var i = 0; i < weights.length; i++) {
             // check if the neighbour is the endnode
             if(neighbours[i].x == endNode.x && neighbours[i].y == endNode.y){

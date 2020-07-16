@@ -1,13 +1,8 @@
-<<<<<<< HEAD
+
 var PriorityQueue=require('./PQ.js')
 var Distance = require('./distance.js')
 var Util     = require('../core/Util.js')
-=======
-var PriorityQueue  = require('./PQ.js')
-var Distance       = require('./distance.js')
-var Util           = require('../core/Util.js')
-// var Node           = require('../core/Node.js');
->>>>>>> 27843307b11d18b514a3af22b9f7d991355e5e33
+
 
 class CellAttributes {
     constructor(f, node){
@@ -19,6 +14,8 @@ class CellAttributes {
 function BestFirstSearch(obj){this.htype = Distance.manhattan
 	if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
     else{this.htype = obj.htype}
+  if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
+    else{this.diagonal=obj.diagonal}
 
 }
 
@@ -45,7 +42,7 @@ BestFirstSearch.prototype.findPath= function(startX, startY, endX, endY, grid){
     for(let i = 0; i < values[1]; i++) {
         for (let j = 0; j < values[0]; j++){
             cellDetails[i] = [...(cellDetails[i] ? cellDetails[i] : []),
-                new CellAttributes(Number.MAX_VALUE , -1, -1)
+                new CellAttributes(Number.MAX_VALUE , undefined)
         ];
       }
   }
@@ -66,13 +63,23 @@ BestFirstSearch.prototype.findPath= function(startX, startY, endX, endY, grid){
           cell.opened=false;
 	        cell.closed = true;
 	        //get neighbours
-	        [neighbours,_] = grid.getNeighbours(cell)  //neighbours
+	        [neighbours,_] = grid.getNeighbours(cell,this.diagonal)  //neighbours
 	        var i;
 	        for(i=0;i<neighbours.length;++i){
 	        	cellDetails[neighbours[i].x][neighbours[i].y].f=this.htype(neighbours[i].x, neighbours[i].y, endNode)
 	        }
-	        neighbours.forEach(function(node){if(!node.closed){ if(node.opened){openList._siftUp()};openList.push(node);node.opened=true; cellDetails[node.x][node.y].parent=cell;}});
+	        neighbours.forEach(function(node){
+
+            if(!node.closed){ 
+              openList.push(node);node.opened=true; 
+              cellDetails[node.x][node.y].parent=cell;
+
+            }
+          });
 	    }
+      if(foundDest){
+        break;
+      }
 
     } //end while loop
 

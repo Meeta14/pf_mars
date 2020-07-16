@@ -10,7 +10,10 @@ class CellAttributes {
     }
 }
 
-function Dijkstra(obj){}
+function Dijkstra(obj){
+	if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
+    else{this.diagonal=obj.diagonal}
+}
 
 Dijkstra.prototype.findPath= function(startX, startY, endX, endY, grid){
 
@@ -63,7 +66,7 @@ Dijkstra.prototype.findPath= function(startX, startY, endX, endY, grid){
 				closedList[cell.x][cell.y] = true;
 				cell.closed = true;
 	    	// var min=Number.MAX_VALUE;
-				[neighbours,weights] = grid.getNeighbours(cell)
+				[neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
 				// console.log(neighbours, weights)
 				for (var i = 0; i < weights.length; i++) {
 					// console.log('f', closedList[cell.x][cell.y] == false)

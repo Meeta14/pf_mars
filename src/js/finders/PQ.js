@@ -3,6 +3,7 @@ const parent = i => ((i + 1) >>> 1) - 1;
 const left = i => (i << 1) + 1;
 const right = i => (i + 1) << 1;
 
+
 class PriorityQueue {
   constructor(comparator = (a, b) => a > b) {
     this._heap = [];
@@ -12,40 +13,37 @@ class PriorityQueue {
     return this._heap.length;
   }
   isEmpty() {
-    return this.size() == 0;
+    return this._heap.length == 0;
   }
   peek() {
     return this._heap[top];
   }
-  // find(node){
-  //   let iter=top;
 
-  //   while(iter<this.size() ){
-  //     if(node.isequal(this._heap[iter])){
-
-  //       return iter;
-  //     }
-  //     // if(right(iter)==this.size()-1 && left(iter)<this.size()){
-  //     //   console.log(iter,"reached1");
-  //     //   pos=this.find(left(iter));
-  //     //   if(iter>=0){
-  //     //     return pos;
-  //     //   }
-  //     // }
-  //     // else if(left(iter)==this.size()-1 && right(iter)<this.size()){
-  //     //   console.log("reached2");
-  //     //   iter=right(iter);
-  //     // }
-  //     else if(left(iter)<this.size()){
-  //       pos=this.find(left(iter));
-  //       if(pos>=0)
-  //     }
-    
-  //   }
-  //   return -1;
-  // }
+  find(node){
+    for(let i=top;i<this.size();++i){
+      // if(this._heap[i].isequal(node)){
+        if(this._heap[i].x==node.x && this._heap[i].y==node.y){
+        return i;
+      }
+    }
+    return -1;
+    }
+    remove(pos){
+      let iter=pos;
+      while(iter>top){
+        
+        this._swap(iter,parent(iter));
+        iter=parent(iter);
+      }
+      this.pop();
+      
+    }
   push(...nodes) {
     nodes.forEach(node=> {
+      let pos=this.find(node);
+      if(pos>=0){
+        this.remove(pos);
+      }
       this._heap.push(node);
       this._siftUp();
     });

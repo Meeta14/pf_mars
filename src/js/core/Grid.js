@@ -45,60 +45,141 @@ Array.prototype.equals = function (arr) {
     return this.length == arr.length && this.every((u, i) => u === arr[i]);
 }
 
+//function to check if array is present in list of blocked nodes
+Grid.prototype.isBlock=function(x,y){
+var i;
+if(!this.nodes[y][x].walkable){
+	return true;
+}
+else{
+	return false;
+}
+}
+
 //function to check if array is present in list of terrain nodes
-Grid.prototype.isterrain=function(x, y, node){
-	// var x=node.x, y=node.y;
-	if(this.isHillAt(x,y) || this.isHillAt(node.x, node.y)){return true}
-	else {return false}
+Grid.prototype.isterrain=function(x,y,node){
+	if(this.isHillAt(x,y) && this.isHillAt(node.x,node.y)){
+		return true;
+	}
+	else{
+		return false;
+	}
+
 }
 
 //function to return all neighbours of a given node
-Grid.prototype.getNeighbours=function(node){
+Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 	var x=node.x, y=node.y;
 	var dict={};
 	neighbours=[];
 	weights=[];
 			if (this.isWalkableAt(x, y - 1)) {
 	        neighbours.push(this.nodes[y - 1][x]);
-	        if (this.isterrain(x, y - 1,node)){
+	        if(w){
+	        	if (this.isterrain(x, y - 1,node)){
 	        	weights.push(4);
+		        }
+		        else{
+		        	weights.push(1)
+		        }
 	        }
-	        else{
-	        	weights.push(1)
-	        }
+
+	        
 	    }
-	    // →
+	    // →  
 	    if (this.isWalkableAt(x + 1, y)) {
 	        neighbours.push(this.nodes[y][x + 1]);
-	        if (this.isterrain(x+1,y,node)){
-	        	weights.push(4);
-	        }
-	        else{
-	        	weights.push(1)
-	        }
+	        if(w){
+		        if (this.isterrain(x+1,y,node)){
+		        	weights.push(4);
+		        }
+		        else{
+		        	weights.push(1)
+		        }
+	    	}
 	    }
+
 	    // ↓
 	    if (this.isWalkableAt(x, y + 1)) {
 	        neighbours.push(this.nodes[y + 1][x]);
-	        if (this.isterrain(x,y+1,node)){
-	        	weights.push(4);
-	        }
-	        else{
-	        	weights.push(1)
-	        }
+	        if(w){
+		        if (this.isterrain(x,y+1,node)){
+		        	weights.push(4);
+		        }
+		        else{
+		        	weights.push(1)
+		        }
+		    }
 	    }
 	    // ←
 	    if (this.isWalkableAt(x - 1, y)) {
 	        neighbours.push(this.nodes[y][x - 1]);
-	        if (this.isterrain(x-1, y ,node)){
-	        	weights.push(4);
-	        }
-	        else{
-	        	weights.push(1)
-	        }
+	        if(w){
+		        if (this.isterrain(x-1, y ,node)){
+		        	weights.push(4);
+		        }
+		        else{
+		        	weights.push(1)
+		        }
+		    }
 	    }
+	    if(diagonal==true){
+	    	if (this.isInside(x-1 ,y-1) && !this.isBlock(x - 1, y-1)) {
+	        	neighbours.push(this.nodes[y-1][x - 1]);
+	        	if(w){
+			        if (this.isterrain(x-1, y-1 ,node)){
+			        	weights.push(4);
+			        }
+			        else{
+			        	weights.push(1)
+			        }
+			    }
+	    	}
 
-	return [neighbours,weights];
+	    	if (this.isInside(x-1 ,y+1) && !this.isBlock(x - 1, y+1)) {
+	        	neighbours.push(this.nodes[y+1][x - 1]);
+	        	if(w){
+			        if (this.isterrain(x-1, y+1 ,node)){
+			        	weights.push(4);
+			        }
+			        else{
+			        	weights.push(1)
+			        }
+			    }
+	    	}
+
+	    	if (this.isInside(x+1 ,y-1) && !this.isBlock(x +1, y-1)) {
+	        	neighbours.push(this.nodes[y-1][x + 1]);
+	        	if(w){
+			        if (this.isterrain(x+1, y-1 ,node)){
+			        	weights.push(4);
+			        }
+			        else{
+			        	weights.push(1)
+			        }
+			    }
+	    	}
+
+	    	if (this.isInside(x+1 ,y+1) && !this.isBlock(x + 1, y+1)) {
+	        	neighbours.push(this.nodes[y+1][x + 1]);
+	        	if(w){
+			        if (this.isterrain(x+1, y+1 ,node)){
+			        	weights.push(4);
+			        }
+			        else{
+			        	weights.push(1)
+			        }
+		        }
+	 		}				
+
+	    }
+	if(w){
+		return [neighbours,weights];
+	}
+	else{
+		return neighbours;
+	}
+	
 };
 
 Grid.prototype.isWalkableAt = function(x, y) {

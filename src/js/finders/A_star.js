@@ -17,6 +17,8 @@ function AstarSearch(obj){
     // if there is choice between distance then h type = manhattan by default
     if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
     else{this.htype = obj.htype}
+    if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
+    else{this.diagonal=obj.diagonal}
 }
 
 AstarSearch.prototype.minFscore = function(openList,cellDetails){
@@ -111,7 +113,7 @@ AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
         closedList[cell.x][cell.y] = true;
         cell.closed = true;
         //get neighbours
-        [neighbours,weights] = grid.getNeighbours(cell)
+        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
         // console.log(neighbours, weights)
         for (var i = 0; i < weights.length; i++) {
             foundDest = this.successor(cellDetails, neighbours[i], cell, endNode, weights[i], closedList, grid, openList)

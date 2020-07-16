@@ -177,24 +177,22 @@ $.extend(Controller, {
     onsearch: function(event, from, to) {
         var timeStart, timeEnd;
             // finder = Panel.getFinder();
-		var gr = this.makeGraph(this.endNodes);
-		var n = this.endNodes.length;
-		var pathArray = new Array;
-		var order = {p: new Array};
-		var len = this.getPath(1,gr,0,n, order);
-		var f = order.p.reverse(),  l = f.length;
+			 timeStart = window.performance ? performance.now() : Date.now();
+			 var temp = 0;
+			par = [];
+			for(var i = 0; i < this.endNodes.length-1; i++){
+					j = i+1
+						var Grid = this.grid.clone();
+						var finder = Panel.getFinder();
+						var dist = finder.findPath(
+								this.endNodes[i][0], this.endNodes[i][1], this.endNodes[j][0], this.endNodes[j][1], Grid
+							);
+							par=par.concat(dist);
+							temp = temp + PF.Util.pathLength(dist)
+				}
+				this.path = par;
+				this.len = temp;
 
-		for(var j=0; j<l-1; j++){
-			 if(f[j+1] > f[j] ) gr[f[j]][f[j+1]][1].reverse();
-			 pathArray = pathArray.concat(gr[f[j]][f[j+1]][1]);
-		}
-
-		this.path = pathArray;
-        timeStart = window.performance ? performance.now() : Date.now();
-        // grid = this.grid.clone();
-        // this.path = finder.findPath(
-        //     this.startX, this.startY, this.endX, this.endY, grid
-        // );
         this.operationCount = this.operations.length;
         timeEnd = window.performance ? performance.now() : Date.now();
         this.timeSpent = (timeEnd - timeStart).toFixed(4);
@@ -202,70 +200,6 @@ $.extend(Controller, {
         this.loop();
         // => searching
     },
-	makeGraph: function(endNodes){
-		console.log(endNodes)
-        var n = endNodes.length;
-        var graph = new Array(n);
-        for (var i = 0; i < graph.length; i++) {
-            graph[i] = new Array(n);
-        }
-		console.log('grp', graph)
-        for(var i = 0; i < graph.length-1; i++){
-			// j = i+1
-            for(var j = i; j < graph.length; j++){
-                var Grid = this.grid.clone();
-				var finder = Panel.getFinder();
-                // Grid = this.grid.clone();
-				console.log(finder);
-				console.log(endNodes[i][0], endNodes[i][1], endNodes[j][0], endNodes[j][1])
-                var dist = finder.findPath(
-                  endNodes[i][0], endNodes[i][1], endNodes[j][0], endNodes[j][1], Grid
-                );
-
-                var len = PF.Util.pathLength(dist);
-
-				graph[j][i] = new Array(2);
-                graph[j][i][0]=len;
-                graph[j][i][1]=dist;
-                graph[i][j] = new Array(2);
-                graph[i][j][0]=len;
-                graph[i][j][1]= dist.reverse();
-            }
-        }
-
-        return graph;
-	},
-
-	getPath: function(bit_mask,gr,pos,n, order){
-           if (bit_mask === ((1<<n)-1)) {
-               order.p.push(pos);
-   			return 0;
-           }
-
-           var min_len = 1000000;
-
-           for (var i = 1; i < n; i++) {
-               if (!(bit_mask & (1<<i))) {
-   			    var new_o = {p: new Array};
-
-   				if(!gr[pos][i][0]){
-   				    order.p = new_o.p;
-   					return 0;
-   				}
-
-                var new_len = Controller.getPath(bit_mask|(1<<i), gr, i, n, new_o);
-   				new_len += gr[pos][i][0] ;
-
-                   if(new_len < min_len) {
-   					min_len = new_len;
-   					order.p = new_o.p;
-                   }
-               }
-           }
-           order.p.push(pos);
-           return min_len;
-       },
-
 
     onrestart: function() {
         // When clearing the colorized nodes, there may be
@@ -294,7 +228,7 @@ $.extend(Controller, {
     },
     onfinish: function(event, from, to) {
         View.showStats({
-            pathLength: PF.Util.pathLength(this.path),
+            pathLength: this.len,
             timeSpent:  this.timeSpent,
             operationCount: this.operationCount,
         });
@@ -309,7 +243,7 @@ $.extend(Controller, {
     onmodify: function(event, from, to) {
         // => modified
     },
-	onset: function(event, from, to) {
+		onset: function(event, from, to) {
         setTimeout(function() {
             Controller.clearOperations();
             Controller.clearAll();
@@ -570,17 +504,17 @@ $.extend(Controller, {
             this.dragStart();
             return;
         }
-        if (this.can('dragEnd') && this.isEndPos(gridX, gridY)) {
+        if (this.can('dragEnd') && this.isEndPos(gridX, gridY, 1)) {
             this.dragEnd();
             return;
         }
-		if (this.can('dragEnd2') && this.isEndPos(gridX, gridY,2)) {
-            this.dragEnd2();
-            return;
-        }
-		if (this.can('dragEnd3') && this.isEndPos(gridX, gridY,3)) {
-            this.dragEnd3();
-            return;
+			if (this.can('dragEnd2') && this.isEndPos(gridX, gridY,2)) {
+	            this.dragEnd2();
+	            return;
+	        }
+			if (this.can('dragEnd3') && this.isEndPos(gridX, gridY,3)) {
+	            this.dragEnd3();
+	            return;
         }
         if (this.can('dragEnd4') && this.isEndPos(gridX, gridY,4)) {
             this.dragEnd4();
@@ -620,7 +554,7 @@ $.extend(Controller, {
             break;
         case 'draggingEnd':
             if (grid.isWalkableAt(gridX, gridY)) {
-                this.setEndPos(gridX, gridY);}
+                this.setEndPos(gridX, gridY,1);}
             break;
 		case 'draggingEnd2':
             if (grid.isWalkableAt(gridX, gridY)) {

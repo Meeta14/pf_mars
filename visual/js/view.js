@@ -232,7 +232,7 @@ var View = {
         if (value) {
             // clear blocked node
             if (node) {
-                console.log(node)
+                // console.log(node)
                 this.colorizeNode(node, this.rects[gridY][gridX].attr('fill'));
                 this.zoomNode(node);
                 setTimeout(function() {

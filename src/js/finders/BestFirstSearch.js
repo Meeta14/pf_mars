@@ -33,8 +33,9 @@ BestFirstSearch.prototype.findPath= function(startX, startY, endX, endY, grid){
 
     var values=[grid.height,grid.width]
     //declaring openlist as priority queue(it is ordered according to f value)
-    var openList = new PriorityQueue(comparator = (nodeA, nodeB) => cellDetails[nodeA.x][nodeA.y].f < cellDetails[nodeB.x][nodeB.y].f);
+    // var openList = new PriorityQueue(comparator = (nodeA, nodeB) => cellDetails[nodeA.x][nodeA.y].f < cellDetails[nodeB.x][nodeB.y].f);
     var foundDest = false;
+    var openList=[];
 
     // 2d array that holds details of cell
     let cellDetails = [];
@@ -53,8 +54,9 @@ BestFirstSearch.prototype.findPath= function(startX, startY, endX, endY, grid){
 // // TODO: check if same node is being pushed (can it be pushed?)
     openList.push(sourceNode);
     sourceNode.opened=true;
-    while(!openList.isEmpty()){
-    	cell=openList.pop()
+    // while(!openList.isEmpty()){
+      while(openList.length!=0){
+    	cell=openList.shift()
         if(cell.x == endNode.x && cell.y == endNode.y){
         	foundDest=true;
         	break;
@@ -63,7 +65,7 @@ BestFirstSearch.prototype.findPath= function(startX, startY, endX, endY, grid){
           cell.opened=false;
 	        cell.closed = true;
 	        //get neighbours
-	        [neighbours,_] = grid.getNeighbours(cell,this.diagonal)  //neighbours
+	        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal,w=true)  //neighbours
 	        var i;
 	        for(i=0;i<neighbours.length;++i){
 	        	cellDetails[neighbours[i].x][neighbours[i].y].f=this.htype(neighbours[i].x, neighbours[i].y, endNode)
@@ -71,9 +73,9 @@ BestFirstSearch.prototype.findPath= function(startX, startY, endX, endY, grid){
 	        neighbours.forEach(function(node){
 
             if(!node.closed){ 
-              openList.push(node);node.opened=true; 
+              node.opened=true; 
               cellDetails[node.x][node.y].parent=cell;
-
+              openList.push(node);
             }
           });
 	    }

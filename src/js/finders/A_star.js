@@ -15,8 +15,9 @@ class CellAttributes {
 // htype = type of h distace to be cal
 function AstarSearch(obj){
     // if there is choice between distance then h type = manhattan by default
-    if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
-    else{this.htype = obj.htype}
+    // if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
+    // else{this.htype = obj.htype}
+    this.htype=Distance.dijkstraFinder;
     if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
     else{this.diagonal=obj.diagonal}
 }
@@ -45,7 +46,7 @@ AstarSearch.prototype.successor = function(cellDetails, cell, parentNode, endNod
 // && !grid.isBlock(cell.x, cell.y, block)
     else if (closedList[cell.x][cell.y] == false ) {
         gnew = cellDetails[parentNode.x][parentNode.y].g + weight;
-        hnew = htype(cell.x, cell.y, endNode)
+        hnew =  10000000000*htype(cell.x, cell.y, endNode)
         fnew = gnew + hnew
         //
 

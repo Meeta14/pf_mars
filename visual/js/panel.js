@@ -120,12 +120,7 @@ var Panel = {
         return finder;
     },
       getnumdest: function(){
-        // var selected_dest =typeof $('#NoOfDest' +
-        //                          '.option_label').val() !== 'undefined';
-        // var selected_dest = $('#NoOfDest' +
-        //                          '.option_label').val();
         var selected_dest =$('input[name=dest]:checked').val();
-        console.log(selected_dest);
         return selected_dest;
     },
 

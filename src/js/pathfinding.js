@@ -3,7 +3,7 @@ var pathfinding = {
     'Node'                      : require('./core/Node'),
     'Grid'                      : require('./core/Grid'),
     'Util'                      : require('./core/Util'),
-    // 'DiagonalMovement'          : require('./core/DiagonalMovement'),
+    'DiagonalMovement'          : require('./core/DiagonalMovement'),
     'Distance'                  : require('./finders/distance'),
     'AstarSearch'               : require('./finders/A_star'),
 
@@ -11,10 +11,10 @@ var pathfinding = {
     'BreadthFS'                 : require('./finders/BreadthFirstSearch'),
     'Dijkstra'                  : require('./finders/Dijkstra'),
     'PriorityQueue'             : require('./finders/PQ'),
-    // 'BiAStarFinder'             : require('./finders/BiAStarFinder'),
-    // 'BiBestFirstFinder'         : require('./finders/BiBestFirstFinder'),
+    'BiAstarSearch'             : require('./finders/A_star_bi'),
+    // 'BiBestFirstSearch'         : require('./finders/BiBestFirstFinder'),
     // 'BiBreadthFirstFinder'      : require('./finders/BiBreadthFirstFinder'),
-    // 'BiDijkstraFinder'          : require('./finders/BiDijkstraFinder'),
+    // 'DijkstraBi'          : require('./finders/BiDijkstraFinder'),
     // 'IDAStarFinder'             : require('./finders/IDAStarFinder'),
     // 'JumpPointFinder'           : require('./finders/JumpPointFinder'),
 };

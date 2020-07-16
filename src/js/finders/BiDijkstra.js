@@ -9,12 +9,12 @@ class CellAttributes {
     }
 }
 
-function Dijkstra(obj){
+function DijkstraBi(obj){
   if(obj.diagonal==undefined){this.diagonal=false;}
   else{obj.diagonal=diagonal;}
 }
 
-Dijkstra.prototype.findPath= function(startX, startY, endX, endY, grid){
+DijkstraBi.prototype.findPath= function(startX, startY, endX, endY, grid){
 
 // check if source and destination is inside the grid // TODO: see input is valid ouside the func before givig input?
    sourceNode = grid.getNodeAt(startX, startY);
@@ -53,8 +53,8 @@ Dijkstra.prototype.findPath= function(startX, startY, endX, endY, grid){
     endNode.opened=true;
     var Node1,Node2=new Node();
     var foundDest = false; //flag variable to check if destination has been found
-    while(!openList_source.isEmpty() && !openList_end.isEmpty()){    
-    //for the source list    
+    while(!openList_source.isEmpty() && !openList_end.isEmpty()){
+    //for the source list
     	cell=openList_source.pop();
      //    if(cell.isequal(endNode)){
      //    	foundDest=true;
@@ -83,7 +83,7 @@ Dijkstra.prototype.findPath= function(startX, startY, endX, endY, grid){
 
               }
               openList_source.push(node);
-              node.opened=true; 
+              node.opened=true;
               cellDetails[node.x][node.y].parent=cell;
               cellDetails[node.x][node.y].visitedby=1;
 
@@ -126,7 +126,7 @@ Dijkstra.prototype.findPath= function(startX, startY, endX, endY, grid){
                 return true;
               }
               openList_end.push(node);
-              node.opened=true; 
+              node.opened=true;
               cellDetails[node.x][node.y].parent=cell;
               cellDetails[node.x][node.y].visitedby=2;
 
@@ -148,7 +148,7 @@ Dijkstra.prototype.findPath= function(startX, startY, endX, endY, grid){
         path2=Util.backtrace(cellDetails,Node2);    //path from sourceNode to Node2
         path=path2.concat(path1.reverse());
         return path;
-  
+
       }
  }
 

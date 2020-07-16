@@ -82,7 +82,7 @@ var Controller = StateMachine.create({
             from: ['ready', 'finished'],
             to:   'draggingEnd2'
         },
-		{
+				{
             name: 'dragEnd3',
             from: ['ready', 'finished'],
             to:   'draggingEnd3'
@@ -126,7 +126,8 @@ $.extend(Controller, {
 
 
 	getDest: function(){
-  		var destattr =$('input[name=dest]:checked').val();
+			// var destattr =$('input[name=dest]:checked').val();
+  		var destattr = Panel.getnumdest();
   		return destattr;
 	},
     /**
@@ -268,34 +269,34 @@ $.extend(Controller, {
     onready: function() {
         console.log('=> ready');
         this.setButtonStates({
-            id: 1,
+            id: 2,
             text: 'Start Search',
             enabled: true,
             callback: $.proxy(this.start, this),
         }, {
-            id: 2,
+            id: 3,
             text: 'Pause Search',
             enabled: false,
         }, {
-            id: 3,
+            id: 4,
             text: 'Clear Walls',
             enabled: true,
             callback: $.proxy(this.reset, this),
         },
 		{
-            id: 7,
+            id: 1,
             text: 'Set dest',
             enabled: true,
             callback: $.proxy(this.set, this),
         },
         {
-            id: 4,
+            id: 5,
             text: 'obstacles',
             enabled: true,
             callback: $.proxy(this.drawWall, this),
         },
         {
-            id: 5,
+            id: 6,
             text: 'Hill',
             enabled: true,
             callback: $.proxy(this.drawHill, this),
@@ -314,11 +315,11 @@ $.extend(Controller, {
         // Clears any existing search progress
         this.clearFootprints();
         this.setButtonStates({
-            id: 2,
+            id: 3,
             enabled: true,
         },
 		{
-            id: 7,
+            id: 1,
             text: 'Set dest',
             enabled: false,
             callback: $.proxy(this.set, this),
@@ -329,17 +330,17 @@ $.extend(Controller, {
     onsearching: function() {
         console.log('=> searching');
         this.setButtonStates({
-            id: 1,
+            id: 2,
             text: 'Restart Search',
             enabled: true,
             callback: $.proxy(this.restart, this),
         }, {
-            id: 2,
+            id: 3,
             text: 'Pause Search',
             enabled: true,
             callback: $.proxy(this.pause, this),
         },{
-            id: 7,
+            id: 1,
             text: 'Set dest',
             enabled: false,
             callback: $.proxy(this.set, this),
@@ -349,17 +350,17 @@ $.extend(Controller, {
     onpaused: function() {
         console.log('=> paused');
         this.setButtonStates({
-            id: 1,
+            id: 2,
             text: 'Resume Search',
             enabled: true,
             callback: $.proxy(this.resume, this),
         }, {
-            id: 2,
+            id: 3,
             text: 'Cancel Search',
             enabled: true,
             callback: $.proxy(this.cancel, this),
         },{
-            id: 7,
+            id: 1,
             text: 'Set dest',
             enabled: false,
             callback: $.proxy(this.set, this),
@@ -369,17 +370,17 @@ $.extend(Controller, {
     onfinished: function() {
         console.log('=> finished');
         this.setButtonStates({
-            id: 1,
+            id: 2,
             text: 'Restart Search',
             enabled: true,
             callback: $.proxy(this.restart, this),
         }, {
-            id: 2,
+            id: 3,
             text: 'Clear Path',
             enabled: true,
             callback: $.proxy(this.clear, this),
         },{
-            id: 7,
+            id: 1,
             text: 'Set dest',
             enabled: true,
             callback: $.proxy(this.set, this),
@@ -388,17 +389,17 @@ $.extend(Controller, {
     onmodified: function() {
         console.log('=> modified');
         this.setButtonStates({
-            id: 1,
+            id: 2,
             text: 'Start Search',
             enabled: true,
             callback: $.proxy(this.start, this),
         }, {
-            id: 2,
+            id: 3,
             text: 'Clear Path',
             enabled: true,
             callback: $.proxy(this.clear, this),
         },{
-            id: 7,
+            id: 1,
             text: 'Set dest',
             enabled: true,
             callback: $.proxy(this.set, this),

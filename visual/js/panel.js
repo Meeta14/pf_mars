@@ -7,7 +7,7 @@ var Panel = {
 
         $('.panel').draggable();
         $('.accordion').accordion({
-            collapsible: false,
+            collapsible: true,
         });
         $('.option_label').click(function() {
             $(this).prev().click();
@@ -18,15 +18,17 @@ var Panel = {
         $('#play_panel').css({
             top: $algo.offset().top + $algo.outerHeight() + 20
         });
-        $('#NoOfDest').css({
-            top: $('#instructions_panel').offset().top + $('#instructions_panel').outerHeight() + 20
-        });
+        // $('#NoOfDest').css({
+        //     top: $('#instructions_panel').offset().top + $('#instructions_panel').outerHeight() + 20
+        // });
         $('#button2').attr('disabled', 'disabled');
         // $('#block_panel').css({
         //     top: $algo.offset().top + $algo.outerHeight() + 100
         // });
         // $('#button2').attr('disabled', 'disabled');
     },
+
+
 
     getFinder: function() {
         var finder, selected_header, distance, allowDiagonal,diagonal;//, biDirectional, dontCrossCorners, weight, trackRecursion, timeLimit;
@@ -116,13 +118,16 @@ var Panel = {
         }
 
         return finder;
-    }
+    },
+      getnumdest: function(){
+        // var selected_dest =typeof $('#NoOfDest' +
+        //                          '.option_label').val() !== 'undefined';
+        // var selected_dest = $('#NoOfDest' +
+        //                          '.option_label').val();
+        var selected_dest =$('input[name=dest]:checked').val();
+        console.log(selected_dest);
+        return selected_dest;
+    },
 
-    // getTerrain: function(){
-    //     selected_header = $(
-    //         '#play_panel '+
-    //         '.ui-accordion-header[aria-selected=true]'
-    //     ).attr('id');
-    //     return this.id
-    // }
+
 };

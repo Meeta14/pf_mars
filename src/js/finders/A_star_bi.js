@@ -7,8 +7,8 @@ class CellAttributes {
       this.g = g;
       this.f = f;
       this.h = h;
-      this.parent_i = i;
-      this.parent_j = j;
+      this.parent = i;
+      // this.parent_j = j;
       this.visitedBy = a; // a is 1 for sourcenode n 2 for end node
     }
 }
@@ -18,8 +18,9 @@ class CellAttributes {
 function AstarSearchBi(obj){
     // if there is choice between distance then h type = manhattan by default
     if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
-    else{this.htype = obj.htype}
-if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
+    else{
+        this.htype = obj.htype}
+    if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
     else{this.diagonal=obj.diagonal}
 }
 
@@ -37,8 +38,8 @@ AstarSearchBi.prototype.minFscore = function(openList,cellDetails){
 
 AstarSearchBi.prototype.successor = function(cellDetails, cell, parentNode, targetNode, weight, closedList, grid, openList, endNode){
     htype = this.htype;
-    if(targetNode.x == endNode.x && targetNode.y == endNode.y){visitedvia = 2; target_source = 1;}
-    else{visitedvia = 1; target_source = 2;}
+    if(targetNode.x == endNode.x && targetNode.y == endNode.y){visitedvia = 1; target_source = 2;}
+    else{visitedvia = 2; target_source = 1;}
 
     if(cellDetails[cell.x][cell.y].visitedBy == target_source){return true}
 // If the successor is already on the closed list or if it is blocked(the get neighbors fun takes care of it ie, does not return blocked neighbours), then ignore it. Else do the following
@@ -56,8 +57,8 @@ AstarSearchBi.prototype.successor = function(cellDetails, cell, parentNode, targ
             cellDetails[cell.x][cell.y].g = gnew;
             cellDetails[cell.x][cell.y].h = hnew;
             cellDetails[cell.x][cell.y].visitedBy = visitedvia;
-            cellDetails[cell.x][cell.y].parent_i = parentNode.x;
-            cellDetails[cell.x][cell.y].parent_j = parentNode.y;
+            cellDetails[cell.x][cell.y].parent = parentNode;
+            // cellDetails[cell.x][cell.y].parent_j = parentNode.y;
             }
         }
     return false;
@@ -101,8 +102,8 @@ AstarSearchBi.prototype.findPath = function(startX, startY, endX, endY, grid){
     cellDetails[sourceNode.x][sourceNode.y].g = 0.0;
     cellDetails[sourceNode.x][sourceNode.y].h = 0.0;
     cellDetails[sourceNode.x][sourceNode.y].visitedBy = 1;
-    cellDetails[sourceNode.x][sourceNode.y].parent_i = sourceNode.x;
-    cellDetails[sourceNode.x][sourceNode.y].parent_j = sourceNode.y;
+    cellDetails[sourceNode.x][sourceNode.y].parent = sourceNode;
+    // cellDetails[sourceNode.x][sourceNode.y].parent_j = sourceNode.y;
 
 // // TODO: check if same node is being pushed (can it be pushed?)
     openListstart.push(sourceNode);
@@ -113,8 +114,8 @@ AstarSearchBi.prototype.findPath = function(startX, startY, endX, endY, grid){
     cellDetails[endNode.x][endNode.y].g = 0.0;
     cellDetails[endNode.x][endNode.y].h = 0.0;
     cellDetails[endNode.x][endNode.y].visitedBy = 2;
-    cellDetails[endNode.x][endNode.y].parent_i = endNode.x;
-    cellDetails[endNode.x][endNode.y].parent_j = endNode.y;
+    cellDetails[endNode.x][endNode.y].parent = endNode;
+    // cellDetails[endNode.x][endNode.y].parent_j = endNode.y;
 
 // // TODO: check if same node is being pushed (can it be pushed?)
     openListend.push(endNode);
@@ -134,7 +135,12 @@ AstarSearchBi.prototype.findPath = function(startX, startY, endX, endY, grid){
         for (var i = 0; i < weights.length; i++) {
             // cellDetails[neighbours[i].x][neighbours[i].y].visitedBy = 1;
             foundDest = this.successor(cellDetails, neighbours[i], cell, endNode, weights[i], closedList, grid, openListstart, endNode)
-            if(foundDest){return Util.backtracebi(cellDetails, sourceNode, endNode);}
+            if(foundDest){
+                path1= Util.backtrace(cellDetails, neighbours[i]);   //path from endNode to Node1
+                path2=Util.backtrace(cellDetails, cell);    //path from sourceNode to Node2
+                path=path2.concat(path1.reverse());
+                return path;;
+                }
             }// end for loop
             // if(foundDest){break}
             // console.log(openList)
@@ -151,16 +157,17 @@ AstarSearchBi.prototype.findPath = function(startX, startY, endX, endY, grid){
         for (var i = 0; i < weights.length; i++) {
             // cellDetails[neighbours[i].x][neighbours[i].y].visitedBy = 2;
             foundDest = this.successor(cellDetails, neighbours[i], cell, sourceNode, weights[i], closedList, grid, openListend, endNode)
-            if(foundDest){{return Util.backtracebi(cellDetails, sourceNode, endNode);}}
+            if(foundDest){
+                path1= Util.backtrace(cellDetails, cell);   //path from endNode to Node1
+                path2=Util.backtrace(cellDetails, neighbours[i]);    //path from sourceNode to Node2
+                path=path2.concat(path1.reverse());
+                return path;
+            }
         }// end for loop
 
     } //end while loop
 
      if (foundDest == 0) {return 'not found'}
-     else{
-         // console.log(closedList)
-         // console.log(cellDetails)
-         return Util.backtracebi(cellDetails, sourceNode, endNode);}
- };
-
+     else{ console.log('error')};
+}
 module.exports = AstarSearchBi;

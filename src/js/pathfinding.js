@@ -11,10 +11,10 @@ var pathfinding = {
     'BreadthFS'                 : require('./finders/BreadthFirstSearch'),
     'Dijkstra'                  : require('./finders/Dijkstra'),
     'PriorityQueue'             : require('./finders/PQ'),
-    'BiAstarSearch'             : require('./finders/BiAStarFinder'),
-    'BiBestFirstSearch'         : require('./finders/BiBestFirstFinder'),
+    'BiAstarSearch'             : require('./finders/A_star_bi'),
+    // 'BiBestFirstSearch'         : require('./finders/BiBestFirstFinder'),
     // 'BiBreadthFirstFinder'      : require('./finders/BiBreadthFirstFinder'),
-    'DijkstraBi'          : require('./finders/BiDijkstraFinder'),
+    // 'DijkstraBi'          : require('./finders/BiDijkstraFinder'),
     // 'IDAStarFinder'             : require('./finders/IDAStarFinder'),
     // 'JumpPointFinder'           : require('./finders/JumpPointFinder'),
 };

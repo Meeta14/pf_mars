@@ -42,7 +42,7 @@ var Panel = {
                                     '.bi-directional:checked').val() !=='undefined';
             distance = $('input[name=astar_heuristic]:checked').val();
             if (biDirectional) {
-                finder = new PF.AstarSearchBI({
+                finder = new PF.BiAstarSearch({
                     htype: PF.Distance[distance],
                     diagonal: allowDiagonal
                 });

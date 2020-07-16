@@ -127,7 +127,7 @@ $.extend(Controller, {
 
 	getDest: function(){
 			// var destattr =$('input[name=dest]:checked').val();
-  		var destattr = Panel.getnumdest;
+  		var destattr = Panel.getnumdest();
   		return destattr;
 	},
     /**

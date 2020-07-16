@@ -139,7 +139,7 @@ AstarSearchBi.prototype.findPath = function(startX, startY, endX, endY, grid){
                 path1= Util.backtrace(cellDetails, neighbours[i]);   //path from endNode to Node1
                 path2=Util.backtrace(cellDetails, cell);    //path from sourceNode to Node2
                 path=path2.concat(path1.reverse());
-                return path;;
+                return path;
                 }
             }// end for loop
             // if(foundDest){break}

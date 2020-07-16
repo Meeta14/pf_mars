@@ -14,13 +14,16 @@ var Panel = {
         });
         $('#hide_instructions').click(function() {
             $('#instructions_panel').slideUp();
+            $('#NoOfDest').css({
+                top: 20
+            });
         });
         $('#play_panel').css({
             top: $algo.offset().top + $algo.outerHeight() + 20
         });
-        // $('#NoOfDest').css({
-        //     top: $('#instructions_panel').offset().top + $('#instructions_panel').outerHeight() + 20
-        // });
+        $('#landscape_panel').css({
+            top: $('#instructions_panel').offset().top + $('#instructions_panel').outerHeight() + 20
+        });
         $('#button2').attr('disabled', 'disabled');
         // $('#block_panel').css({
         //     top: $algo.offset().top + $algo.outerHeight() + 100
@@ -121,9 +124,10 @@ var Panel = {
     },
       getnumdest: function(){
         var selected_dest =$('input[name=dest]:checked').val();
-        console.log(selected_dest);
         return selected_dest;
     },
+
+
 
 
 };

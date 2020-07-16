@@ -98,23 +98,19 @@ var Controller = StateMachine.create({
             to:   'drawingWall'
         },
         {
-            name: 'eraseWall',
+            name: 'erase',
             from: ['ready', 'finished'],
-            to:   'erasingWall'
+            to:   'erasing'
         },
         {
             name: 'drawHill',
             from: ['ready', 'finished'],
             to:   'drawingHill'
         },
-        {
-            name: 'eraseHill',
-            from: ['ready', 'finished'],
-            to:   'erasingHill'
-        },
+
 		{
             name: 'rest',
-            from: ['draggingStart', 'draggingEnd', 'draggingEnd2', 'draggingEnd3', 'draggingEnd4', 'drawingWall', 'erasingWall'],
+            from: ['draggingStart', 'draggingEnd', 'draggingEnd2', 'draggingEnd3', 'draggingEnd4', 'drawingWall', 'drawingHill', 'erasing'],
             to  : 'ready'
         },
     ],
@@ -130,6 +126,11 @@ $.extend(Controller, {
   		var destattr = Panel.getnumdest();
   		return destattr;
 	},
+    getchoice: function(){
+      var selected_choice= $('input[name=terrain]:checked').val();
+      console.log(selected_choice);
+      return selected_choice;
+    },
     /**
      * Asynchronous transition from `none` state to `ready` state.
      */
@@ -163,18 +164,16 @@ $.extend(Controller, {
         this.setWalkableAt(gridX, gridY, false);
         // => drawingWall
     },
-    oneraseWall: function(event, from, to, gridX, gridY) {
+    onerase: function(event, from, to, gridX, gridY) {
         this.setWalkableAt(gridX, gridY, true);
-        // => erasingWall
+        this.setHillAt(gridX, gridY, false);
+        // => erasing Wall and hill
     },
     ondrawHill: function(event, from, to, gridX, gridY) {
         this.setHillAt(gridX, gridY, true);
         // => drawingWall
     },
-    oneraseHill: function(event, from, to, gridX, gridY) {
-        this.setHillAt(gridX, gridY, false);
-        // => erasingWall
-    },
+
     onsearch: function(event, from, to) {
         var timeStart, timeEnd;
             // finder = Panel.getFinder();
@@ -244,7 +243,7 @@ $.extend(Controller, {
     onmodify: function(event, from, to) {
         // => modified
     },
-		onset: function(event, from, to) {
+	onset: function(event, from, to) {
         setTimeout(function() {
             Controller.clearOperations();
             Controller.clearAll();
@@ -289,18 +288,24 @@ $.extend(Controller, {
             enabled: true,
             callback: $.proxy(this.set, this),
         },
-        {
-            id: 5,
-            text: 'obstacles',
-            enabled: true,
-            callback: $.proxy(this.drawWall, this),
-        },
-        {
-            id: 6,
-            text: 'Hill',
-            enabled: true,
-            callback: $.proxy(this.drawHill, this),
-        },
+        // {
+        //     id: 5,
+        //     text: 'Set',
+        //     enabled: true,
+        //     callback: $.proxy(this.landscape,this),
+        // },
+        // {
+        //     id: 5,
+        //     text: 'obstacles',
+        //     enabled: true,
+        //     callback: $.proxy(this.drawWall, this),
+        // },
+        // {
+        //     id: 6,
+        //     text: 'Hill',
+        //     enabled: true,
+        //     callback: $.proxy(this.drawHill, this),
+        // },
         // {
         //     id: 6,
         //     text: 'Valley',
@@ -521,22 +526,22 @@ $.extend(Controller, {
             this.dragEnd4();
             return;
         }
-        if (this.can('drawWall') && grid.isWalkableAt(gridX, gridY)) {
+        if (this.can('drawWall') && this.getchoice()==0 && grid.isWalkableAt(gridX, gridY)) {
             this.drawWall(gridX, gridY);
             return;
         }
-        if (this.can('eraseWall') && !grid.isWalkableAt(gridX, gridY)) {
-            this.eraseWall(gridX, gridY);
+        if (this.can('erase') && (!grid.isWalkableAt(gridX, gridY) || grid.isHillAt(gridX, gridY) ) ) {
+            this.erase(gridX, gridY);
             return;
         }
-        if (this.can('drawWall') && grid.isHillAt(gridX, gridY)) {
-            this.drawWall(gridX, gridY);
+        if (this.can('drawHill') && this.getchoice()==1 &&  !grid.isHillAt(gridX, gridY)) {
+            this.drawHill(gridX, gridY);
             return;
         }
-        if (this.can('eraseHill') && !grid.isHillAt(gridX, gridY)) {
-            this.eraseHill(gridX, gridY);
-            return;
-        }
+        // if (this.can('eraseHill') && !grid.isHillAt(gridX, gridY)) {
+        //     this.eraseHill(gridX, gridY);
+        //     return;
+        // }
     },
     mousemove: function(event) {
         var coord = View.toGridCoordinate(event.pageX, event.pageY),
@@ -572,15 +577,16 @@ $.extend(Controller, {
         case 'drawingWall':
             this.setWalkableAt(gridX, gridY, false);
             break;
-        case 'erasingWall':
+        case 'erasing':
             this.setWalkableAt(gridX, gridY, true);
+            this.setHillAt(gridX, gridY, false);
             break;
         case 'drawingHill':
             this.setHillAt(gridX, gridY, true);
             break;
-        case 'erasingHill':
-            this.setHillAt(gridX, gridY, false);
-            break;
+        // case 'erasingHill':
+        //     this.setHillAt(gridX, gridY, false);
+        //     break;
         }
     },
     mouseup: function(event) {
@@ -686,6 +692,7 @@ $.extend(Controller, {
         View.setAttributeAt(gridX, gridY, 'walkable', walkable);
     },
     setHillAt: function(gridX, gridY, hill) {
+        // console.log("setHillAt",hill);
         this.grid.setHillAt(gridX, gridY, hill);
         View.setAttributeAt(gridX, gridY, 'hill', hill);
     },

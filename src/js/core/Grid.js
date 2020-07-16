@@ -77,7 +77,7 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 	        neighbours.push(this.nodes[y - 1][x]);
 	        if(w){
 	        	if (this.isterrain(x, y - 1,node)){
-	        	weights.push(4);
+	        	weights.push(1000);
 		        }
 		        else{
 		        	weights.push(1)
@@ -91,7 +91,7 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 	        neighbours.push(this.nodes[y][x + 1]);
 	        if(w){
 		        if (this.isterrain(x+1,y,node)){
-		        	weights.push(4);
+		        	weights.push(1000);
 		        }
 		        else{
 		        	weights.push(1)
@@ -104,7 +104,7 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 	        neighbours.push(this.nodes[y + 1][x]);
 	        if(w){
 		        if (this.isterrain(x,y+1,node)){
-		        	weights.push(4);
+		        	weights.push(1000);
 		        }
 		        else{
 		        	weights.push(1)
@@ -116,7 +116,7 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 	        neighbours.push(this.nodes[y][x - 1]);
 	        if(w){
 		        if (this.isterrain(x-1, y ,node)){
-		        	weights.push(4);
+		        	weights.push(1000);
 		        }
 		        else{
 		        	weights.push(1)
@@ -128,7 +128,7 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 	        	neighbours.push(this.nodes[y-1][x - 1]);
 	        	if(w){
 			        if (this.isterrain(x-1, y-1 ,node)){
-			        	weights.push(4);
+			        	weights.push(1000);
 			        }
 			        else{
 			        	weights.push(1)
@@ -140,7 +140,7 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 	        	neighbours.push(this.nodes[y+1][x - 1]);
 	        	if(w){
 			        if (this.isterrain(x-1, y+1 ,node)){
-			        	weights.push(4);
+			        	weights.push(1000);
 			        }
 			        else{
 			        	weights.push(1)
@@ -152,7 +152,7 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 	        	neighbours.push(this.nodes[y-1][x + 1]);
 	        	if(w){
 			        if (this.isterrain(x+1, y-1 ,node)){
-			        	weights.push(4);
+			        	weights.push(1000);
 			        }
 			        else{
 			        	weights.push(1)
@@ -164,7 +164,7 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 	        	neighbours.push(this.nodes[y+1][x + 1]);
 	        	if(w){
 			        if (this.isterrain(x+1, y+1 ,node)){
-			        	weights.push(4);
+			        	weights.push(1000);
 			        }
 			        else{
 			        	weights.push(1)

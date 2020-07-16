@@ -38,6 +38,7 @@
       Drag the <span class="green">green</span> node to set the start position. <br>
       Drag the <span class="red">red</span> node to set the end position. <br>
       Choose an algorithm from the right-hand panel. <br>
+      Select number of destinations from the same panel. <br>
       Click Start Search in the lower-right corner to start the animation.
     </div>
 
@@ -162,11 +163,19 @@
       <button id="button3" class="control_button">Pause Search</button>
       <button id="button4" class="control_button">Clear Walls</button>
     </div>
-      <div id="play_new">
-      <button id="button5" class="control_button">Obstacle</button>
-      <button id="button6" class="control_button">Hill</button>
-      <button id="button7" class="control_button">Valley</button>
-    </div>
+  </div>
+
+  <div id="landscape_panel" class="panel ">
+<header><h2 class = "header_title">Set landscape</h2></header>
+    <div id="landscape" class="options">
+          <input type="radio" name="terrain" value=0 checked />
+          <label class="option_label">Obstacles</label> <br>
+          <input type="radio" name="terrain" value=1>
+          <label class="option_label">Hill</label> <br>
+          <input type="radio" name="terrain" value=2>
+          <label class="option_label">Valley</label> <br>
+       </div>
+<!--      <button id="button5" class="control_button" style="width: 80px;">Set</button> -->
     </div>
 
 

@@ -6,15 +6,13 @@ var pathfinding = {
     'DiagonalMovement'          : require('./core/DiagonalMovement'),
     'Distance'                  : require('./finders/distance'),
     'AstarSearch'               : require('./finders/A_star'),
-
-    'BestFirstSearch'           : require('./finders/BestFirstSearch'),
     'BreadthFS'                 : require('./finders/BreadthFirstSearch'),
     'Dijkstra'                  : require('./finders/Dijkstra'),
+    'DijkstraBi'                : require('./finders/BiDijkstra'),
     'PriorityQueue'             : require('./finders/PQ'),
     'BiAstarSearch'             : require('./finders/A_star_bi'),
-    // 'BiBestFirstSearch'         : require('./finders/BiBestFirstFinder'),
     // 'BiBreadthFirstFinder'      : require('./finders/BiBreadthFirstFinder'),
-    // 'DijkstraBi'          : require('./finders/BiDijkstraFinder'),
+
     // 'IDAStarFinder'             : require('./finders/IDAStarFinder'),
     // 'JumpPointFinder'           : require('./finders/JumpPointFinder'),
 };

@@ -1,155 +1,134 @@
+var Distance = require('./distance.js')
+var Util     = require('../core/Util.js')
 var PriorityQueue=require('./PQ.js')
-var Util     = require('../core/util.js')
 
 class CellAttributes {
-    constructor(f,visitedby, node){
+    constructor(f, i, j,visitedby){
       this.f = f;
-      this.parent=node;
+      this.parent_i = i
+      this.parent_j = j
       this.visitedby=visitedby;
     }
 }
 
-function DijkstraBi(obj){
-  if(obj.diagonal==undefined){this.diagonal=false;}
-  else{obj.diagonal=diagonal;}
+function BiDijkstra(obj){
+    if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
+    else{this.diagonal=obj.diagonal}
 }
 
-DijkstraBi.prototype.findPath= function(startX, startY, endX, endY, grid){
 
+BiDijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
 // check if source and destination is inside the grid // TODO: see input is valid ouside the func before givig input?
    sourceNode = grid.getNodeAt(startX, startY);
    endNode =  grid.getNodeAt(endX, endY);
-
 // check if either of the source or destination is blocked
-    if(grid.isBlock(startX, startY) || grid.isBlock(endX, endY)){return [];}
-
+    if(!grid.isWalkableAt(startX, startY) || !grid.isWalkableAt(endX, endY)){return [];}
     // check if source and destination is same
-    if(sourceNode.isequal(endNode)){return [];}
+    if(sourceNode.x == endNode.x && sourceNode.y == endNode.y){return [];}
 
-    var values=[grid.height,grid.width]
-    //declaring openlist as priority queue(it is ordered according to f value)
+    // var openList = [];
     var openList_source = new PriorityQueue(comparator = (nodeA, nodeB) => cellDetails[nodeA.x][nodeA.y].f < cellDetails[nodeB.x][nodeB.y].f);
     var openList_end = new PriorityQueue(comparator = (nodeA, nodeB) => cellDetails[nodeA.x][nodeA.y].f < cellDetails[nodeB.x][nodeB.y].f);
-
+    var values = [grid.height,grid.width];
     // 2d array that holds details of cell
     let cellDetails = [];
 
-    for(let i = 0; i < values[0]; i++) {
-        for (let j = 0; j < values[1]; j++){
+    for(let i = 0; i < values[1]; i++) {
+        for (let j = 0; j < values[0]; j++){
             cellDetails[i] = [...(cellDetails[i] ? cellDetails[i] : []),
                 new CellAttributes(Number.MAX_VALUE , -1, -1)
         ];
-      }
-  }
+        }
+    }
     // parameters of starting node
     cellDetails[sourceNode.x][sourceNode.y].f = 0.0;
-    cellDetails[sourceNode.x][sourceNode.y].parent = sourceNode;
-    cellDetails[endNode.x][endNode.y].f=0;
-    cellDetails[endNode.x][endNode.y].parent=endNode;
+    cellDetails[sourceNode.x][sourceNode.y].parent_i = sourceNode.x;
+    cellDetails[sourceNode.x][sourceNode.y].parent_j = sourceNode.y;
+    cellDetails[sourceNode.x][sourceNode.y].visitedby = 1;
+    cellDetails[endNode.x][endNode.y].f = 0.0;
+    cellDetails[endNode.x][endNode.y].parent_i = endNode.x;
+    cellDetails[endNode.x][endNode.y].parent_j = endNode.y;
+    cellDetails[endNode.x][endNode.y].visitedby = 2;
 
+// // TODO: check if same node is being pushed (can it be pushed?)
     openList_source.push(sourceNode);
     openList_end.push(endNode);
+
     sourceNode.opened=true;
     endNode.opened=true;
-    var Node1,Node2=new Node();
-    var foundDest = false; //flag variable to check if destination has been found
-    while(!openList_source.isEmpty() && !openList_end.isEmpty()){
-    //for the source list
-    	cell=openList_source.pop();
-     //    if(cell.isequal(endNode)){
-     //    	foundDest=true;
-     //    	break;
-     //    }
-        // else{
-          cell.opened=false;
-	        cell.closed = true;
-	        //get neighbours
-	        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)  //neighbours
-	        // var i;
-	        // for(i=0;i<neighbours.length;++i){
-	        // 	newf=cellDetails[cell.x][cell.y].f+weights[i]
-	        // 	cellDetails[neighbours[i].x][neighbours[i].y].f=Math.min(newf,cellDetails[neighbours[i].x][neighbours[i].y].f);
 
-	        // }
-	        neighbours.some(function(node,i){
-            newf=cellDetails[cell.x][cell.y].f+weights[i]
-            cellDetails[node.x][node.y].f=Math.min(newf,cellDetails[node.x][node.y].f);
-            if(!node.closed){
-              if(cellDetails[node.x][node.y].visitedby==2){
-                foundDest=true;
-                Node1=node;
-                Node2=cell;
-                return true;
+    
+    while(!openList_source.isEmpty() && !openList_end.isEmpty() ){
+      //for source openList
 
-              }
-              openList_source.push(node);
-              node.opened=true;
-              cellDetails[node.x][node.y].parent=cell;
-              cellDetails[node.x][node.y].visitedby=1;
+        cell=openList_source.pop();
+        cell.closed = true;
+        //get neighbours
+        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
+        for (var i = 0; i < weights.length; i++) {
+          if(!neighbours[i].closed){
+          
+          if(cellDetails[neighbours[i].x][neighbours[i].y].visitedby==2){
+          // cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
+          // cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
+          let path1= Util.backtrace2(cellDetails, neighbours[i]);   //path from endNode to neighbour
+          let path2=Util.backtrace2(cellDetails, cell);    //path from sourceNode to cell
+          let path=path2.concat(path1.reverse());
+          console.log("check1",path[0][0]==sourceNode.x && path[0][1]==sourceNode.y);
+          return path;
+        }
+        else{
+          cellDetails[neighbours[i].x][neighbours[i].y].visitedby=1;
+          newf=cellDetails[cell.x][cell.y].f+weights[i];
+          if(newf<cellDetails[neighbours[i].x][neighbours[i].y].f){
+            neighbours[i].opened=true;
+            cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
+            openList_source.push(neighbours[i]);
+            cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
+            cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
+          }
+        }
+            }  
+        } // end for loop
 
+      //for end openList 
+
+        cell=openList_end.pop();
+        cell.closed = true;
+        //get neighbours
+        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
+        for (var i = 0; i < weights.length; i++) {
+          if(!neighbours[i].closed){
+          
+          if(cellDetails[neighbours[i].x][neighbours[i].y].visitedby==1){
+          // cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
+          // cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
+          let path1= Util.backtrace2(cellDetails, cell);   //path from endNode to neighbour
+          let path2=Util.backtrace2(cellDetails, neighbours[i]);    //path from sourceNode to cell
+          let path=path2.concat(path1.reverse());
+          console.log("check2",path[0][0]==sourceNode.x && path[0][1]==sourceNode.y);
+          return path;
+        }
+        else{
+          cellDetails[neighbours[i].x][neighbours[i].y].visitedby=2;
+          newf=cellDetails[cell.x][cell.y].f+weights[i];
+          if(newf<cellDetails[neighbours[i].x][neighbours[i].y].f){
+            neighbours[i].opened=true;
+            cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
+            openList_end.push(neighbours[i]);
+            cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
+            cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
+
+
+          }
+        }
             }
-          } );
-	      // }
-
-
-        if(foundDest){
-          break;
-        }
-
-
-        //for the end list
-
-      cell=openList_end.pop();
-        // if(cell.isequal(endNode)){
-        //   foundDest=true;
-        //   break;
-        // }
-        // else{
-          cell.opened=false;
-          cell.closed = true;
-          //get neighbours
-          [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)  //neighbours
-          // var i;
-          // for(i=0;i<neighbours.length;++i){
-          //  newf=cellDetails[cell.x][cell.y].f+weights[i]
-          //  cellDetails[neighbours[i].x][neighbours[i].y].f=Math.min(newf,cellDetails[neighbours[i].x][neighbours[i].y].f);
-
-          // }
-          neighbours.some(function(node,i){
-            newf=cellDetails[cell.x][cell.y].f+weights[i]
-            cellDetails[node.x][node.y].f=Math.min(newf,cellDetails[node.x][node.y].f);
-            if(!node.closed){
-              if(cellDetails[node.x][node.y].visitedby==1){
-                foundDest=true;
-                Node2=node;
-                Node1=cell;
-                return true;
-              }
-              openList_end.push(node);
-              node.opened=true;
-              cellDetails[node.x][node.y].parent=cell;
-              cellDetails[node.x][node.y].visitedby=2;
-
-            }});
-        // }
-
-
-        if(foundDest){
-          break;
-        }
-
+        }// end for loop
 
 
     } //end while loop
 
-     if (foundDest == 0) {return 'not found'}
-     else{
-        path1= Util.backtrace(cellDetails, Node1);   //path from endNode to Node1
-        path2=Util.backtrace(cellDetails,Node2);    //path from sourceNode to Node2
-        path=path2.concat(path1.reverse());
-        return path;
+return "not found";
 
-      }
- }
-
+}
 module.exports=BiDijkstra;

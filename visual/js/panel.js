@@ -84,13 +84,13 @@ var Panel = {
             weight = weight >= 1 ? weight : 1; /* if negative or 0, use 1 */
 
             if (biDirectional) {
-                finder = new PF.BiBestFirstSearch({
+                finder = new PF.BiAstarSearch({
                     htype : PF.Distance[distance],
                     diagonal: allowDiagonal,
                     weight: weight
                 });
             } else {
-                finder = new PF.BestFirstSearch({
+                finder = new PF.AstarSearch({
                     htype : PF.Distance[distance],
                     diagonal: allowDiagonal,
                     weight: weight
@@ -100,7 +100,7 @@ var Panel = {
         case 'dijkstra_header':
             allowDiagonal = typeof $('#dijkstra_section ' +
                                      '.allow_diagonal:checked').val() !== 'undefined';
-             biDirectional = typeof $('#breadthfirst_section ' +
+             biDirectional = typeof $('#dijkstra_section ' +
                                       '.bi-directional:checked').val() !== 'undefined';
 
               if (biDirectional) {

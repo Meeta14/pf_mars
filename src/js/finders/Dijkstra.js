@@ -174,7 +174,66 @@ Dijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
 
 // // TODO: check if same node is being pushed (can it be pushed?)
     openList.push(sourceNode);
+<<<<<<< HEAD
     sourceNode.opened = true;
+=======
+    sourceNode.opened=true;
+
+    var foundDest = false; //flag variable to check if destination has been found
+
+		while(openList.length!= 0){
+
+	    	cell=openList[0]
+				openList.splice(0, 1)
+				closedList[cell.x][cell.y] = true;
+				cell.closed = true;
+	    	// var min=Number.MAX_VALUE;
+				[neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
+				// console.log(neighbours, weights)
+				for (var i = 0; i < weights.length; i++) {
+					// console.log('f', closedList[cell.x][cell.y] == false)
+						if(neighbours[i].x == endNode.x && neighbours[i].y == endNode.y){
+							cellDetails[neighbours[i].x][neighbours[i].y].parent_i = cell.x;
+							cellDetails[neighbours[i].x][neighbours[i].y].parent_j = cell.y;
+							foundDest=true;
+							break;
+						}
+						else if(closedList[neighbours[i].x][neighbours[i].y] == false){
+									fnew = cellDetails[cell.x][cell.y].f + weights;
+									if(cellDetails[neighbours[i].x][neighbours[i].y].f == Number.MAX_VALUE || cellDetails[neighbours[i].x][neighbours[i].y].f > fnew){
+							            openList.push(neighbours[i]);
+							            neighbours[i].opened = true;
+							            cellDetails[neighbours[i].x][neighbours[i].y].f = fnew;
+							            cellDetails[neighbours[i].x][neighbours[i].y].parent_i = cell.x;
+							            cellDetails[neighbours[i].x][neighbours[i].y].parent_j = cell.y;
+							            }
+							        }
+						}//end for loop
+						// console.log(openList)
+						if(foundDest){break};
+	        } //end while loop
+	    //     else{
+			// 			closedList[cell.x][cell.y] = true;
+		  //       cell.closed = true;
+		  //       //get neighbours
+		  //         //neighbours
+		  //       var i;
+		  //       for(i=0;i<neighbours.length;++i){
+			//
+		  //       	newf=cellDetails[cell.x][cell.y].f+weights[i]
+		  //       	cellDetails[neighbours[i].x][neighbours[i].y].f=Math.min(newf,cellDetails[neighbours[i].x][neighbours[i].y].f);
+			//
+		  //       }
+		  //       neighbours.forEach(function(node){
+			// 				if(!node.closed){
+			// 					openList.push(node);
+			// 					node.opened=true;
+			// 					cellDetails[node.x][node.y].parent=cell;
+			// 				}});
+		  //   }
+			//
+	    // } //end while loop
+>>>>>>> 6c65a8d7d029579e981aa1ad48c0638e246cd1e9
 
     while(openList.length != 0){
         cell=openList.pop();

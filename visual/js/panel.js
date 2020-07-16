@@ -38,49 +38,88 @@ var Panel = {
         case 'astar_header':
             allowDiagonal = typeof $('#astar_section ' +
                                      '.allow_diagonal:checked').val() !== 'undefined';
+            biDirectional = typeof $('#astar_section ' +
+                                    '.bi-directional:checked').val() !=='undefined';
             distance = $('input[name=astar_heuristic]:checked').val();
+            if (biDirectional) {
+                finder = new PF.BiAstarSearch({
+                    htype: PF.Distance[distance],
+                    diagonal: allowDiagonal
+                });
+            } else {
                 finder = new PF.AstarSearch({
                     htype: PF.Distance[distance],
                     diagonal: allowDiagonal
                 });
+            }
             break;
 
         case 'breadthfirst_header':
             allowDiagonal = typeof $('#breadthfirst_section ' +
                                      '.allow_diagonal:checked').val() !== 'undefined';
-                finder = new PF.BreadthFS({
-                    diagonal: allowDiagonal,
-                    diagonal: allowDiagonal
-                });
-            break;
+            biDirectional = typeof $('#breadthfirst_section ' +
+                                      '.bi-directional:checked').val() !== 'undefined';
+              if (biDirectional) {
+                  finder = new PF.BiBreadthFirstFinder({
+                      diagonal: allowDiagonal
+                  });
+              } else {
+                  finder = new PF.BreadthFS({
+                      diagonal: allowDiagonal
+              });
+          }
+              break;
 
         case 'bestfirst_header':
             allowDiagonal = typeof $('#bestfirst_section ' +
                                      '.allow_diagonal:checked').val() !== 'undefined';
+             biDirectional = typeof $('#bestfirst_section ' +
+                          '.bi-directional:checked').val() !== 'undefined';
             distance = $('input[name=bestfirst_heuristic]:checked').val();
+
+            weight = parseInt($('#bestfirst .spinner').val()) || 1000;
+            weight = weight >= 1 ? weight : 1; /* if negative or 0, use 1 */
+
+            if (biDirectional) {
+                finder = new PF.BiBestFirstSearch({
+                    htype : PF.Distance[distance],
+                    diagonal: allowDiagonal,
+                    weight: weight
+                });
+            } else {
                 finder = new PF.BestFirstSearch({
                     htype : PF.Distance[distance],
-                    diagonal: allowDiagonal
+                    diagonal: allowDiagonal,
+                    weight: weight
                 });
+            }
             break;
-
         case 'dijkstra_header':
             allowDiagonal = typeof $('#dijkstra_section ' +
                                      '.allow_diagonal:checked').val() !== 'undefined';
-                finder = new PF.Dijkstra({
-                    diagonal: allowDiagonal
-                });
-            break;
+             biDirectional = typeof $('#breadthfirst_section ' +
+                                      '.bi-directional:checked').val() !== 'undefined';
+
+              if (biDirectional) {
+                  finder = new PF.Dijkstra({
+                      diagonal: allowDiagonal
+                  });
+              } else {
+                  finder = new PF.Dijkstra({
+                      diagonal: allowDiagonal
+                  });
+              }
+              break;
         }
 
         return finder;
-    },
-
-    getTerrain: function(){
-        selected_header = $(
-            '#play_panel '+
-            '.ui-accordion-header[aria-selected=true]'
-        ).attr('id');
-        return this.id
     }
+
+    // getTerrain: function(){
+    //     selected_header = $(
+    //         '#play_panel '+
+    //         '.ui-accordion-header[aria-selected=true]'
+    //     ).attr('id');
+    //     return this.id
+    // }
 };

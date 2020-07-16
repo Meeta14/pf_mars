@@ -29,16 +29,9 @@ Dijkstra.prototype.findPath= function(startX, startY, endX, endY, grid){
 
     var values =  grid.dimention();
     //declaring openlist as priority queue(it is ordered according to f value)
-    var openList = [];// new PriorityQueue(comparator = (nodeA, nodeB) => cellDetails[nodeA.x][nodeA.y].f < cellDetails[nodeB.x][nodeB.y].f);
+    var  openList= [];
+    // new PriorityQueue(comparator = (nodeA, nodeB) => cellDetails[nodeA.x][nodeA.y].f < cellDetails[nodeB.x][nodeB.y].f);
 
-		closedList=[];
-    var i,j;
-    for(i=0;i<values[0];++i){
-      closedList.push([]);
-      for(j=0;j<values[1];++j){
-        closedList[i].push(false);
-      }
-    }
     // 2d array that holds details of cell
     let cellDetails = [];
 
@@ -63,20 +56,18 @@ Dijkstra.prototype.findPath= function(startX, startY, endX, endY, grid){
 
 	    	cell=openList[0]
 				openList.splice(0, 1)
-				closedList[cell.x][cell.y] = true;
 				cell.closed = true;
 	    	// var min=Number.MAX_VALUE;
 				[neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
 				// console.log(neighbours, weights)
 				for (var i = 0; i < weights.length; i++) {
-					// console.log('f', closedList[cell.x][cell.y] == false)
 						if(neighbours[i].x == endNode.x && neighbours[i].y == endNode.y){
 							cellDetails[neighbours[i].x][neighbours[i].y].parent_i = cell.x;
 							cellDetails[neighbours[i].x][neighbours[i].y].parent_j = cell.y;
 							foundDest=true;
 							break;
 						}
-						else if(closedList[neighbours[i].x][neighbours[i].y] == false){
+						else if(neighbours[i].closed == false){
 									fnew = cellDetails[cell.x][cell.y].f + weights;
 									if(cellDetails[neighbours[i].x][neighbours[i].y].f == Number.MAX_VALUE || cellDetails[neighbours[i].x][neighbours[i].y].f > fnew){
 							            openList.push(neighbours[i]);
@@ -90,27 +81,7 @@ Dijkstra.prototype.findPath= function(startX, startY, endX, endY, grid){
 						console.log(openList)
 						if(foundDest){break};
 	        } //end while loop
-	    //     else{
-			// 			closedList[cell.x][cell.y] = true;
-		  //       cell.closed = true;
-		  //       //get neighbours
-		  //         //neighbours
-		  //       var i;
-		  //       for(i=0;i<neighbours.length;++i){
-			//
-		  //       	newf=cellDetails[cell.x][cell.y].f+weights[i]
-		  //       	cellDetails[neighbours[i].x][neighbours[i].y].f=Math.min(newf,cellDetails[neighbours[i].x][neighbours[i].y].f);
-			//
-		  //       }
-		  //       neighbours.forEach(function(node){
-			// 				if(!node.closed){
-			// 					openList.push(node);
-			// 					node.opened=true;
-			// 					cellDetails[node.x][node.y].parent=cell;
-			// 				}});
-		  //   }
-			//
-	    // } //end while loop
+
 
      if (foundDest == 0) {return 'not found'}
      else{return Util.backtrace2(cellDetails, endNode)}

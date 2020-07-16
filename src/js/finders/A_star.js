@@ -14,12 +14,13 @@ class CellAttributes {
 // Astar has attributes:-
 // htype = type of h distace to be cal
 function AstarSearch(obj){
-    // if there is choice between distance then h type = manhattan by default
-    // if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
-    // else{this.htype = obj.htype}
-    this.htype=Distance.dijkstraFinder;
+    if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
+    else{this.htype = obj.htype}
+
     if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
     else{this.diagonal=obj.diagonal}
+    if(obj==undefined || obj.weight ==undefined){this.weight=1;}
+    else{this.weight=obj.weight;}
 }
 
 AstarSearch.prototype.minFscore = function(openList,cellDetails){
@@ -46,7 +47,7 @@ AstarSearch.prototype.successor = function(cellDetails, cell, parentNode, endNod
 // && !grid.isBlock(cell.x, cell.y, block)
     else if (closedList[cell.x][cell.y] == false ) {
         gnew = cellDetails[parentNode.x][parentNode.y].g + weight;
-        hnew =  10000000000*htype(cell.x, cell.y, endNode)
+        hnew =  this.weight*htype(cell.x, cell.y, endNode)
         fnew = gnew + hnew
         //
 

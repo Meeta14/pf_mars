@@ -87,7 +87,7 @@ Dijkstra.prototype.findPath= function(startX, startY, endX, endY, grid){
 							            }
 							        }
 						}//end for loop
-						console.log(openList)
+						// console.log(openList)
 						if(foundDest){break};
 	        } //end while loop
 	    //     else{

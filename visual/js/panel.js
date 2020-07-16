@@ -18,6 +18,9 @@ var Panel = {
         $('#play_panel').css({
             top: $algo.offset().top + $algo.outerHeight() + 20
         });
+        $('#NoOfDest').css({
+            top: $('#instructions_panel').offset().top + $('#instructions_panel').outerHeight() + 20
+        });
         $('#button2').attr('disabled', 'disabled');
         // $('#block_panel').css({
         //     top: $algo.offset().top + $algo.outerHeight() + 100

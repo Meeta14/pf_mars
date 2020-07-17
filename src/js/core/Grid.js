@@ -92,78 +92,124 @@ Grid.prototype.calcweight=function(x,y,node){
 	else{
 		return this.normal;
 	}
-	
+
 }
 
 //function to return all neighbours of a given node
-Grid.prototype.getNeighbours=function(node,diagonal,w=true){
+Grid.prototype.getNeighbours=function(node,diagonal,w=true, dont_cross_corners){
 	var x=node.x, y=node.y;
 	var dict={};
 	neighbours=[];
 	weights=[];
+	s0 = false, d0 = false,
+	s1 = false, d1 = false,
+	s2 = false, d2 = false,
+	s3 = false, d3 = false;
+	// ↑
+	if(this.isWalkableAt(x, y - 1)) {
+		s0 = true;
+		neighbours.push(this.nodes[y - 1][x]);
+		if(w){
+			weights.push(this.calcweight(x,y-1,node));
+		}
+	}
+	// →
+	if (this.isWalkableAt(x + 1, y)) {
+		s1 = true;
+		neighbours.push(this.nodes[y][x + 1]);
+		if(w){
+			weights.push(this.calcweight(x+1,y,node));
+		}
+	}
 
+	// ↓
+	if (this.isWalkableAt(x, y + 1)) {
+		s2 = true;
+		neighbours.push(this.nodes[y + 1][x]);
+		if(w){
+			weights.push(this.calcweight(x,y+1,node));
+		}
+	}
+	// ←
+	if (this.isWalkableAt(x - 1, y)) {
+		s3 = true;
+		neighbours.push(this.nodes[y][x - 1]);
+		if(w){
+			weights.push(this.calcweight(x-1,y,node));
+		}
+	}
 	    if(diagonal==true){
+			if(dont_cross_corners){
+				d0 = s3 && s0;
+				d1 = s0 && s1;
+				d2 = s1 && s2;
+				d3 = s2 && s3;}
+			else{
+				d0 = s3 || s0;
+				d1 = s0 || s1;
+				d2 = s1 || s2;
+				d3 = s2 || s3;}
 	    	let factor=Math.sqrt(2);
-	    	if (this.isInside(x-1 ,y-1) && !this.isBlock(x - 1, y-1)) {
+	    	if (d0 && this.isInside(x-1 ,y-1) && !this.isBlock(x - 1, y-1)) {
 	        	neighbours.push(this.nodes[y-1][x - 1]);
 	        	if(w){
 	        		weights.push(factor*this.calcweight(x-1,y-1,node));
 			    }
 	    	}
 
-	    	if (this.isInside(x-1 ,y+1) && !this.isBlock(x - 1, y+1)) {
+	    	if (d3 && this.isInside(x-1 ,y+1) && !this.isBlock(x - 1, y+1)) {
 	        	neighbours.push(this.nodes[y+1][x - 1]);
 	        	if(w){
 			        weights.push(factor*this.calcweight(x-1,y+1,node));
 			    }
 	    	}
 
-	    	if (this.isInside(x+1 ,y-1) && !this.isBlock(x +1, y-1)) {
+	    	if (d1 && this.isInside(x+1 ,y-1) && !this.isBlock(x +1, y-1)) {
 	        	neighbours.push(this.nodes[y-1][x + 1]);
 	        	if(w){
 			        weights.push(factor*this.calcweight(x+1,y-1,node));
 			    }
 	    	}
 
-	    	if (this.isInside(x+1 ,y+1) && !this.isBlock(x + 1, y+1)) {
+	    	if (d2 && this.isInside(x+1 ,y+1) && !this.isBlock(x + 1, y+1)) {
 	        	neighbours.push(this.nodes[y+1][x + 1]);
 	        	if(w){
 			        weights.push(factor*this.calcweight(x+1,y+1,node));
 		        }
-	 		}				
+	 		}
 
 	    }
 
-			if (this.isWalkableAt(x, y - 1)) {
-	        neighbours.push(this.nodes[y - 1][x]);
-	        if(w){
-	        	weights.push(this.calcweight(x,y-1,node));
-	        }
-
-	        
-	    }
-	    // →  
-	    if (this.isWalkableAt(x + 1, y)) {
-	        neighbours.push(this.nodes[y][x + 1]);
-	        if(w){
-		        weights.push(this.calcweight(x+1,y,node));
-	    	}
-	    }
-
-	    // ↓
-	    if (this.isWalkableAt(x, y + 1)) {
-	        neighbours.push(this.nodes[y + 1][x]);
-	        if(w){
-		        weights.push(this.calcweight(x,y+1,node));
-		    }
-	    }
-	    // ←
-	    if (this.isWalkableAt(x - 1, y)) {
-	        neighbours.push(this.nodes[y][x - 1]);
-	        if(w){
-		        weights.push(this.calcweight(x-1,y,node));
-		    }
-	    }
+		// 	if (this.isWalkableAt(x, y - 1)) {
+	    //     neighbours.push(this.nodes[y - 1][x]);
+	    //     if(w){
+	    //     	weights.push(this.calcweight(x,y-1,node));
+	    //     }
+		//
+		//
+	    // }
+	    // // →
+	    // if (this.isWalkableAt(x + 1, y)) {
+	    //     neighbours.push(this.nodes[y][x + 1]);
+	    //     if(w){
+		//         weights.push(this.calcweight(x+1,y,node));
+	    // 	}
+	    // }
+		//
+	    // // ↓
+	    // if (this.isWalkableAt(x, y + 1)) {
+	    //     neighbours.push(this.nodes[y + 1][x]);
+	    //     if(w){
+		//         weights.push(this.calcweight(x,y+1,node));
+		//     }
+	    // }
+	    // // ←
+	    // if (this.isWalkableAt(x - 1, y)) {
+	    //     neighbours.push(this.nodes[y][x - 1]);
+	    //     if(w){
+		//         weights.push(this.calcweight(x-1,y,node));
+		//     }
+	    // }
 
 	if(w){
 		return [neighbours,weights];
@@ -171,7 +217,7 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 	else{
 		return neighbours;
 	}
-	
+
 };
 
 Grid.prototype.isWalkableAt = function(x, y) {
@@ -199,7 +245,7 @@ Grid.prototype.setValleyAt = function(x, y, valley) {
 	else{
 		this.nodes[y][x].hill = 0;
 	}
-    
+
 };
 
 Grid.prototype.clone = function() {

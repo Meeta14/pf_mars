@@ -17,13 +17,23 @@ class CellAttributes {
 // htype = type of h distace to be cal
 function AstarSearchBi(obj){
     // if there is choice between distance then h type = manhattan by default
-    if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
-    else{
-        this.htype = obj.htype}
     if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
     else{this.diagonal=obj.diagonal}
+
     if(obj==undefined || obj.weight ==undefined){this.weight=1;}
     else{this.weight=obj.weight;}
+
+    if (this.diagonal === true) {
+        if(obj == undefined || obj.htype == undefined ){this.htype = Distance.octile}
+        else{this.htype = obj.htype}
+    } else {
+        if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
+        else{this.htype = obj.htype}
+    }
+
+    if(obj==undefined || obj.dontCrossCorners ==undefined){this.dontCrossCorners = false;}
+    else{this.dontCrossCorners =obj.dontCrossCorners;}
+
 }
 
 AstarSearchBi.prototype.minFscore = function(openList,cellDetails){
@@ -132,7 +142,7 @@ AstarSearchBi.prototype.findPath = function(startX, startY, endX, endY, grid){
         closedList[cell.x][cell.y] = true;
         cell.closed = true;
         //get neighbours
-        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
+        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners)
         // console.log(neighbours, weights)
         for (var i = 0; i < weights.length; i++) {
             // cellDetails[neighbours[i].x][neighbours[i].y].visitedBy = 1;
@@ -154,7 +164,7 @@ AstarSearchBi.prototype.findPath = function(startX, startY, endX, endY, grid){
         closedList[cell.x][cell.y] = true;
         cell.closed = true;
         //get neighbours
-        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
+        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners)
         // console.log(neighbours, weights)
         for (var i = 0; i < weights.length; i++) {
             // cellDetails[neighbours[i].x][neighbours[i].y].visitedBy = 2;

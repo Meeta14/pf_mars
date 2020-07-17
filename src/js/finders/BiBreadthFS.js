@@ -11,6 +11,8 @@ class CellAttributes {
 function BiBreadthFS(obj){
   if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
     else{this.diagonal=obj.diagonal}
+ if(obj==undefined || obj.dontCrossCorners ==undefined){this.dontCrossCorners = false;}
+    else{this.dontCrossCorners =obj.dontCrossCorners;}
 }
 
 BiBreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
@@ -74,7 +76,7 @@ BiBreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
          closedList[cell.x][cell.y] = true;
          cell.closed = true;
          //get neighbours
-         [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
+         [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners)
 
          for (var i = 0; i < weights.length; i++) {
             // check if the neighbour is the endnode
@@ -106,7 +108,7 @@ BiBreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
             closedList[cell.x][cell.y] = true;
             cell.closed = true;
             //get neighbours
-            [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
+            [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorner)
             for (var i = 0; i < weights.length; i++) {
                // check if the neighbour is the endnode
                if(cellDetails[neighbours[i].x][neighbours[i].y].visitedBy == fromstart){

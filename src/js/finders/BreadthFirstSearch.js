@@ -10,6 +10,8 @@ class CellAttributes {
 function BreadthFS(obj){
   if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
     else{this.diagonal=obj.diagonal}
+if(obj==undefined || obj.dontCrossCorners ==undefined){this.dontCrossCorners = false;}
+      else{this.dontCrossCorners =obj.dontCrossCorners;}
 }
 
 BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
@@ -62,7 +64,7 @@ BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
          closedList[cell.x][cell.y] = true;
          cell.closed = true;
          //get neighbours
-         [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
+         [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners)
          for (var i = 0; i < weights.length; i++) {
             // check if the neighbour is the endnode
             if(neighbours[i].x == endNode.x && neighbours[i].y == endNode.y){

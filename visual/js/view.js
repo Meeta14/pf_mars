@@ -58,7 +58,7 @@ var View = {
         stroke: 'yellow',
         'stroke-width': 3,
     },
-    supportedOperations: ['opened', 'closed', 'tested','hill'],  //'hill','valley'
+    supportedOperations: ['opened', 'closed', 'tested'],  //'hill','valley'
     init: function(opts) {
         this.numCols      = opts.numCols;
         this.numRows      = opts.numRows;

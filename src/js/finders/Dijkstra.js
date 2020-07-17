@@ -54,7 +54,10 @@ Dijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
 
     while(!openList.isEmpty()){
         cell=openList.pop();
+        cell.opened=false;
         cell.closed = true;
+
+        console.log(cell);
         //get neighbours
         [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
         for (var i = 0; i < weights.length; i++) {
@@ -68,14 +71,30 @@ Dijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
         }
         else{
         	newf=cellDetails[cell.x][cell.y].f+weights[i];
-        	if(newf<cellDetails[neighbours[i].x][neighbours[i].y].f){
-        		neighbours[i].opened=true;
-        		cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
-        		openList.push(neighbours[i]);
-        		cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
-        		cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
+        	// if(newf<cellDetails[neighbours[i].x][neighbours[i].y].f){
+        	// 	neighbours[i].opened=true;
+        	// 	cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
+        	// 	openList.push(neighbours[i]);
+        	// 	cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
+        	// 	cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
 
-        	}
+        	// }
+            if(cellDetails[neighbours[i].x][neighbours[i].y].f==Number.MAX_VALUE){
+                neighbours[i].opened=true;
+                cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
+                openList.push(neighbours[i]);
+                cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
+                cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
+            }
+            else if(newf<cellDetails[neighbours[i].x][neighbours[i].y].f){
+                neighbours[i].opened=true;
+                cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
+                // openList.push(neighbours[i]);
+                openList._siftUp();
+                cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
+                cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
+
+            }
         }
             if(foundDest){break}
             }

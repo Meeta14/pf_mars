@@ -41,10 +41,10 @@ var View = {
             fill: '#ce91eb',  //purple
             'stroke-opacity': 0.2,
         },
-        // valley: {
-        //     fill: '#e880b2',
-        //     'stroke-opacity': 0.2,
-        // },
+        valley: {
+            fill: '#6666ff',
+            'stroke-opacity': 0.2,
+        },
     },
     nodeColorizeEffect: {
         duration: 50,
@@ -58,7 +58,7 @@ var View = {
         stroke: 'yellow',
         'stroke-width': 3,
     },
-    supportedOperations: ['opened', 'closed', 'tested','hill'],  //'hill','valley'
+    supportedOperations: ['opened', 'closed', 'tested'],  //'hill','valley'
     init: function(opts) {
         this.numCols      = opts.numCols;
         this.numRows      = opts.numRows;
@@ -188,10 +188,15 @@ var View = {
             // this.setWalkableAt(gridX, gridY, true);
             this.setHillAt(gridX, gridY, value);
             break;
-        // case 'valley':
-        //     color = value ? nodeStyle.normal.fill : nodeStyle.valley.fill;
-        //     this.setvallyAt(gridX, gridY, value); //check name
-        //     break;
+        case 'valley':
+            if(value){
+                color = nodeStyle.valley.fill;
+            }
+            else{
+
+                color = nodeStyle.normal.fill}
+            this.setValleyAt(gridX, gridY, value);
+            break;
         case 'opened':
             this.colorizeNode(this.rects[gridY][gridX], nodeStyle.opened.fill);
             this.setCoordDirty(gridX, gridY, true);
@@ -238,7 +243,6 @@ var View = {
         if (value) {
             // clear blocked node
             if (node) {
-                // console.log(node)
                 this.colorizeNode(node, this.rects[gridY][gridX].attr('fill'));
                 this.zoomNode(node);
                 setTimeout(function() {
@@ -267,7 +271,7 @@ var View = {
         }
         node = hillNodes[gridY][gridX];
         if (!value) {
-            // clear blocked node
+            // clear hill node
             if (node) {
                 this.colorizeNode(node, this.rects[gridY][gridX].attr('fill'));
                 this.zoomNode(node);
@@ -277,12 +281,39 @@ var View = {
                 hillNodes[gridY][gridX] = null;
             }
         } else {
-            // draw blocked node
+            // draw hill node
             if (node) {
                 return;
             }
             node = hillNodes[gridY][gridX] = this.rects[gridY][gridX].clone();
             this.colorizeNode(node, this.nodeStyle.hill.fill);
+            this.zoomNode(node);
+        }
+    },
+    setValleyAt: function(gridX, gridY, value) {
+        var node, i, valleyNodes = this.valleyNodes;
+        if (!valleyNodes) {
+            valleyNodes = this.valleyNodes = new Array(this.numRows);
+            for (i = 0; i < this.numRows; ++i) {
+                valleyNodes[i] = [];
+            }
+        }
+        node = valleyNodes[gridY][gridX];
+        if (!value) {
+            if (node) {
+                this.colorizeNode(node, this.rects[gridY][gridX].attr('fill'));
+                this.zoomNode(node);
+                setTimeout(function() {
+                    node.remove();
+                }, this.nodeZoomEffect.duration);
+                valleyNodes[gridY][gridX] = null;
+            }
+        } else {
+            if (node) {
+                return;
+            }
+            node = valleyNodes[gridY][gridX] = this.rects[gridY][gridX].clone();
+            this.colorizeNode(node, this.nodeStyle.valley.fill);
             this.zoomNode(node);
         }
     },
@@ -321,6 +352,20 @@ var View = {
                 if (hillNodes[i][j]) {
                     hillNodes[i][j].remove();
                     hillNodes[i][j] = null;
+                }
+            }
+        }
+    },
+    clearValleyNodes: function() {
+        var i, j, valleyNodes = this.valleyNodes;
+        if (!valleyNodes) {
+            return;
+        }
+        for (i = 0; i < this.numRows; ++i) {
+            for (j = 0 ;j < this.numCols; ++j) {
+                if (valleyNodes[i][j]) {
+                    valleyNodes[i][j].remove();
+                    valleyNodes[i][j] = null;
                 }
             }
         }

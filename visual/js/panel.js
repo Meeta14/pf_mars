@@ -68,7 +68,7 @@ var Panel = {
             biDirectional = typeof $('#breadthfirst_section ' +
                                       '.bi-directional:checked').val() !== 'undefined';
               if (biDirectional) {
-                  finder = new PF.BiBreadthFirstFinder({
+                  finder = new PF.BiBreadthFS({
                       diagonal: allowDiagonal
                   });
               } else {

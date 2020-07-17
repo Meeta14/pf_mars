@@ -167,17 +167,23 @@ var View = {
         var color, nodeStyle = this.nodeStyle;
         switch (attr) {
         case 'walkable':
-            if(!value){color = nodeStyle.blocked.fill;}
+            if(!value){
+                color = nodeStyle.blocked.fill;
+            }
             // else if(this.grid.isHillAt(gridX, gridY)){color = nodeStyle.hill.fill;}
-            else{color = nodeStyle.normal.fill}
+            else{
+
+                color = nodeStyle.normal.fill}
             // color = value ? nodeStyle.normal.fill : nodeStyle.blocked.fill;
             // this.setHillAt(gridX, gridY, true);
             this.setWalkableAt(gridX, gridY, value);
             break;
         case 'hill':
-            if(value){color = nodeStyle.hill.fill;}
+            if(value){
+                color = nodeStyle.hill.fill;}
             // else if(!this.isWalkableAt){color = nodeStyle.blocked.fill;}
-            else{color = nodeStyle.normal.fill}
+            else{
+                color = nodeStyle.normal.fill}
             // color = value ? nodeStyle.normal.fill : nodeStyle.hill.fill;
             // this.setWalkableAt(gridX, gridY, true);
             this.setHillAt(gridX, gridY, value);
@@ -260,7 +266,7 @@ var View = {
             }
         }
         node = hillNodes[gridY][gridX];
-        if (value) {
+        if (!value) {
             // clear blocked node
             if (node) {
                 this.colorizeNode(node, this.rects[gridY][gridX].attr('fill'));

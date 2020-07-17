@@ -52,8 +52,8 @@ BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
     idx = 0;
     openList.push(sourceNode);
     sourceNode.opened = true;
-
-    while(openList.length != 0){
+    cond = true;
+    while(cond){
       // console.log(openList)
       //current cell in consideration
          cell=openList[idx];
@@ -83,6 +83,7 @@ BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
          }// end for loop
              if(foundDest){break}
              // console.log(openList)
+         cond = openList.length != idx;
     } //end while loop
 
       if (foundDest == 0) {return 'not found'}

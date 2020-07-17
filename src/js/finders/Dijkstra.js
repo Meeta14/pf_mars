@@ -54,7 +54,10 @@ Dijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
 
     while(!openList.isEmpty()){
         cell=openList.pop();
+        cell.opened=false;
         cell.closed = true;
+
+        console.log(cell);
         //get neighbours
         [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
         for (var i = 0; i < weights.length; i++) {

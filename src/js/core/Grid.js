@@ -84,9 +84,9 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 		        }
 	        }
 
-	        
+
 	    }
-	    // →  
+	    // →
 	    if (this.isWalkableAt(x + 1, y)) {
 	        neighbours.push(this.nodes[y][x + 1]);
 	        if(w){
@@ -170,7 +170,7 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 			        	weights.push(1)
 			        }
 		        }
-	 		}				
+	 		}
 
 	    }
 	if(w){
@@ -179,7 +179,7 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 	else{
 		return neighbours;
 	}
-	
+
 };
 
 Grid.prototype.isWalkableAt = function(x, y) {

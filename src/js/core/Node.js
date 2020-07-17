@@ -3,7 +3,7 @@ function Node(x,y,walkable,hill){
 	this.x=x;
 	this.y=y;
 	this.walkable=(walkable === undefined ? true : walkable);
-	this.hill=(hill === undefined ? false : hill);
+	this.hill=(hill === undefined ? 0 : hill);
 }
 
 Node.prototype.isequal = function(nodeA){

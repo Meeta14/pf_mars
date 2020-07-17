@@ -101,31 +101,35 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 	var dict={};
 	neighbours=[];
 	weights=[];
+	north=this.isWalkableAt(x, y + 1);
+	south=this.isWalkableAt(x, y - 1);
+	east=this.isWalkableAt(x+1, y );
+	west=this.isWalkableAt(x-1, y );
 
 	    if(diagonal==true){
 	    	let factor=Math.sqrt(2);
-	    	if (this.isInside(x-1 ,y-1) && !this.isBlock(x - 1, y-1)) {
+	    	if (this.isInside(x-1 ,y-1) && this.isWalkableAt(x - 1, y-1) && (west ||south)) {
 	        	neighbours.push(this.nodes[y-1][x - 1]);
 	        	if(w){
 	        		weights.push(factor*this.calcweight(x-1,y-1,node));
 			    }
 	    	}
 
-	    	if (this.isInside(x-1 ,y+1) && !this.isBlock(x - 1, y+1)) {
+	    	if (this.isInside(x-1 ,y+1) && this.isWalkableAt(x - 1, y+1) && !(west || north)) {
 	        	neighbours.push(this.nodes[y+1][x - 1]);
 	        	if(w){
 			        weights.push(factor*this.calcweight(x-1,y+1,node));
 			    }
 	    	}
 
-	    	if (this.isInside(x+1 ,y-1) && !this.isBlock(x +1, y-1)) {
+	    	if (this.isInside(x+1 ,y-1) && this.isWalkableAt(x +1, y-1) && !(east || south)) {
 	        	neighbours.push(this.nodes[y-1][x + 1]);
 	        	if(w){
 			        weights.push(factor*this.calcweight(x+1,y-1,node));
 			    }
 	    	}
 
-	    	if (this.isInside(x+1 ,y+1) && !this.isBlock(x + 1, y+1)) {
+	    	if (this.isInside(x+1 ,y+1) && this.isWalkableAt(x + 1, y+1) && (north || east)) {
 	        	neighbours.push(this.nodes[y+1][x + 1]);
 	        	if(w){
 			        weights.push(factor*this.calcweight(x+1,y+1,node));
@@ -134,7 +138,7 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 
 	    }
 
-			if (this.isWalkableAt(x, y - 1)) {
+			if (south) {
 	        neighbours.push(this.nodes[y - 1][x]);
 	        if(w){
 	        	weights.push(this.calcweight(x,y-1,node));
@@ -143,7 +147,7 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 	        
 	    }
 	    // →  
-	    if (this.isWalkableAt(x + 1, y)) {
+	    if (east) {
 	        neighbours.push(this.nodes[y][x + 1]);
 	        if(w){
 		        weights.push(this.calcweight(x+1,y,node));
@@ -151,14 +155,14 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 	    }
 
 	    // ↓
-	    if (this.isWalkableAt(x, y + 1)) {
+	    if (north) {
 	        neighbours.push(this.nodes[y + 1][x]);
 	        if(w){
 		        weights.push(this.calcweight(x,y+1,node));
 		    }
 	    }
 	    // ←
-	    if (this.isWalkableAt(x - 1, y)) {
+	    if (west) {
 	        neighbours.push(this.nodes[y][x - 1]);
 	        if(w){
 		        weights.push(this.calcweight(x-1,y,node));

@@ -13,6 +13,8 @@ class CellAttributes {
 function Dijkstra(obj){
     if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
     else{this.diagonal=obj.diagonal}
+    if(obj==undefined || obj.dontCrossCorners ==undefined){this.dontCrossCorners = false;}
+       else{this.dontCrossCorners =obj.dontCrossCorners;}
 }
 
 
@@ -57,12 +59,12 @@ Dijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
         cell.opened=false;
         cell.closed = true;
 
-        console.log(cell);
+        // console.log(cell);
         //get neighbours
-        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
+        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners)
         for (var i = 0; i < weights.length; i++) {
         	if(!neighbours[i].closed){
-        	
+
         	if(neighbours[i].x==endNode.x && neighbours[i].y == endNode.y){
         	foundDest=true;
         	cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;

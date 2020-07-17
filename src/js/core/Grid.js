@@ -6,7 +6,7 @@ function Grid(width,height){
 	this.width=width;
 	this.height=height;
 	this.nodes=this.makenodes(width,height);
-	this.hillweight=12;
+	this.hillweight=10;
 	this.valleyweight=1;
 	this.normal=5;
 }
@@ -75,13 +75,13 @@ Grid.prototype.calcweight=function(x,y,node){
 	let valley1=this.isValleyAt(x,y);
 	let valley2=this.isValleyAt(node.x,node.y);
 	if( (hill1 && valley2) || (hill2 && valley1)  ){
-		return Math.abs(this.hillweight-this.valleyweight);
+		return this.hillweight-this.valleyweight;
 	}
 	else if( (hill1 &&  !hill2) || (!hill1 && hill2) ){
-		return Math.abs(this.hillweight - this.normal);
+		return this.hillweight - this.normal;
 	}
 	else if( (valley1 &&  !valley2) || (!valley1 && valley2) ){
-		return Math.abs(this.valleyweight - this.normal);
+		return this.valleyweight - this.normal;
 	}
 	else if( hill1 && hill2 ){
 		return this.hillweight;
@@ -96,79 +96,82 @@ Grid.prototype.calcweight=function(x,y,node){
 }
 
 //function to return all neighbours of a given node
-Grid.prototype.getNeighbours=function(node,diagonal,w=true){
+Grid.prototype.getNeighbours=function(node,diagonal,w=true, dont_cross_corners){
 	var x=node.x, y=node.y;
 	var dict={};
 	neighbours=[];
 	weights=[];
-	north=this.isWalkableAt(x, y + 1);
-	south=this.isWalkableAt(x, y - 1);
-	east=this.isWalkableAt(x+1, y );
-	west=this.isWalkableAt(x-1, y );
+	s0 = false, d0 = false,
+	s1 = false, d1 = false,
+	s2 = false, d2 = false,
+	s3 = false, d3 = false;
+	// ↑
+	if(this.isWalkableAt(x, y - 1)) {
+		s0 = true;
+		neighbours.push(this.nodes[y - 1][x]);
+		if(w){
+			weights.push(this.calcweight(x,y-1,node));
+		}
+	}
+	// →
+	if (this.isWalkableAt(x + 1, y)) {
+		s1 = true;
+		neighbours.push(this.nodes[y][x + 1]);
+		if(w){
+			weights.push(this.calcweight(x+1,y,node));
+		}
+	}
 
-
-	    }
-	    // →
-	    if (this.isWalkableAt(x + 1, y)) {
-	        neighbours.push(this.nodes[y][x + 1]);
-	        if(w){
-		        if (this.isterrain(x+1,y,node)){
-		        	weights.push(1000);
-		        }
-		        else{
-		        	weights.push(1)
-		        }
-	    	}
-	    }
-
-	    // ↓
-	    if (this.isWalkableAt(x, y + 1)) {
-	        neighbours.push(this.nodes[y + 1][x]);
-	        if(w){
-		        if (this.isterrain(x,y+1,node)){
-		        	weights.push(1000);
-		        }
-		        else{
-		        	weights.push(1)
-		        }
-		    }
-	    }
-	    // ←
-	    if (this.isWalkableAt(x - 1, y)) {
-	        neighbours.push(this.nodes[y][x - 1]);
-	        if(w){
-		        if (this.isterrain(x-1, y ,node)){
-		        	weights.push(1000);
-		        }
-		        else{
-		        	weights.push(1)
-		        }
-		    }
-	    }
+	// ↓
+	if (this.isWalkableAt(x, y + 1)) {
+		s2 = true;
+		neighbours.push(this.nodes[y + 1][x]);
+		if(w){
+			weights.push(this.calcweight(x,y+1,node));
+		}
+	}
+	// ←
+	if (this.isWalkableAt(x - 1, y)) {
+		s3 = true;
+		neighbours.push(this.nodes[y][x - 1]);
+		if(w){
+			weights.push(this.calcweight(x-1,y,node));
+		}
+	}
 	    if(diagonal==true){
+			if(dont_cross_corners){
+				d0 = s3 && s0;
+				d1 = s0 && s1;
+				d2 = s1 && s2;
+				d3 = s2 && s3;}
+			else{
+				d0 = s3 || s0;
+				d1 = s0 || s1;
+				d2 = s1 || s2;
+				d3 = s2 || s3;}
 	    	let factor=Math.sqrt(2);
-	    	if (this.isInside(x-1 ,y-1) && this.isWalkableAt(x - 1, y-1) && (west ||south)) {
+	    	if (d0 && this.isInside(x-1 ,y-1) && !this.isBlock(x - 1, y-1)) {
 	        	neighbours.push(this.nodes[y-1][x - 1]);
 	        	if(w){
 	        		weights.push(factor*this.calcweight(x-1,y-1,node));
 			    }
 	    	}
 
-	    	if (this.isInside(x-1 ,y+1) && this.isWalkableAt(x - 1, y+1) && !(west || north)) {
+	    	if (d3 && this.isInside(x-1 ,y+1) && !this.isBlock(x - 1, y+1)) {
 	        	neighbours.push(this.nodes[y+1][x - 1]);
 	        	if(w){
 			        weights.push(factor*this.calcweight(x-1,y+1,node));
 			    }
 	    	}
 
-	    	if (this.isInside(x+1 ,y-1) && this.isWalkableAt(x +1, y-1) && !(east || south)) {
+	    	if (d1 && this.isInside(x+1 ,y-1) && !this.isBlock(x +1, y-1)) {
 	        	neighbours.push(this.nodes[y-1][x + 1]);
 	        	if(w){
 			        weights.push(factor*this.calcweight(x+1,y-1,node));
 			    }
 	    	}
 
-	    	if (this.isInside(x+1 ,y+1) && this.isWalkableAt(x + 1, y+1) && (north || east)) {
+	    	if (d2 && this.isInside(x+1 ,y+1) && !this.isBlock(x + 1, y+1)) {
 	        	neighbours.push(this.nodes[y+1][x + 1]);
 	        	if(w){
 			        weights.push(factor*this.calcweight(x+1,y+1,node));
@@ -177,36 +180,36 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 
 	    }
 
-			if (south) {
-	        neighbours.push(this.nodes[y - 1][x]);
-	        if(w){
-	        	weights.push(this.calcweight(x,y-1,node));
-	        }
-
-
-	    }
-	    // →
-	    if (east) {
-	        neighbours.push(this.nodes[y][x + 1]);
-	        if(w){
-		        weights.push(this.calcweight(x+1,y,node));
-	    	}
-	    }
-
-	    // ↓
-	    if (north) {
-	        neighbours.push(this.nodes[y + 1][x]);
-	        if(w){
-		        weights.push(this.calcweight(x,y+1,node));
-		    }
-	    }
-	    // ←
-	    if (west) {
-	        neighbours.push(this.nodes[y][x - 1]);
-	        if(w){
-		        weights.push(this.calcweight(x-1,y,node));
-		    }
-	    }
+		// 	if (this.isWalkableAt(x, y - 1)) {
+	    //     neighbours.push(this.nodes[y - 1][x]);
+	    //     if(w){
+	    //     	weights.push(this.calcweight(x,y-1,node));
+	    //     }
+		//
+		//
+	    // }
+	    // // →
+	    // if (this.isWalkableAt(x + 1, y)) {
+	    //     neighbours.push(this.nodes[y][x + 1]);
+	    //     if(w){
+		//         weights.push(this.calcweight(x+1,y,node));
+	    // 	}
+	    // }
+		//
+	    // // ↓
+	    // if (this.isWalkableAt(x, y + 1)) {
+	    //     neighbours.push(this.nodes[y + 1][x]);
+	    //     if(w){
+		//         weights.push(this.calcweight(x,y+1,node));
+		//     }
+	    // }
+	    // // ←
+	    // if (this.isWalkableAt(x - 1, y)) {
+	    //     neighbours.push(this.nodes[y][x - 1]);
+	    //     if(w){
+		//         weights.push(this.calcweight(x-1,y,node));
+		//     }
+	    // }
 
 	if(w){
 		return [neighbours,weights];

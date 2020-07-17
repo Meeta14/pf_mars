@@ -14,13 +14,24 @@ class CellAttributes {
 // Astar has attributes:-
 // htype = type of h distace to be cal
 function AstarSearch(obj){
-    if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
-    else{this.htype = obj.htype}
 
     if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
     else{this.diagonal=obj.diagonal}
+
     if(obj==undefined || obj.weight ==undefined){this.weight=1;}
     else{this.weight=obj.weight;}
+
+    if (this.diagonal === true) {
+        if(obj == undefined || obj.htype == undefined ){this.htype = Distance.octile}
+        else{this.htype = obj.htype}
+    } else {
+        if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
+        else{this.htype = obj.htype}
+    }
+
+    if(obj==undefined || obj.dontCrossCorners ==undefined){this.dontCrossCorners = false;}
+    else{this.dontCrossCorners =obj.dontCrossCorners;}
+
 }
 
 AstarSearch.prototype.minFscore = function(openList,cellDetails){
@@ -115,7 +126,7 @@ AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
         closedList[cell.x][cell.y] = true;
         cell.closed = true;
         //get neighbours
-        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
+        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners)
         // console.log(neighbours, weights)
         for (var i = 0; i < weights.length; i++) {
             foundDest = this.successor(cellDetails, neighbours[i], cell, endNode, weights[i], closedList, grid, openList)

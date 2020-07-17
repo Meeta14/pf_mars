@@ -133,7 +133,7 @@ $.extend(Controller, {
 	},
     getchoice: function(){
       var selected_choice= $('input[name=terrain]:checked').val();
-      console.log(selected_choice);
+      // console.log(selected_choice);
       return selected_choice;
     },
     /**

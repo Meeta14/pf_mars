@@ -14,6 +14,8 @@ class CellAttributes {
 function BiDijkstra(obj){
     if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
     else{this.diagonal=obj.diagonal}
+    if(obj==undefined || obj.dontCrossCorners ==undefined){this.dontCrossCorners = false;}
+       else{this.dontCrossCorners =obj.dontCrossCorners;}
 }
 
 
@@ -57,17 +59,17 @@ BiDijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
     sourceNode.opened=true;
     endNode.opened=true;
 
-    
+
     while(!openList_source.isEmpty() && !openList_end.isEmpty() ){
       //for source openList
 
         cell=openList_source.pop();
         cell.closed = true;
         //get neighbours
-        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
+        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners)
         for (var i = 0; i < weights.length; i++) {
           if(!neighbours[i].closed){
-          
+
           if(cellDetails[neighbours[i].x][neighbours[i].y].visitedby==2){
           // cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
           // cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
@@ -88,18 +90,18 @@ BiDijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
             cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
           }
         }
-            }  
+            }
         } // end for loop
 
-      //for end openList 
+      //for end openList
 
         cell=openList_end.pop();
         cell.closed = true;
         //get neighbours
-        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal)
+        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners)
         for (var i = 0; i < weights.length; i++) {
           if(!neighbours[i].closed){
-          
+
           if(cellDetails[neighbours[i].x][neighbours[i].y].visitedby==1){
           // cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
           // cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;

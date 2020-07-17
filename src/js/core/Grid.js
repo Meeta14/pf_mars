@@ -103,31 +103,32 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true){
 	weights=[];
 
 	    if(diagonal==true){
+	    	let factor=Math.sqrt(2);
 	    	if (this.isInside(x-1 ,y-1) && !this.isBlock(x - 1, y-1)) {
 	        	neighbours.push(this.nodes[y-1][x - 1]);
 	        	if(w){
-	        		weights.push(this.calcweight(x-1,y-1,node));
+	        		weights.push(factor*this.calcweight(x-1,y-1,node));
 			    }
 	    	}
 
 	    	if (this.isInside(x-1 ,y+1) && !this.isBlock(x - 1, y+1)) {
 	        	neighbours.push(this.nodes[y+1][x - 1]);
 	        	if(w){
-			        weights.push(this.calcweight(x-1,y+1,node));
+			        weights.push(factor*this.calcweight(x-1,y+1,node));
 			    }
 	    	}
 
 	    	if (this.isInside(x+1 ,y-1) && !this.isBlock(x +1, y-1)) {
 	        	neighbours.push(this.nodes[y-1][x + 1]);
 	        	if(w){
-			        weights.push(this.calcweight(x+1,y-1,node));
+			        weights.push(factor*this.calcweight(x+1,y-1,node));
 			    }
 	    	}
 
 	    	if (this.isInside(x+1 ,y+1) && !this.isBlock(x + 1, y+1)) {
 	        	neighbours.push(this.nodes[y+1][x + 1]);
 	        	if(w){
-			        weights.push(this.calcweight(x+1,y+1,node));
+			        weights.push(factor*this.calcweight(x+1,y+1,node));
 		        }
 	 		}				
 

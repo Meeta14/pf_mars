@@ -58,7 +58,7 @@ else{
 
 //function to check if array is present in list of terrain nodes
 Grid.prototype.isterrain=function(x,y,node){
-	if(this.isHillAt(x,y) && this.isHillAt(node.x,node.y)){
+	if(this.isHillAt(x,y) || this.isHillAt(node.x,node.y)){
 		return true;
 	}
 	else{

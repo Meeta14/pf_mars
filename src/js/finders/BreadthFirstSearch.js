@@ -46,19 +46,19 @@ BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
       ];
      }
  }
- // console.log(cellDetails)
     // parameters of starting node
    cellDetails[sourceNode.x][sourceNode.y].parent = sourceNode;
 
-
+    idx = 0;
     openList.push(sourceNode);
     sourceNode.opened = true;
 
     while(openList.length != 0){
       // console.log(openList)
       //current cell in consideration
-         cell=openList[0]
-         openList.shift()
+         cell=openList[idx];
+         idx = idx+1;
+         // openList.shift()
          closedList[cell.x][cell.y] = true;
          cell.closed = true;
          //get neighbours
@@ -66,13 +66,12 @@ BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
          for (var i = 0; i < weights.length; i++) {
             // check if the neighbour is the endnode
             if(neighbours[i].x == endNode.x && neighbours[i].y == endNode.y){
-               // closedList[neighbours[i].x][neighbours[i].y] = true;
                neighbours[i].closed = true;
                cellDetails[neighbours[i].x][neighbours[i].y].parent = cell;
                foundDest = true;
             }
             // if it is not blocked(get neighbour func takes care of it) and not visited yet
-            else if(closedList[neighbours[i].x][neighbours[i].y] != true){
+            else if(!(closedList[neighbours[i].x][neighbours[i].y] == true || neighbours[i].opened == true)){
                openList.push(neighbours[i]);
                // closedList[neighbours[i].x][neighbours[i].y] = true;
                neighbours[i].opened = true;

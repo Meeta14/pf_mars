@@ -22,6 +22,8 @@ function AstarSearchBi(obj){
         this.htype = obj.htype}
     if(obj == undefined || obj.diagonal == undefined ){this.diagonal=false;}
     else{this.diagonal=obj.diagonal}
+    if(obj==undefined || obj.weight ==undefined){this.weight=1;}
+    else{this.weight=obj.weight;}
 }
 
 AstarSearchBi.prototype.minFscore = function(openList,cellDetails){
@@ -45,7 +47,7 @@ AstarSearchBi.prototype.successor = function(cellDetails, cell, parentNode, targ
 // If the successor is already on the closed list or if it is blocked(the get neighbors fun takes care of it ie, does not return blocked neighbours), then ignore it. Else do the following
     else if (closedList[cell.x][cell.y] == false ) {
         gnew = cellDetails[parentNode.x][parentNode.y].g + weight;
-        hnew = htype(cell.x, cell.y, targetNode)
+        hnew = this.weight*htype(cell.x, cell.y, targetNode)
         fnew = gnew + hnew
         //
 

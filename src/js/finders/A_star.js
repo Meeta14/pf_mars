@@ -58,7 +58,7 @@ AstarSearch.prototype.successor = function(cellDetails, cell, parentNode, endNod
 // && !grid.isBlock(cell.x, cell.y, block)
     else if (closedList[cell.x][cell.y] == false ) {
         gnew = cellDetails[parentNode.x][parentNode.y].g + weight;
-        hnew =  this.weight*grid.normal*htype(cell.x, cell.y, endNode)  //multiplying hnew with grid.normal to make sure that g and h have equal weightage
+        hnew =  this.weight*grid.valleyweight*htype(cell.x, cell.y, endNode)  //multiplying hnew with grid.normal to make sure that g and h have equal weightage
         fnew = gnew + hnew
         //
 

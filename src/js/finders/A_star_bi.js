@@ -57,7 +57,7 @@ AstarSearchBi.prototype.successor = function(cellDetails, cell, parentNode, targ
 // If the successor is already on the closed list or if it is blocked(the get neighbors fun takes care of it ie, does not return blocked neighbours), then ignore it. Else do the following
     else if (closedList[cell.x][cell.y] == false ) {
         gnew = cellDetails[parentNode.x][parentNode.y].g + weight;
-        hnew = this.weight*htype(cell.x, cell.y, targetNode)
+        hnew = this.weight*grid.normal*htype(cell.x, cell.y, targetNode)
         fnew = gnew + hnew
         //
 

@@ -7,7 +7,7 @@ var Panel = {
 
         $('.panel').draggable();
         $('.accordion').accordion({
-            collapsible: true,
+            collapsible: false,
         });
         $('.option_label').click(function() {
             $(this).prev().click();
@@ -25,10 +25,16 @@ var Panel = {
             top: $('#instructions_panel').offset().top + $('#instructions_panel').outerHeight() + 20
         });
         $('#button2').attr('disabled', 'disabled');
-        // $('#block_panel').css({
-        //     top: $algo.offset().top + $algo.outerHeight() + 100
+
+        // var $func = $('#function_panel');
+        //
+        // $('.panel').draggable();
+        // $('.accordion').accordion({
+        //     collapsible: true,
         // });
-        // $('#button2').attr('disabled', 'disabled');
+        // $('.option_label').click(function() {
+        //     $(this).prev().click();
+        // });
     },
 
 

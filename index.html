@@ -178,6 +178,31 @@
        </div>
 <!--      <button id="button5" class="control_button" style="width: 80px;">Set</button> -->
     </div>
+    
+    <div id="function_panel" class="panel left_panel">
+      <header><h2 class="header_title">Select functions</h2></header>
+
+      <div class="accordion">
+        <h3 id="dest_header"><a href="#">Num of destinations</a></h3>
+        <div id = "NoOfDest" class = "finder_section">
+             <!-- <header><h2 class = "header_title">No. of destinations</h2></header> -->
+                <div class="options">
+                    <input type="radio" name="dest" value="One"  />
+                    <label class="option_label">1</label> <br>
+                    <input type="radio" name="dest" value="Two"/>
+                    <label class="option_label">2</label> <br>
+                    <input type="radio" name="dest" value="Three"/>
+                    <label class="option_label">3</label> <br>
+                    <!-- <input type="radio" name="dest" value="Four"/>
+                    <label class="option_label">4</label> <br> -->
+                 </div>
+             <button id="button8" class="control_button" onclick="myFunction()" >Set</button>
+             <script>function myFunction() {alert("plz select algo to continue");}</script>
+            </div>
+
+      </div><!-- .accordion -->
+    </div><!-- #function_panel -->
+
 
 
     <div id="stats"></div>

@@ -26,15 +26,6 @@ var Panel = {
         });
         $('#button2').attr('disabled', 'disabled');
 
-        // var $func = $('#function_panel');
-        //
-        // $('.panel').draggable();
-        // $('.accordion').accordion({
-        //     collapsible: true,
-        // });
-        // $('.option_label').click(function() {
-        //     $(this).prev().click();
-        // });
     },
 
 

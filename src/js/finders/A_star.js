@@ -22,9 +22,14 @@ function AstarSearch(obj){
     else{this.weight=obj.weight;}
 
     if (this.diagonal === true) {
-        if(obj == undefined || obj.htype == undefined ){this.htype = Distance.octile}
-        else{this.htype = obj.htype}
-    } else {
+        if(obj == undefined || obj.htype == undefined  || obj.htype == Distance.manhattan){
+            this.htype=Distance.octile;
+        } 
+        else{
+            this.htype=obj.htype;
+        }
+    } 
+    else {
         if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
         else{this.htype = obj.htype}
     }

@@ -6,7 +6,7 @@ function Grid(width,height){
 	this.width=width;
 	this.height=height;
 	this.nodes=this.makenodes(width,height);
-	this.hillweight=10;
+	this.hillweight=12;
 	this.valleyweight=1;
 	this.normal=5;
 }
@@ -149,7 +149,8 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true, dont_cross_corners){
 				d1 = s0 || s1;
 				d2 = s1 || s2;
 				d3 = s2 || s3;}
-	    	let factor=Math.sqrt(2);
+	    	// let factor=Math.sqrt(2);
+	    	let factor=1.4;
 	    	if (d0 && this.isInside(x-1 ,y-1) && !this.isBlock(x - 1, y-1)) {
 	        	neighbours.push(this.nodes[y-1][x - 1]);
 	        	if(w){

@@ -82,7 +82,7 @@ var Controller = StateMachine.create({
             from: ['ready', 'finished'],
             to:   'draggingEnd2'
         },
-				{
+                {
             name: 'dragEnd3',
             from: ['ready', 'finished'],
             to:   'draggingEnd3'
@@ -108,12 +108,17 @@ var Controller = StateMachine.create({
             to:   'drawingHill'
         },
         {
+            name: 'drawMaze',
+            from: ['ready', 'finished'],
+            to:   ['ready']
+        },
+        {
             name: 'drawValley',
             from: ['ready', 'finished'],
             to:   'drawingValley'
         },
 
-		{
+        {
             name: 'rest',
             from: ['draggingStart', 'draggingEnd', 'draggingEnd2', 'draggingEnd3', 'draggingEnd4', 'drawingWall', 'drawingHill', 'erasing','drawingValley'],
             to  : 'ready'
@@ -126,14 +131,13 @@ $.extend(Controller, {
     operationsPerSecond: 300,
 
 
-	getDest: function(){
-			// var destattr =$('input[name=dest]:checked').val();
-  		var destattr = Panel.getnumdest();
-  		return destattr;
-	},
+    getDest: function(){
+            // var destattr =$('input[name=dest]:checked').val();
+        var destattr = Panel.getnumdest();
+        return destattr;
+    },
     getchoice: function(){
       var selected_choice= $('input[name=terrain]:checked').val();
-      // console.log(selected_choice);
       return selected_choice;
     },
     /**
@@ -150,9 +154,9 @@ $.extend(Controller, {
             numRows: numRows
         });
 
-		this.endNodes = new Array;
+        this.endNodes = new Array;
 
-        	View.generateGrid(function() {
+            View.generateGrid(function() {
             Controller.setDefaultStartEndPos();
             Controller.bindEvents();
             Controller.transition(); // transit to the next state (ready)
@@ -183,25 +187,32 @@ $.extend(Controller, {
         this.setValleyAt(gridX, gridY, true);
         // => drawingWall
     },
+    ondrawMaze: function(event,from,to){
+        var maze= $( 'input[name=maze]:checked').val();
+        Controller.clearOperations();
+        Controller.clearAll();
+        Controller.buildNewGrid();
+        View.printMaze(maze);
+    },
 
     onsearch: function(event, from, to) {
         var timeStart, timeEnd;
             // finder = Panel.getFinder();
-			 timeStart = window.performance ? performance.now() : Date.now();
-			 var temp = 0;
-			par = [];
-			for(var i = 0; i < this.endNodes.length-1; i++){
-					j = i+1
-						var Grid = this.grid.clone();
-						var finder = Panel.getFinder();
-						var dist = finder.findPath(
-								this.endNodes[i][0], this.endNodes[i][1], this.endNodes[j][0], this.endNodes[j][1], Grid
-							);
-							par=par.concat(dist);
-							temp = temp + PF.Util.pathLength(dist)
-				}
-				this.path = par;
-				this.len = temp;
+             timeStart = window.performance ? performance.now() : Date.now();
+             var temp = 0;
+            par = [];
+            for(var i = 0; i < this.endNodes.length-1; i++){
+                    j = i+1
+                        var Grid = this.grid.clone();
+                        var finder = Panel.getFinder();
+                        var dist = finder.findPath(
+                                this.endNodes[i][0], this.endNodes[i][1], this.endNodes[j][0], this.endNodes[j][1], Grid
+                            );
+                            par=par.concat(dist);
+                            temp = temp + PF.Util.pathLength(dist)
+                }
+                this.path = par;
+                this.len = temp;
 
         this.operationCount = this.operations.length;
         timeEnd = window.performance ? performance.now() : Date.now();
@@ -253,7 +264,7 @@ $.extend(Controller, {
     onmodify: function(event, from, to) {
         // => modified
     },
-	onset: function(event, from, to) {
+    onset: function(event, from, to) {
         setTimeout(function() {
             Controller.clearOperations();
             Controller.clearAll();
@@ -278,50 +289,33 @@ $.extend(Controller, {
     onready: function() {
         console.log('=> ready');
         this.setButtonStates({
-            id: 2,
+            id: 3,
             text: 'Start Search',
             enabled: true,
             callback: $.proxy(this.start, this),
         }, {
-            id: 3,
+            id: 4,
             text: 'Pause Search',
             enabled: false,
         }, {
-            id: 4,
+            id: 5,
             text: 'Clear Walls',
             enabled: true,
             callback: $.proxy(this.reset, this),
         },
-		{
+        
+        {
+            id: 2,
+            text: 'Set maze',
+            enabled: true,
+            callback: $.proxy(this.drawMaze,this),
+        },
+        {
             id: 1,
             text: 'Set dest',
             enabled: true,
             callback: $.proxy(this.set, this),
         },
-        // {
-        //     id: 5,
-        //     text: 'Set',
-        //     enabled: true,
-        //     callback: $.proxy(this.landscape,this),
-        // },
-        // {
-        //     id: 5,
-        //     text: 'obstacles',
-        //     enabled: true,
-        //     callback: $.proxy(this.drawWall, this),
-        // },
-        // {
-        //     id: 6,
-        //     text: 'Hill',
-        //     enabled: true,
-        //     callback: $.proxy(this.drawHill, this),
-        // },
-        // {
-        //     id: 6,
-        //     text: 'Valley',
-        //     enabled: true,
-        //     callback: $.proxy(this.reset, this),
-        // }
     );
         // => [starting, draggingStart, draggingEnd, drawingStart, drawingEnd]
     },
@@ -330,27 +324,32 @@ $.extend(Controller, {
         // Clears any existing search progress
         this.clearFootprints();
         this.setButtonStates({
-            id: 3,
+            id: 4,
             enabled: true,
         },
-		{
+        {
             id: 1,
             text: 'Set dest',
             enabled: false,
             callback: $.proxy(this.set, this),
-        });
+        },
+        {
+            id: 2,
+            enabled: false,
+        }
+        );
         this.search();
         // => searching
     },
     onsearching: function() {
         console.log('=> searching');
         this.setButtonStates({
-            id: 2,
+            id: 3,
             text: 'Restart Search',
             enabled: true,
             callback: $.proxy(this.restart, this),
         }, {
-            id: 3,
+            id: 4,
             text: 'Pause Search',
             enabled: true,
             callback: $.proxy(this.pause, this),
@@ -359,18 +358,22 @@ $.extend(Controller, {
             text: 'Set dest',
             enabled: false,
             callback: $.proxy(this.set, this),
+        },
+        {
+            id: 2,
+            enabled: false,
         });
         // => [paused, finished]
     },
     onpaused: function() {
         console.log('=> paused');
         this.setButtonStates({
-            id: 2,
+            id: 3,
             text: 'Resume Search',
             enabled: true,
             callback: $.proxy(this.resume, this),
         }, {
-            id: 3,
+            id: 4,
             text: 'Cancel Search',
             enabled: true,
             callback: $.proxy(this.cancel, this),
@@ -379,18 +382,22 @@ $.extend(Controller, {
             text: 'Set dest',
             enabled: false,
             callback: $.proxy(this.set, this),
+        },
+        {
+            id: 2,
+            enabled: false,
         });
         // => [searching, ready]
     },
     onfinished: function() {
         console.log('=> finished');
         this.setButtonStates({
-            id: 2,
+            id: 3,
             text: 'Restart Search',
             enabled: true,
             callback: $.proxy(this.restart, this),
         }, {
-            id: 3,
+            id: 4,
             text: 'Clear Path',
             enabled: true,
             callback: $.proxy(this.clear, this),
@@ -399,17 +406,21 @@ $.extend(Controller, {
             text: 'Set dest',
             enabled: true,
             callback: $.proxy(this.set, this),
+        },
+        {
+            id: 2,
+            enabled: true,
         });
     },
     onmodified: function() {
         console.log('=> modified');
         this.setButtonStates({
-            id: 2,
+            id: 3,
             text: 'Start Search',
             enabled: true,
             callback: $.proxy(this.start, this),
         }, {
-            id: 3,
+            id: 4,
             text: 'Clear Path',
             enabled: true,
             callback: $.proxy(this.clear, this),
@@ -418,6 +429,10 @@ $.extend(Controller, {
             text: 'Set dest',
             enabled: true,
             callback: $.proxy(this.set, this),
+        },
+        {
+            id: 2,
+            enabled: true,
         });
     },
 
@@ -525,13 +540,13 @@ $.extend(Controller, {
             this.dragEnd();
             return;
         }
-			if (this.can('dragEnd2') && this.isEndPos(gridX, gridY,2)) {
-	            this.dragEnd2();
-	            return;
-	        }
-			if (this.can('dragEnd3') && this.isEndPos(gridX, gridY,3)) {
-	            this.dragEnd3();
-	            return;
+            if (this.can('dragEnd2') && this.isEndPos(gridX, gridY,2)) {
+                this.dragEnd2();
+                return;
+            }
+            if (this.can('dragEnd3') && this.isEndPos(gridX, gridY,3)) {
+                this.dragEnd3();
+                return;
         }
         if (this.can('dragEnd4') && this.isEndPos(gridX, gridY,4)) {
             this.dragEnd4();
@@ -573,11 +588,11 @@ $.extend(Controller, {
             if (grid.isWalkableAt(gridX, gridY)) {
                 this.setEndPos(gridX, gridY,1);}
             break;
-		case 'draggingEnd2':
+        case 'draggingEnd2':
             if (grid.isWalkableAt(gridX, gridY)) {
                 this.setEndPos(gridX, gridY,2);}
             break;
-		case 'draggingEnd3':
+        case 'draggingEnd3':
             if (grid.isWalkableAt(gridX, gridY)) {
                 this.setEndPos(gridX, gridY,3);}
             break;
@@ -608,7 +623,7 @@ $.extend(Controller, {
     },
     setButtonStates: function() {
         $.each(arguments, function(i, opt) {
-            var $button = Controller.$buttons.eq(opt.id - 1);
+            var $button = Controller.$buttons.eq(opt.id -1);
             if (opt.text) {
                 $button.text(opt.text);
             }
@@ -646,48 +661,48 @@ $.extend(Controller, {
         this.setStartPos(centerX - 5, centerY);
         this.setEndPos(centerX + 5, centerY, 1);
 
-		if(Controller.getDest() === "Two") {
+        if(Controller.getDest() === "Two") {
             this.setEndPos(centerX, centerY+5, 2);
 
-			if(this.endNodes[4]){
+            if(this.endNodes[4]){
                this.setEndPos(64*nodeSize, 36*nodeSize, 4);
-			   this.endNodes.splice(4);
+               this.endNodes.splice(4);
             }
 
             if(this.endNodes[3]){
                this.setEndPos(64*nodeSize, 36*nodeSize, 3);
-			   this.endNodes.splice(3);
+               this.endNodes.splice(3);
             }
         }
         else if(Controller.getDest() === "Three"){
             this.setEndPos(centerX, centerY+5, 2);
             this.setEndPos(centerX, centerY-5, 3);
 
-			if(this.endNodes[4]){
+            if(this.endNodes[4]){
                this.setEndPos(64*nodeSize, 36*nodeSize, 4);
-			   this.endNodes.splice(4);
+               this.endNodes.splice(4);
             }
         }
-		else if(Controller.getDest() === "Four"){
+        else if(Controller.getDest() === "Four"){
             this.setEndPos(centerX, centerY+5, 2);
             this.setEndPos(centerX, centerY-5, 3);
-			this.setEndPos(centerX-10, centerY, 4);
+            this.setEndPos(centerX-10, centerY, 4);
 
-		}
+        }
         else{
-			if(this.endNodes[4]){
+            if(this.endNodes[4]){
                this.setEndPos(64*nodeSize, 36*nodeSize, 4);
-			   this.endNodes.splice(4);
+               this.endNodes.splice(4);
             }
 
-			if(this.endNodes[3]){
+            if(this.endNodes[3]){
                this.setEndPos(64*nodeSize, 36*nodeSize, 3);
-			   this.endNodes.splice(3);
+               this.endNodes.splice(3);
             }
 
             if(this.endNodes[2]){
                this.setEndPos(64*nodeSize, 36*nodeSize, 2);
-			   this.endNodes.splice(2);
+               this.endNodes.splice(2);
             }
         }
     },
@@ -715,11 +730,11 @@ $.extend(Controller, {
         return gridX === this.endNodes[0][0] && gridY === this.endNodes[0][1];
     },
     isEndPos: function(gridX, gridY, n) {
-		if(this.endNodes[n] === undefined) return false;
- 		return (gridX === this.endNodes[n][0] && gridY === this.endNodes[n][1]);
+        if(this.endNodes[n] === undefined) return false;
+        return (gridX === this.endNodes[n][0] && gridY === this.endNodes[n][1]);
     },
     isStartOrEndPos: function(gridX, gridY) {
-		return this.isStartPos(gridX, gridY) || this.isEndPos(gridX, gridY, 1) || this.isEndPos(gridX, gridY, 2)
-		   || this.isEndPos(gridX, gridY, 3) || this.isEndPos(gridX, gridY, 4);
+        return this.isStartPos(gridX, gridY) || this.isEndPos(gridX, gridY, 1) || this.isEndPos(gridX, gridY, 2)
+           || this.isEndPos(gridX, gridY, 3) || this.isEndPos(gridX, gridY, 4);
     },
 });

@@ -317,6 +317,9 @@ var View = {
             this.zoomNode(node);
         }
     },
+    printMaze: function(maze){
+        console.log("in print maze",maze);
+    },
 
     clearFootprints: function() {
         var i, x, y, coord, coords = this.getDirtyCoords();

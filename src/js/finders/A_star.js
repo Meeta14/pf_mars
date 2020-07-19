@@ -22,13 +22,19 @@ function AstarSearch(obj){
     else{this.weight=obj.weight;}
 
     if (this.diagonal === true) {
-        if(obj == undefined || obj.htype == undefined ){this.htype = Distance.octile}
-        else{this.htype = obj.htype}
-    } else {
+        if(obj == undefined || obj.htype == undefined  || obj.htype == Distance.manhattan){
+            this.htype=Distance.octile;
+        } 
+        else{
+            this.htype=obj.htype;
+        }
+
+    }
+    else {
         if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
         else{this.htype = obj.htype}
-    }
-
+        }
+    
     if(obj==undefined || obj.dontCrossCorners ==undefined){this.dontCrossCorners = false;}
     else{this.dontCrossCorners =obj.dontCrossCorners;}
 
@@ -77,6 +83,7 @@ AstarSearch.prototype.successor = function(cellDetails, cell, parentNode, endNod
 };
 
 AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
+    
 // check if source and destination is inside the grid // TODO: see input is valid ouside the func before givig input?
    sourceNode = grid.getNodeAt(startX, startY);
    endNode =  grid.getNodeAt(endX, endY);

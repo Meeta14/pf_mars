@@ -138,8 +138,12 @@
             <label class="option_label">Don't Cross Corners</label> <br>
           </div>
         </div>
+
+
+
+
         <h3 id="dest_header"><a href="#">Num of destinations</a></h3>
-        <div id = "NoOfDest" class = "finder_section">
+        <div id = "NoOfDest" class="finder_section" >
              <!-- <header><h2 class = "header_title">No. of destinations</h2></header> -->
                 <div class="options">
                     <input type="radio" name="dest" value="One"  />
@@ -151,18 +155,35 @@
                     <!-- <input type="radio" name="dest" value="Four"/>
                     <label class="option_label">4</label> <br> -->
                  </div>
-             <button id="button1" class="control_button" onclick="myFunction()" >Set</button>
+             <button id="button1" class="control_button" onclick="myFunction()" >Set dest</button>
              <script>function myFunction() {alert("plz select algo to continue");}</script>
             </div>
+
+        <h3 id="maze_header"><a href="#">Maze</a></h3>
+        <div id = "maze_section" class="finder_section">
+             <!-- <header><h2 class = "header_title">No. of destinations</h2></header> -->
+                <div class="options">
+                    <input type="radio" name="maze" value=1  />
+                    <label class="option_label">Lorem</label> <br>
+                    <input type="radio" name="maze" value=2>
+                    <label class="option_label">Ipsum</label> <br>
+                 </div>
+             <button id="button2" class="control_button"  >Set maze</button>
+            </div>
+
+
+
+
+
 
       </div><!-- .accordion -->
     </div><!-- #algorithm_panel -->
 
     <div id="play_panel" class="panel right_panel">
       <div id="play_new">
-      <button id="button2" class="control_button">Start Search</button>
-      <button id="button3" class="control_button">Pause Search</button>
-      <button id="button4" class="control_button">Clear Walls</button>
+      <button id="button3" class="control_button">Start Search</button>
+      <button id="button4" class="control_button">Pause Search</button>
+      <button id="button5" class="control_button">Clear Walls</button>
     </div>
   </div>
 
@@ -178,6 +199,15 @@
        </div>
 <!--      <button id="button5" class="control_button" style="width: 80px;">Set</button> -->
     </div>
+
+<!--   <div id="extras_panel" class = "panel right_panel">
+    <header><h2 class = "header_title">Options</h2></header>
+    <div class = "accordion">
+
+
+
+    </div>
+  </div> -->
 
     <div id="stats"></div>
 

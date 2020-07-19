@@ -22,13 +22,18 @@ function AstarSearch(obj){
     else{this.weight=obj.weight;}
 
     if (this.diagonal === true) {
-        if(obj == undefined || obj.htype == undefined ){this.htype = Distance.octile}
-        else{this.htype = obj.htype}
-    } else {
+        if(obj == undefined || obj.htype == undefined  || obj.htype == Distance.manhattan){
+            this.htype=Distance.octile;
+        } 
+        else{
+            this.htype=obj.htype;
+        }
+    }
+        else {
         if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
         else{this.htype = obj.htype}
-    }
-
+        }
+    
     if(obj==undefined || obj.dontCrossCorners ==undefined){this.dontCrossCorners = false;}
     else{this.dontCrossCorners =obj.dontCrossCorners;}
 
@@ -58,7 +63,7 @@ AstarSearch.prototype.successor = function(cellDetails, cell, parentNode, endNod
 // && !grid.isBlock(cell.x, cell.y, block)
     else if (closedList[cell.x][cell.y] == false ) {
         gnew = cellDetails[parentNode.x][parentNode.y].g + weight;
-        hnew =  this.weight*grid.normal*htype(cell.x, cell.y, endNode)  //multiplying hnew with grid.normal to make sure that g and h have equal weightage
+        hnew =  this.weight*grid.valleyweight*htype(cell.x, cell.y, endNode)  //multiplying hnew with grid.normal to make sure that g and h have equal weightage
         fnew = gnew + hnew
         //
 
@@ -77,6 +82,7 @@ AstarSearch.prototype.successor = function(cellDetails, cell, parentNode, endNod
 };
 
 AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
+    
 // check if source and destination is inside the grid // TODO: see input is valid ouside the func before givig input?
    sourceNode = grid.getNodeAt(startX, startY);
    endNode =  grid.getNodeAt(endX, endY);

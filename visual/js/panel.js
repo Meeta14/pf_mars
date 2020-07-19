@@ -24,6 +24,9 @@ var Panel = {
         $('#landscape_panel').css({
             top: $('#instructions_panel').offset().top + $('#instructions_panel').outerHeight() + 20
         });
+        // $('#extras_panel').css({
+        //     top: $('#play_panel').offset().top + $('#play_panel').outerHeight() + 20
+        // });
         $('#button2').attr('disabled', 'disabled');
 
     },
@@ -138,6 +141,7 @@ var Panel = {
         var selected_dest =$('input[name=dest]:checked').val();
         return selected_dest;
     },
+
 
 
 

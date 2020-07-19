@@ -28,13 +28,9 @@ function AstarSearch(obj){
         else{
             this.htype=obj.htype;
         }
-<<<<<<< HEAD
+
     }
-        else {
-=======
-    } 
     else {
->>>>>>> 597f67e93f2b20b54de2e86f3da9a3147869535d
         if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
         else{this.htype = obj.htype}
         }

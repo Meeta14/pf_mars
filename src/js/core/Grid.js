@@ -75,13 +75,13 @@ Grid.prototype.calcweight=function(x,y,node){
 	let valley1=this.isValleyAt(x,y);
 	let valley2=this.isValleyAt(node.x,node.y);
 	if( (hill1 && valley2) || (hill2 && valley1)  ){
-		return Math.abs(this.hillweight-this.valleyweight);
+		return this.hillweight-this.valleyweight;
 	}
 	else if( (hill1 &&  !hill2) || (!hill1 && hill2) ){
-		return Math.abs(this.hillweight - this.normal);
+		return this.hillweight - this.normal;
 	}
 	else if( (valley1 &&  !valley2) || (!valley1 && valley2) ){
-		return Math.abs(this.valleyweight - this.normal);
+		return this.normal - this.valleyweight;
 	}
 	else if( hill1 && hill2 ){
 		return this.hillweight;

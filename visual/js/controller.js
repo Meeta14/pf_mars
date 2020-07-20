@@ -187,13 +187,46 @@ $.extend(Controller, {
         this.setValleyAt(gridX, gridY, true);
         // => drawingWall
     },
+
+    // Orientation:  function(width, height){
+    //     if(width < height){return 1}
+    //     if(height < width){return 2}
+    //     return  (Math.floor((Math.random() * 2)))+1
+    // },
+
+    RecursiveMaze : function(grid,x,y, width, height,orientation){
+        if(width<2 && height<2){return}
+
+        if(width > 2){
+            wx = x +  Math.floor(width * .2);  // Math.floor((Math.random() * (width-6)))+3;
+            // wy = y;
+            for (var i=0; i<height; i++){
+                this.grid.setWalkableAt(wx, i, false);
+                View.setAttributeAt(wx, i, 'walkable', false);
+            }
+        }
+
+        if(height>2){
+            // wx = x;  // Math.floor((Math.random() * (width-6)))+3;
+            wy = y +  Math.floor(height * .2);
+            for (var i=0; i<width; i++){
+                this.grid.setWalkableAt(i, wy, false);
+                View.setAttributeAt(i, wy, 'walkable', false);
+            }
+        }
+
+
+    },
     ondrawMaze: function(event,from,to){
         var maze= $( 'input[name=maze]:checked').val();
         Controller.clearOperations();
         Controller.clearAll();
         Controller.buildNewGrid();
-        View.printMaze(maze);
-    },
+        width = this.gridSize[0];
+        height = this.gridSize[1];
+        console.log('starting drawing maze')
+        this.RecursiveMaze(this.grid,0,0, width, height, this.Orientation(width,height));
+},
 
     onsearch: function(event, from, to) {
         var timeStart, timeEnd;
@@ -303,7 +336,7 @@ $.extend(Controller, {
             enabled: true,
             callback: $.proxy(this.reset, this),
         },
-        
+
         {
             id: 2,
             text: 'Set maze',

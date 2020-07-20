@@ -28,7 +28,6 @@ BiDijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
     // check if source and destination is same
     if(sourceNode.x == endNode.x && sourceNode.y == endNode.y){return [];}
 
-    // var openList = [];
     var openList_source = new PriorityQueue(comparator = (nodeA, nodeB) => cellDetails[nodeA.x][nodeA.y].f < cellDetails[nodeB.x][nodeB.y].f);
     var openList_end = new PriorityQueue(comparator = (nodeA, nodeB) => cellDetails[nodeA.x][nodeA.y].f < cellDetails[nodeB.x][nodeB.y].f);
     var values = [grid.height,grid.width];
@@ -47,6 +46,7 @@ BiDijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
     cellDetails[sourceNode.x][sourceNode.y].parent_i = sourceNode.x;
     cellDetails[sourceNode.x][sourceNode.y].parent_j = sourceNode.y;
     cellDetails[sourceNode.x][sourceNode.y].visitedby = 1;
+    // parameters of end node
     cellDetails[endNode.x][endNode.y].f = 0.0;
     cellDetails[endNode.x][endNode.y].parent_i = endNode.x;
     cellDetails[endNode.x][endNode.y].parent_j = endNode.y;
@@ -70,64 +70,57 @@ BiDijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
         for (var i = 0; i < weights.length; i++) {
           if(!neighbours[i].closed){
 
-          if(cellDetails[neighbours[i].x][neighbours[i].y].visitedby==2){
-          // cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
-          // cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
-          let path1= Util.backtrace2(cellDetails, neighbours[i]);   //path from endNode to neighbour
-          let path2=Util.backtrace2(cellDetails, cell);    //path from sourceNode to cell
-          let path=path2.concat(path1.reverse());
-          console.log("check1",path[0][0]==sourceNode.x && path[0][1]==sourceNode.y);
-          return path;
-        }
-        else{
-          cellDetails[neighbours[i].x][neighbours[i].y].visitedby=1;
-          newf=cellDetails[cell.x][cell.y].f+weights[i];
-          if(newf<cellDetails[neighbours[i].x][neighbours[i].y].f){
-            neighbours[i].opened=true;
-            cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
-            openList_source.push(neighbours[i]);
-            cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
-            cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
-          }
-        }
-            }
-        } // end for loop
+              if(cellDetails[neighbours[i].x][neighbours[i].y].visitedby==2){
+                  let path1= Util.backtrace2(cellDetails, neighbours[i]);   //path from endNode to neighbour
+                  let path2=Util.backtrace2(cellDetails, cell);    //path from sourceNode to cell
+                  let path=path2.concat(path1.reverse());
+                  console.log("check1",path[0][0]==sourceNode.x && path[0][1]==sourceNode.y);
+                  return path;
+                }
+            else{
+                cellDetails[neighbours[i].x][neighbours[i].y].visitedby=1;
+                newf=cellDetails[cell.x][cell.y].f+weights[i];
 
-      //for end openList
+              if(newf<cellDetails[neighbours[i].x][neighbours[i].y].f){
+
+                  neighbours[i].opened=true;
+                  cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
+                  openList_source.push(neighbours[i]);
+                  cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
+                  cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
+                    }//if
+                  }//else
+            }//if
+        } // end for loop
 
         cell=openList_end.pop();
         cell.closed = true;
         //get neighbours
         [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners)
         for (var i = 0; i < weights.length; i++) {
-          if(!neighbours[i].closed){
+              if(!neighbours[i].closed){
 
-          if(cellDetails[neighbours[i].x][neighbours[i].y].visitedby==1){
-          // cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
-          // cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
-          let path1= Util.backtrace2(cellDetails, cell);   //path from endNode to neighbour
-          let path2=Util.backtrace2(cellDetails, neighbours[i]);    //path from sourceNode to cell
-          let path=path2.concat(path1.reverse());
-          console.log("check2",path[0][0]==sourceNode.x && path[0][1]==sourceNode.y);
-          return path;
-        }
-        else{
-          cellDetails[neighbours[i].x][neighbours[i].y].visitedby=2;
-          newf=cellDetails[cell.x][cell.y].f+weights[i];
-          if(newf<cellDetails[neighbours[i].x][neighbours[i].y].f){
-            neighbours[i].opened=true;
-            cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
-            openList_end.push(neighbours[i]);
-            cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
-            cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
+                  if(cellDetails[neighbours[i].x][neighbours[i].y].visitedby==1){
+                  let path1= Util.backtrace2(cellDetails, cell);   //path from endNode to neighbour
+                  let path2=Util.backtrace2(cellDetails, neighbours[i]);    //path from sourceNode to cell
+                  let path=path2.concat(path1.reverse());
+                  console.log("check2",path[0][0]==sourceNode.x && path[0][1]==sourceNode.y);
+                  return path;
+                }
+                else{
+                  cellDetails[neighbours[i].x][neighbours[i].y].visitedby=2;
+                  newf=cellDetails[cell.x][cell.y].f+weights[i];
 
-
-          }
-        }
-            }
+                  if(newf<cellDetails[neighbours[i].x][neighbours[i].y].f){
+                        neighbours[i].opened=true;
+                        cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
+                        openList_end.push(neighbours[i]);
+                        cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
+                        cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
+                  }
+                }
+            }//if
         }// end for loop
-
-
     } //end while loop
 
 return "not found";

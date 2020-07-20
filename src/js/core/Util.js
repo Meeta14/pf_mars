@@ -12,8 +12,7 @@ function backtrace2(cellDetails,node){
 		path.push([x,y])
 
 	}
-	// console.log('path', path)
-	return path.reverse();
+		return path.reverse();
 }
 
 exports.backtrace2=backtrace2;
@@ -35,13 +34,11 @@ exports.pathLength = pathLength;
 function backtrace(cellDetails,node){
     var path=[[node.x,node.y]];
     temp=Object.assign({},node);
-    // while(!( cellDetails[temp.x][temp.y].parent.isequal(temp))){
     while(!( cellDetails[temp.x][temp.y].parent.x == temp.x && cellDetails[temp.x][temp.y].parent.y == temp.y)){
         temp=Object.assign({},cellDetails[temp.x][temp.y].parent);
         path.push([temp.x,temp.y])
 
     }
-    // console.log('path', path)
     return path.reverse();
 }
 exports.backtrace=backtrace;

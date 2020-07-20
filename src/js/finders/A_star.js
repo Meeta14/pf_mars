@@ -24,7 +24,7 @@ function AstarSearch(obj){
     if (this.diagonal === true) {
         if(obj == undefined || obj.htype == undefined  || obj.htype == Distance.manhattan){
             this.htype=Distance.octile;
-        } 
+        }
         else{
             this.htype=obj.htype;
         }
@@ -34,7 +34,7 @@ function AstarSearch(obj){
         if(obj == undefined || obj.htype == undefined ){this.htype = Distance.manhattan}
         else{this.htype = obj.htype}
         }
-    
+
     if(obj==undefined || obj.dontCrossCorners ==undefined){this.dontCrossCorners = false;}
     else{this.dontCrossCorners =obj.dontCrossCorners;}
 
@@ -61,10 +61,11 @@ AstarSearch.prototype.successor = function(cellDetails, cell, parentNode, endNod
     // break;
     }
 // If the successor is already on the closed list or if it is blocked(the get neighbors fun takes care of it ie, does not return blocked neighbours), then ignore it. Else do the following
-// && !grid.isBlock(cell.x, cell.y, block)
     else if (closedList[cell.x][cell.y] == false ) {
         gnew = cellDetails[parentNode.x][parentNode.y].g + weight;
-        hnew =  this.weight*grid.valleyweight*htype(cell.x, cell.y, endNode)  //multiplying hnew with grid.normal to make sure that g and h have equal weightage
+        if(grid.isValleyAt(cell.x, cell.y) || grid.isValleyAt( parentNode.x,  parentNode.y)) { factor = grid.valleyweight}
+        else{factor = grid.normal}
+        hnew =  this.weight*factor*htype(cell.x, cell.y, endNode)  //multiplying hnew with grid.normal to make sure that g and h have equal weightage
         fnew = gnew + hnew
         //
 
@@ -83,8 +84,8 @@ AstarSearch.prototype.successor = function(cellDetails, cell, parentNode, endNod
 };
 
 AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
-    
-// check if source and destination is inside the grid // TODO: see input is valid ouside the func before givig input?
+
+
    sourceNode = grid.getNodeAt(startX, startY);
    endNode =  grid.getNodeAt(endX, endY);
 // check if either of the source or destination is blocked
@@ -134,19 +135,15 @@ AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
         cell.closed = true;
         //get neighbours
         [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners)
-        // console.log(neighbours, weights)
         for (var i = 0; i < weights.length; i++) {
             foundDest = this.successor(cellDetails, neighbours[i], cell, endNode, weights[i], closedList, grid, openList)
             if(foundDest){break}
         }// end for loop
             if(foundDest){break}
-            // console.log(openList)
     } //end while loop
 
      if (foundDest == 0) {return 'not found'}
      else{
-         // console.log(closedList)
-         // console.log(cellDetails)
          return Util.backtrace2(cellDetails, endNode)}
  };
 

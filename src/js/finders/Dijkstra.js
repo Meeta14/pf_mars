@@ -27,7 +27,6 @@ Dijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
     // check if source and destination is same
     if(sourceNode.x == endNode.x && sourceNode.y == endNode.y){return [];}
 
-    // var openList = [];
     var openList = new PriorityQueue(comparator = (nodeA, nodeB) => cellDetails[nodeA.x][nodeA.y].f < cellDetails[nodeB.x][nodeB.y].f);
     var foundDest = false;
     // making 2d array for closed list
@@ -59,7 +58,6 @@ Dijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
         cell.opened=false;
         cell.closed = true;
 
-        // console.log(cell);
         //get neighbours
         [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners)
         for (var i = 0; i < weights.length; i++) {
@@ -73,14 +71,6 @@ Dijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
         }
         else{
         	newf=cellDetails[cell.x][cell.y].f+weights[i];
-        	// if(newf<cellDetails[neighbours[i].x][neighbours[i].y].f){
-        	// 	neighbours[i].opened=true;
-        	// 	cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
-        	// 	openList.push(neighbours[i]);
-        	// 	cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
-        	// 	cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
-
-        	// }
             if(cellDetails[neighbours[i].x][neighbours[i].y].f==Number.MAX_VALUE){
                 neighbours[i].opened=true;
                 cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
@@ -91,7 +81,6 @@ Dijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
             else if(newf<cellDetails[neighbours[i].x][neighbours[i].y].f){
                 neighbours[i].opened=true;
                 cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
-                // openList.push(neighbours[i]);
                 openList._siftUp();
                 cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
                 cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
@@ -106,8 +95,6 @@ Dijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
 
      if (foundDest == 0) {return 'not found'}
      else{
-         // console.log(closedList)
-         // console.log(cellDetails)
          return Util.backtrace2(cellDetails, endNode)}
  };
 module.exports=Dijkstra;

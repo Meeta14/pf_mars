@@ -59,16 +59,6 @@ else{
 }
 }
 
-//function to check if array is present in list of terrain nodes
-// Grid.prototype.isterrain=function(x,y,node){
-// 	if(this.isHillAt(x,y) || this.isHillAt(node.x,node.y)){
-// 		return true;
-// 	}
-// 	else{
-// 		return false;
-// 	}
-
-// }
 Grid.prototype.calcweight=function(x,y,node){
 	let hill1=this.isHillAt(x,y);
 	let hill2=this.isHillAt(node.x,node.y);
@@ -177,40 +167,8 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true, dont_cross_corners){
 	        	if(w){
 			        weights.push(factor*this.calcweight(x+1,y+1,node));
 		        }
-	 		}
-
-	    }
-
-		// 	if (this.isWalkableAt(x, y - 1)) {
-	    //     neighbours.push(this.nodes[y - 1][x]);
-	    //     if(w){
-	    //     	weights.push(this.calcweight(x,y-1,node));
-	    //     }
-		//
-		//
-	    // }
-	    // // →
-	    // if (this.isWalkableAt(x + 1, y)) {
-	    //     neighbours.push(this.nodes[y][x + 1]);
-	    //     if(w){
-		//         weights.push(this.calcweight(x+1,y,node));
-	    // 	}
-	    // }
-		//
-	    // // ↓
-	    // if (this.isWalkableAt(x, y + 1)) {
-	    //     neighbours.push(this.nodes[y + 1][x]);
-	    //     if(w){
-		//         weights.push(this.calcweight(x,y+1,node));
-		//     }
-	    // }
-	    // // ←
-	    // if (this.isWalkableAt(x - 1, y)) {
-	    //     neighbours.push(this.nodes[y][x - 1]);
-	    //     if(w){
-		//         weights.push(this.calcweight(x-1,y,node));
-		//     }
-	    // }
+	 			}
+		}
 
 	if(w){
 		return [neighbours,weights];
@@ -218,7 +176,6 @@ Grid.prototype.getNeighbours=function(node,diagonal,w=true, dont_cross_corners){
 	else{
 		return neighbours;
 	}
-
 };
 
 Grid.prototype.isWalkableAt = function(x, y) {
@@ -246,7 +203,6 @@ Grid.prototype.setValleyAt = function(x, y, valley) {
 	else{
 		this.nodes[y][x].hill = 0;
 	}
-
 };
 
 Grid.prototype.clone = function() {
@@ -264,9 +220,7 @@ Grid.prototype.clone = function() {
             newNodes[i][j] = new Node(j, i, thisNodes[i][j].walkable, thisNodes[i][j].hill);
         }
     }
-
     newGrid.nodes = newNodes;
-
     return newGrid;
 };
 

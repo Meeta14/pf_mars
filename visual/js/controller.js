@@ -293,7 +293,7 @@ $.extend(Controller, {
                     visited[neighbours_x[i]][neighbours_y[i]] = true;
     				this.grid.setWalkableAt(neighbours_x[i], neighbours_y[i] ,true);
     				View.setAttributeAt(neighbours_x[i], neighbours_y[i], 'walkable', true);
-    				this.Connect(neighbours_x[i], neighbours_y[i], dir[i]);
+    				this.Connect(cell[0], cell[1], dir[i]);
     			}//if
     		}//for
     		openList.push([neighbours_x[idx],neighbours_y[idx]]);

@@ -188,96 +188,200 @@ $.extend(Controller, {
         // => drawingWall
     },
 
-    Orientation:  function(width, height){
-        if(width < height){return 1}
-        if(height < width){return 2}
-        return  (Math.floor((Math.random() * 2)))+1
+    Connect : function(x,y, dir){
+        if(dir == 1){ //east
+            this.grid.setWalkableAt(x+1,y,true);
+            View.setAttributeAt(x+1, y, 'walkable', true);
+    		return
+        }
+        if(dir == 2){ //south
+            this.grid.setWalkableAt(x,y+1,true);
+            View.setAttributeAt(x,y+1, 'walkable', true);
+    		return
+        }
+        if(dir == 3){ //west
+            this.grid.setWalkableAt(x-1,y,true);
+            View.setAttributeAt(x-1, y, 'walkable', true);
+    		return
+        }
+        if(dir == 4){ //north
+            this.grid.setWalkableAt(x,y-1,true);
+            View.setAttributeAt(x, y-1, 'walkable', true);
+    		return
+        }
     },
-    RecursiveMaze : function(grid,x,y,width,height, orientation){
-        if(width < 6 || height < 6){return}
-            console.log(width,height)
-            horizontal = (orientation == 1)
 
-        //where will the wall be drawn from?
-        if(horizontal){
-            wx = x;
-            wy = y +  Math.floor((Math.random() * (height-6)))+3;// random between x+3 to x+ width-3 (so that there is enough space between walls)
-            }
-            else{
-            wx = x + Math.floor((Math.random() * (width-6)))+3; //+  Math.floor(width * .5);
-            wy = y;
-            }
-
-    // where will the hole be there?
-        if(horizontal){
-            px=wx+ Math.floor((Math.random() * (width-3))) + 1;  //random between wx+1 to x+ width-2 (as ht =5 means y goes till 5) (so that there is enough space between walls)
-            py = wy                                             // it also ensures that px+-1 and py +-1 does not go beyound grid
+    GetNeighbours : function(x , y, visited, value){
+    	neighbours_x=[];
+        neighbours_y=[];
+    	dir = [];
+        s4 = false; s1 = false;
+        s2 = false; s3 = false;
+    	// ↑
+    	if(y-2 > 0) {
+            if(visited[x][y-2] == value){
+    		// node.x = x;node.y = y-2;	neighbours.push(node);
+            neighbours_x.push(x);
+            neighbours_y.push(y-2);
+    		dir.push(4);
+            s4 = true;
         }
-        else{
-            px=wx;
-            py=wy+ Math.floor((Math.random() * (height-3))) + 1;
+    	}
+    	// →
+    	if(x+2 < this.gridSize[0] ){
+            if( visited[x+2][y] == value) {
+    		// node.x = x+2;node.y = y;neighbours.push(node);
+            neighbours_x.push(x+2);
+            neighbours_y.push(y);
+    		dir.push(1);
+            s1 = true;
         }
-        //what dir awithh the wall be drawn
-        if(horizontal){ dx = 1; dy = 0}
-        else{dx = 0; dy = 1}
-
-        //length of wall
-        if(horizontal){length = width;}
-        else{length = height;}
-        // console.log(px, wx)
-
-        if(dx){
-        for(var i=0; i<length; i++){
-            if(i != px || i != px+1 || i != px11){
-                this.grid.setWalkableAt(i,wy,false);
-                View.setAttributeAt(i, wy, 'walkable',false);
-            }
-            else{}
-            }//for
-        }//if
-        if(dy){
-        for(var i=0; i<length; i++){
-            if(i != py || i != py+1 ||i != py-1 ){
-                 this.grid.setWalkableAt(wx,i,false);
-                View.setAttributeAt(wx, i, 'walkable',false);}
-            else{}
-        }//for
-        }//if
-
-        var nx = x;
-        var ny = y;
-        //change the wt and ht
-        var w, h;
-        if(horizontal){
-        w = width;
-        h = wy-y+1;
+    	}
+    	if(y+2 < this.gridSize[1]){
+            if(visited[x][y+2] == value) {
+    		// node.x = x;node.y = y+2;neighbours.push(node);
+            neighbours_x.push(x);
+            neighbours_y.push(y+2);
+    		dir.push(2);
+            s2 = true;
         }
-        else{
-        w = wx-x+1;
-        h = height;}
-        this.RecursiveMaze(grid, nx, ny, w, h, this.Orientation(w, h));
+    	}
+    	if(x-2 > 0){
+            if(visited[x-2][y] == value) {
+    		// node.x = x-2;node.y = y;neighbours.push(node);
+            neighbours_x.push(x-2);
+            neighbours_y.push(y);
+    		dir.push(3);
+            s3 = true;
+        }
+    	}
+        if(s1+s2+s3+s4 == false){
+            return [0,0,0];}
+     	return [neighbours_x, neighbours_y, dir];
+    },
 
-    //change in sq x and y
-        if(horizontal){nx=x; ny = wy+1}
-        else{ nx = wx+1; ny = y }
+    DfsMaze : function(x,y){
+    	for(var i =0; i< this.gridSize[0]; i++){
+    		for(var j=0; j<this.gridSize[1]; j++){
+    			this.grid.setWalkableAt(i,j,false);
+    	        View.setAttributeAt(i, j, 'walkable', false);
+    		}
+    	}
+        visited = [];
+    	for(i=0;i<this.gridSize[0];++i){
+    	  	visited.push([]);
+    	  	for(j=0;j<this.gridSize[1];++j){
+    			visited[i].push(false);
+    	  }
+    	}
 
-        if(horizontal){
-        w = width;
-        h = y+height-wy-1}
-        else{w = x+width-wx-1;
-        h = height;}
-        this.RecursiveMaze(grid, nx, ny, w, h, this.Orientation(w, h))
-        },
+    	openList = [];
+    	openList.push([x,y]);
+    	this.grid.setWalkableAt(x, y ,true);
+    	View.setAttributeAt(x, y, 'walkable', true);
+
+    	while(openList.length !=0){
+    		cell = openList.pop();
+            visited[x][y] = true;
+            // console.log(cell);
+    		[neighbours_x,neighbours_y, dir] = this.GetNeighbours(cell[0], cell[1], visited,false);
+            if(dir != 0){
+    		idx = Math.floor((Math.random() * dir.length));
+
+    		for(var i=0; i<neighbours_x.length; i++){
+    			if(i != idx){
+    				openList.push([neighbours_x[i],neighbours_y[i]]);
+                    visited[neighbours_x[i]][neighbours_y[i]] = true;
+    				this.grid.setWalkableAt(neighbours_x[i], neighbours_y[i] ,true);
+    				View.setAttributeAt(neighbours_x[i], neighbours_y[i], 'walkable', true);
+    				this.Connect(cell[0], cell[1], dir[i]);
+    			}//if
+    		}//for
+    		openList.push([neighbours_x[idx],neighbours_y[idx]]);
+            visited[neighbours_x[idx]][neighbours_y[idx]] = true;
+    		this.grid.setWalkableAt(neighbours_x[idx], neighbours_y[idx] ,false);
+    		View.setAttributeAt(neighbours_x[idx], neighbours_y[idx], 'walkable', true);
+    		this.Connect(cell[0], cell[1], dir[idx]);
+        }
+    	}
+        //
+        // for(var i = 0; i < this.endNodes.length; i++){
+        //     this.setWalkableAt(this.endNodes[i][0], this.endNodes[i][1],true);
+        //     // this.grid.setWalkableAt(this.endNodes[i][0], this.endNodes[i][1],true);
+        //     // View.setAttributeAt(this.endNodes[i][0], this.endNodes[i][1], 'walkable', true);
+        //     }
+    },
+
+//     PrimMaze : function(x,y){
+//         for(var i =0; i< this.gridSize[0]; i++){
+//             for(var j=0; j<this.gridSize[1]; j++){
+//                 this.grid.setWalkableAt(i,j,false);
+//                 View.setAttributeAt(i, j, 'walkable', false);
+//             }
+//         }
+//         visited = [];
+//         for(i=0;i<this.gridSize[0];++i){
+//             visited.push([]);
+//             for(j=0;j<this.gridSize[1];++j){
+//                 visited[i].push(false);
+//           }
+//         }
+//
+//         openList = [];
+//         // visited[x][y] = true;
+//         openList.push([x,y])
+//         console.log(openList)
+//         this.grid.setWalkableAt(x, y ,true);
+//         View.setAttributeAt(x, y, 'walkable', true);
+// // var neighbours_x = 0;
+// // var neighbours_y = 0;
+// // var dir = 0;
+//         while(openList.length !=3){
+//             idx = Math.floor((Math.random() * openList.length));
+//             cell=openList[idx];
+//             // console.log(openList)
+//             openList.splice(idx, 1)
+// console.log(cell[0], cell[1], 'c')
+//             [neighbours_x,neighbours_y, dir] = this.GetNeighbours(cell[0], cell[1], visited, true);
+//             if(dir != 0){
+//                 idx = Math.floor((Math.random() * dir.length));
+//                 this.grid.setWalkableAt(neighbours_x[idx], neighbours_y[idx] ,true);
+//                 View.setAttributeAt(neighbours_x[idx], neighbours_y[idx], 'walkable', true);
+//                 this.Connect(cell[0], cell[1], dir[idx]);
+// console.log( dir[idx])
+//             }//if
+//
+//         [neighbours_x, neighbours_y, dir] = this.GetNeighbours(cell[0], cell[1], visited, false);
+//         if(dir != 0){
+//             for(var i=0; i<neighbours_x.length; i++){
+//                     openList.push([neighbours_x[i],neighbours_y[i]]);
+//                     this.grid.setWalkableAt(neighbours_x[i], neighbours_y[i] ,true);
+//                     View.setAttributeAt(neighbours_x[i], neighbours_y[i], 'walkable', true);
+//                     console.log(neighbours_x[idx], neighbours_y[idx],'n')
+//             }//for
+//         }//if
+//
+//     }//while
+//         // for(var i = 0; i < this.endNodes.length; i++){
+//         //     this.grid.setWalkableAt(this.endNodes[i][0], this.endNodes[i][1],true);
+//         //     View.setAttributeAt(this.endNodes[i][0], this.endNodes[i][1], 'walkable', true);
+//         //     }
+// console.log('done')
+//     },
 
     ondrawMaze: function(event,from,to){
         var maze= $( 'input[name=maze]:checked').val();
         Controller.clearOperations();
         Controller.clearAll();
         Controller.buildNewGrid();
-        width = this.gridSize[0];
-        height = this.gridSize[1];
+        // width = this.gridSize[0];
+        // height = this.gridSize[1];
         console.log('starting drawing maze')
-        this.RecursiveMaze(this.grid,0,0, width, height, this.Orientation(width,height));
+        this.DfsMaze(0,0);
+        Controller.setDefaultStartEndPos();
+        // console.log(View.blockedNodes);
+        console.log('starting drawing maze2')
+        // this.PrimMaze(0,0);
 },
 
     onsearch: function(event, from, to) {
@@ -290,11 +394,12 @@ $.extend(Controller, {
                     j = i+1
                         var Grid = this.grid.clone();
                         var finder = Panel.getFinder();
+                        // console.log(this.endNodes);
                         var dist = finder.findPath(
                                 this.endNodes[i][0], this.endNodes[i][1], this.endNodes[j][0], this.endNodes[j][1], Grid
                             );
                             par=par.concat(dist);
-                            temp = temp + PF.Util.pathLength(dist)
+                            temp = temp + PF.Util.pathLength(dist);
                 }
                 this.path = par;
                 this.len = temp;
@@ -743,11 +848,11 @@ $.extend(Controller, {
         centerX = Math.ceil(availWidth / 2 / nodeSize);
         centerY = Math.floor(height / 2 / nodeSize);
 
-        this.setStartPos(centerX - 5, centerY);
-        this.setEndPos(centerX + 5, centerY, 1);
+        this.setStartPos(centerX - 6, centerY + 1);
+        this.setEndPos(centerX + 6, centerY+1, 1);
 
         if(Controller.getDest() === "Two") {
-            this.setEndPos(centerX, centerY+5, 2);
+            this.setEndPos(centerX, centerY+6, 2);
 
             if(this.endNodes[4]){
                this.setEndPos(64*nodeSize, 36*nodeSize, 4);
@@ -760,8 +865,8 @@ $.extend(Controller, {
             }
         }
         else if(Controller.getDest() === "Three"){
-            this.setEndPos(centerX, centerY+5, 2);
-            this.setEndPos(centerX, centerY-5, 3);
+            this.setEndPos(centerX, centerY+6, 2);
+            this.setEndPos(centerX, centerY-6, 3);
 
             if(this.endNodes[4]){
                this.setEndPos(64*nodeSize, 36*nodeSize, 4);
@@ -769,8 +874,8 @@ $.extend(Controller, {
             }
         }
         else if(Controller.getDest() === "Four"){
-            this.setEndPos(centerX, centerY+5, 2);
-            this.setEndPos(centerX, centerY-5, 3);
+            this.setEndPos(centerX, centerY+6, 2);
+            this.setEndPos(centerX, centerY-6, 3);
             this.setEndPos(centerX-10, centerY, 4);
 
         }

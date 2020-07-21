@@ -187,6 +187,7 @@ $.extend(Controller, {
         this.setValleyAt(gridX, gridY, true);
         // => drawingWall
     },
+
     Connect : function(x,y, dir){
         if(dir == 1){ //east
             this.grid.setWalkableAt(x+1,y,true);
@@ -216,7 +217,6 @@ $.extend(Controller, {
     	dir = [];
         s4 = false; s1 = false;
         s2 = false; s3 = false;
-    	// var node =new Node(0,0);
     	// ↑
     	if(y-2 > 0) {
             if(visited[x][y-2] == value){
@@ -255,7 +255,8 @@ $.extend(Controller, {
             s3 = true;
         }
     	}
-        if(s1+s2+s3+s4 == false){return [0,0,0];}
+        if(s1+s2+s3+s4 == false){
+            return [0,0,0];}
      	return [neighbours_x, neighbours_y, dir];
     },
 
@@ -275,14 +276,14 @@ $.extend(Controller, {
     	}
 
     	openList = [];
-    	openList.push([x,y])
+    	openList.push([x,y]);
     	this.grid.setWalkableAt(x, y ,true);
     	View.setAttributeAt(x, y, 'walkable', true);
 
     	while(openList.length !=0){
     		cell = openList.pop();
             visited[x][y] = true;
-
+            // console.log(cell);
     		[neighbours_x,neighbours_y, dir] = this.GetNeighbours(cell[0], cell[1], visited,false);
             if(dir != 0){
     		idx = Math.floor((Math.random() * dir.length));
@@ -293,88 +294,94 @@ $.extend(Controller, {
                     visited[neighbours_x[i]][neighbours_y[i]] = true;
     				this.grid.setWalkableAt(neighbours_x[i], neighbours_y[i] ,true);
     				View.setAttributeAt(neighbours_x[i], neighbours_y[i], 'walkable', true);
-    				this.Connect(neighbours_x[i], neighbours_y[i], dir[i]);
+    				this.Connect(cell[0], cell[1], dir[i]);
     			}//if
     		}//for
     		openList.push([neighbours_x[idx],neighbours_y[idx]]);
             visited[neighbours_x[idx]][neighbours_y[idx]] = true;
-    		this.grid.setWalkableAt(neighbours_x[idx], neighbours_y[idx] ,true);
+    		this.grid.setWalkableAt(neighbours_x[idx], neighbours_y[idx] ,false);
     		View.setAttributeAt(neighbours_x[idx], neighbours_y[idx], 'walkable', true);
     		this.Connect(cell[0], cell[1], dir[idx]);
         }
     	}
-
-        for(var i = 0; i < this.endNodes.length; i++){
-            this.grid.setWalkableAt(this.endNodes[i][0], this.endNodes[i][1],true);
-            View.setAttributeAt(this.endNodes[i][0], this.endNodes[i][1], 'walkable', true);
-            }
+        //
+        // for(var i = 0; i < this.endNodes.length; i++){
+        //     this.setWalkableAt(this.endNodes[i][0], this.endNodes[i][1],true);
+        //     // this.grid.setWalkableAt(this.endNodes[i][0], this.endNodes[i][1],true);
+        //     // View.setAttributeAt(this.endNodes[i][0], this.endNodes[i][1], 'walkable', true);
+        //     }
     },
 
+//     PrimMaze : function(x,y){
+//         for(var i =0; i< this.gridSize[0]; i++){
+//             for(var j=0; j<this.gridSize[1]; j++){
+//                 this.grid.setWalkableAt(i,j,false);
+//                 View.setAttributeAt(i, j, 'walkable', false);
+//             }
+//         }
+//         visited = [];
+//         for(i=0;i<this.gridSize[0];++i){
+//             visited.push([]);
+//             for(j=0;j<this.gridSize[1];++j){
+//                 visited[i].push(false);
+//           }
+//         }
+//
+//         openList = [];
+//         // visited[x][y] = true;
+//         openList.push([x,y])
+//         console.log(openList)
+//         this.grid.setWalkableAt(x, y ,true);
+//         View.setAttributeAt(x, y, 'walkable', true);
+// // var neighbours_x = 0;
+// // var neighbours_y = 0;
+// // var dir = 0;
+//         while(openList.length !=3){
+//             idx = Math.floor((Math.random() * openList.length));
+//             cell=openList[idx];
+//             // console.log(openList)
+//             openList.splice(idx, 1)
+// console.log(cell[0], cell[1], 'c')
+//             [neighbours_x,neighbours_y, dir] = this.GetNeighbours(cell[0], cell[1], visited, true);
+//             if(dir != 0){
+//                 idx = Math.floor((Math.random() * dir.length));
+//                 this.grid.setWalkableAt(neighbours_x[idx], neighbours_y[idx] ,true);
+//                 View.setAttributeAt(neighbours_x[idx], neighbours_y[idx], 'walkable', true);
+//                 this.Connect(cell[0], cell[1], dir[idx]);
+// console.log( dir[idx])
+//             }//if
+//
+//         [neighbours_x, neighbours_y, dir] = this.GetNeighbours(cell[0], cell[1], visited, false);
+//         if(dir != 0){
+//             for(var i=0; i<neighbours_x.length; i++){
+//                     openList.push([neighbours_x[i],neighbours_y[i]]);
+//                     this.grid.setWalkableAt(neighbours_x[i], neighbours_y[i] ,true);
+//                     View.setAttributeAt(neighbours_x[i], neighbours_y[i], 'walkable', true);
+//                     console.log(neighbours_x[idx], neighbours_y[idx],'n')
+//             }//for
+//         }//if
+//
+//     }//while
+//         // for(var i = 0; i < this.endNodes.length; i++){
+//         //     this.grid.setWalkableAt(this.endNodes[i][0], this.endNodes[i][1],true);
+//         //     View.setAttributeAt(this.endNodes[i][0], this.endNodes[i][1], 'walkable', true);
+//         //     }
+// console.log('done')
+//     },
 
-        PrimMaze : function(x,y){
-            for(var i =0; i< this.gridSize[0]; i++){
-                for(var j=0; j<this.gridSize[1]; j++){
-                    this.grid.setWalkableAt(i,j,false);
-                    View.setAttributeAt(i, j, 'walkable', false);
-                }
-            }
-            visited = [];
-            for(i=0;i<this.gridSize[0];++i){
-                visited.push([]);
-                for(j=0;j<this.gridSize[1];++j){
-                    visited[i].push(false);
-              }
-            }
-
-            openList = [];
-            openList.push([x,y])
-            this.grid.setWalkableAt(x, y ,true);
-            View.setAttributeAt(x, y, 'walkable', true);
-            visited[x][y] = true;
-            // while(openList.length !=0){
-            for(var k=0; k<4; k++){
-                idx = Math.floor((Math.random() * openList.length));
-                cell=openList[idx];
-                openList.splice(idx, 1)
-                visited[cell[0]][cell[1]] = true;
-
-                [neighbours_x,neighbours_y, dir] = this.GetNeighbours(cell[0], cell[1], visited, true);
-                console.log(k,neighbours_x,neighbours_y );
-                if(dir != 0){
-                    idx = Math.floor((Math.random() * dir.length));
-                    this.Connect(cell[0], cell[1], dir[idx]);
-                    // this.Connect(neighbours_x[idx], neighbours_y[idx]);
-                    console.log('dir', dir[idx], neighbours_x[idx], neighbours_y[idx]);
-                }//if
-
-            [neighbours_x, neighbours_y, dir] = this.GetNeighbours(cell[0], cell[1], visited, false);
-            if(dir != 0){
-                for(var i=0; i<neighbours_x.length; i++){
-                        openList.push([neighbours_x[i],neighbours_y[i]]);
-                        this.grid.setWalkableAt(neighbours_x[i], neighbours_y[i] ,true);
-                        View.setAttributeAt(neighbours_x[i], neighbours_y[i], 'walkable', true);
-                        // console.log(neighbours_x[idx], neighbours_y[idx],'n')
-                }//for
-            }//if
-
-        }//while
-            for(var i = 0; i < this.endNodes.length; i++){
-                this.grid.setWalkableAt(this.endNodes[i][0], this.endNodes[i][1],true);
-                View.setAttributeAt(this.endNodes[i][0], this.endNodes[i][1], 'walkable', true);
-                }
-    console.log('done')
-        },
     ondrawMaze: function(event,from,to){
         var maze= $( 'input[name=maze]:checked').val();
         Controller.clearOperations();
         Controller.clearAll();
         Controller.buildNewGrid();
+        // width = this.gridSize[0];
+        // height = this.gridSize[1];
         console.log('starting drawing maze')
-        if(maze == 1){
-        this.DfsMaze(0,0);}
-        // Controller.setDefaultStartEndPos();
-        // else{this.PrimMaze(0,0);}
-        console.log('ending drawing maze')
+        this.DfsMaze(0,0);
+        Controller.setDefaultStartEndPos();
+        // console.log(View.blockedNodes);
+        console.log('starting drawing maze2')
+        // this.PrimMaze(0,0);
 },
 
     onsearch: function(event, from, to) {

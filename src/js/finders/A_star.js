@@ -127,24 +127,24 @@ AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
     sourceNode.opened = true;
 
     while(openList.length != 0){
-        index=this.minFscore(openList, cellDetails)
-        cell=openList[index]
+        index=this.minFscore(openList, cellDetails);
+        cell=openList[index];
 
         if(index>-1){openList.splice(index, 1)}
         closedList[cell.x][cell.y] = true;
         cell.closed = true;
         //get neighbours
-        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners)
+        [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners);
         for (var i = 0; i < weights.length; i++) {
-            foundDest = this.successor(cellDetails, neighbours[i], cell, endNode, weights[i], closedList, grid, openList)
+            foundDest = this.successor(cellDetails, neighbours[i], cell, endNode, weights[i], closedList, grid, openList);
             if(foundDest){break}
         }// end for loop
             if(foundDest){break}
     } //end while loop
 
-     if (foundDest == 0) {return 'not found'}
+     if (foundDest == 0) {return []}
      else{
-         return Util.backtrace2(cellDetails, endNode)}
+         return Util.backtrace2(cellDetails, endNode);}
  };
 
 module.exports = AstarSearch;

@@ -218,7 +218,7 @@ $.extend(Controller, {
         s2 = false; s3 = false;
     	// var node =new Node(0,0);
     	// ↑
-    	if(y-2 > 0) {
+    	if(y-2 >= 0) {
             if(visited[x][y-2] == value){
     		// node.x = x;node.y = y-2;	neighbours.push(node);
             neighbours_x.push(x);
@@ -246,7 +246,7 @@ $.extend(Controller, {
             s2 = true;
         }
     	}
-    	if(x-2 > 0){
+    	if(x-2 >= 0){
             if(visited[x-2][y] == value) {
     		// node.x = x-2;node.y = y;neighbours.push(node);
             neighbours_x.push(x-2);
@@ -293,7 +293,7 @@ $.extend(Controller, {
                     visited[neighbours_x[i]][neighbours_y[i]] = true;
     				this.grid.setWalkableAt(neighbours_x[i], neighbours_y[i] ,true);
     				View.setAttributeAt(neighbours_x[i], neighbours_y[i], 'walkable', true);
-    				this.Connect(neighbours_x[i], neighbours_y[i], dir[i]);
+    				this.Connect(cell[0], cell[1], dir[i]);
     			}//if
     		}//for
     		openList.push([neighbours_x[idx],neighbours_y[idx]]);
@@ -326,34 +326,40 @@ $.extend(Controller, {
               }
             }
 
+            opened = [];
+            for(i=0;i<this.gridSize[0];++i){
+                opened.push([]);
+                for(j=0;j<this.gridSize[1];++j){
+                    opened[i].push(false);
+              }
+            }
+
             openList = [];
             openList.push([x,y])
             this.grid.setWalkableAt(x, y ,true);
             View.setAttributeAt(x, y, 'walkable', true);
-            visited[x][y] = true;
-            // while(openList.length !=0){
-            for(var k=0; k<4; k++){
+            opened[x][y] = true;
+            while(openList.length !=0){
                 idx = Math.floor((Math.random() * openList.length));
                 cell=openList[idx];
                 openList.splice(idx, 1)
                 visited[cell[0]][cell[1]] = true;
 
                 [neighbours_x,neighbours_y, dir] = this.GetNeighbours(cell[0], cell[1], visited, true);
-                console.log(k,neighbours_x,neighbours_y );
                 if(dir != 0){
                     idx = Math.floor((Math.random() * dir.length));
                     this.Connect(cell[0], cell[1], dir[idx]);
-                    // this.Connect(neighbours_x[idx], neighbours_y[idx]);
-                    console.log('dir', dir[idx], neighbours_x[idx], neighbours_y[idx]);
                 }//if
 
             [neighbours_x, neighbours_y, dir] = this.GetNeighbours(cell[0], cell[1], visited, false);
             if(dir != 0){
                 for(var i=0; i<neighbours_x.length; i++){
+                    if(!opened[neighbours_x[i]][neighbours_y[i]]){
                         openList.push([neighbours_x[i],neighbours_y[i]]);
+                        opened[neighbours_x[i]][neighbours_y[i]] = true;
                         this.grid.setWalkableAt(neighbours_x[i], neighbours_y[i] ,true);
                         View.setAttributeAt(neighbours_x[i], neighbours_y[i], 'walkable', true);
-                        // console.log(neighbours_x[idx], neighbours_y[idx],'n')
+                    }//if
                 }//for
             }//if
 
@@ -370,10 +376,9 @@ $.extend(Controller, {
         Controller.clearAll();
         Controller.buildNewGrid();
         console.log('starting drawing maze')
-        if(maze == 1){
-        this.DfsMaze(0,0);}
-        // Controller.setDefaultStartEndPos();
-        // else{this.PrimMaze(0,0);}
+        if(maze == 1){this.DfsMaze(0,0);}
+        else{if(maze == 2){this.PrimMaze(0,0);}}
+
         console.log('ending drawing maze')
 },
 

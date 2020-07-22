@@ -1,3 +1,85 @@
+function GetNeighbours(x , y, visited, value){
+    neighbours_x=[];
+      neighbours_y=[];
+    dir = [];
+      s4 = false; s1 = false;
+      s2 = false; s3 = false;
+    // var node =new Node(0,0);
+    // ↑
+    console.log(y-2 > -1)
+    if(y-2 > 0) {
+        console.log('here2')
+          if(visited[x][y-2] == value){
+              console.log('here')
+      // node.x = x;node.y = y-2;	neighbours.push(node);
+          neighbours_x.push(x);
+          neighbours_y.push(y-2);
+      dir.push(4);
+          s4 = true;
+      }
+    }
+    // →
+    if(x+2 < 5){
+          if( visited[x+2][y] == value) {
+      // node.x = x+2;node.y = y;neighbours.push(node);
+          neighbours_x.push(x+2);
+          neighbours_y.push(y);
+      dir.push(1);
+          s1 = true;
+      }
+    }
+    if(y+2 <5){
+          if(visited[x][y+2] == value) {
+      // node.x = x;node.y = y+2;neighbours.push(node);
+          neighbours_x.push(x);
+          neighbours_y.push(y+2);
+      dir.push(2);
+          s2 = true;
+      }
+    }
+    if(x-2 > 0){
+          if(visited[x-2][y] == value) {
+      // node.x = x-2;node.y = y;neighbours.push(node);
+          neighbours_x.push(x-2);
+          neighbours_y.push(y);
+        dir.push(3);
+          s3 = true;
+      }
+    }
+      if(s1+s2+s3+s4 == false){return [0,0,0];}
+    return [neighbours_x, neighbours_y, dir];
+  }
+
+  visited = [];
+  for(i=0;i<5;++i){
+      visited.push([]);
+      for(j=0;j<5;++j){
+          visited[i].push(false);
+    }
+  }
+
+  visited[0][0] = true;
+console.log(GetNeighbours(0,2,visited,false))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // idx = Math.floor((Math.random() * 4));
 // console.log(idx)
 // visited = [];
@@ -10,16 +92,16 @@
 //
 // visited[3][0] = true;
 // console.log(visited)
-d = [0,1,2]
-e = [2,1,2]
-f = [3,1,2]
-var a = [];
-var b = [];
-var c = [];
-[a,b,c] = [d,e,f];
-console.log(a);
-console.log(b);
-console.log(c);
+// d = [0,1,2]
+// e = [2,1,2]
+// f = [3,1,2]
+// var a = [];
+// var b = [];
+// var c = [];
+// [a,b,c] = [d,e,f];
+// console.log(a);
+// console.log(b);
+// console.log(c);
 // list = true;
 // list = [0,1]
 // list.push([0,0])

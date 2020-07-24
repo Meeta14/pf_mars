@@ -567,7 +567,7 @@ getPath: function(mask,gr,pos,n, path){
             enabled: false,
         }, {
             id: 5,
-            text: 'Clear Walls',
+            text: 'Clear Terrain',
             enabled: true,
             callback: $.proxy(this.reset, this),
         },

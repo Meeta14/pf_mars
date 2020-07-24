@@ -464,6 +464,7 @@ getPath: function(mask,gr,pos,n, path){
                     for(var j=i;j<graph_nodes.length;j++){
                         var Grid = this.grid.clone();
                         var finder = Panel.getFinder();
+                        if(finder ==  undefined ){ window.alert("Please select search Algo");}
                         var dist = finder.findPath(
                                 this.endNodes[i][0], this.endNodes[i][1], this.endNodes[j][0], this.endNodes[j][1], Grid
                             );

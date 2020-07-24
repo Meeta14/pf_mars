@@ -421,7 +421,7 @@ getPath: function(graph,mask,pos,n, path){  //Uses Bellman-Held-Karp algorithm
             case "1":
                 var temp = 0;
                 par = [];
-                for(var i = 0; i < this.endNodes.length-1; i++){.  
+                for(var i = 0; i < this.endNodes.length-1; i++){  
                         j = i+1
                             var Grid = this.grid.clone();
                             var finder = Panel.getFinder();

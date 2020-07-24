@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>PathFinding.js</title>
+    <title>Batman and Robin</title>
 
     <link rel="stylesheet" href="./visual/css/style.css" />
     <link rel="stylesheet" href="./visual/lib/themes/jquery.ui.all.css" />
@@ -37,8 +37,10 @@
       Click within the <span class="white">white</span> grid and drag your mouse to draw obstacles. <br>
       Drag the <span class="green">green</span> node to set the start position. <br>
       Drag the <span class="red">red</span> node to set the end position. <br>
+      To draw obstacles/hills/valleys select terrain from `Set Landscape' panel and click within the white grid and drag your mouse. <br>
+      Select number of destinations from the same panel. By default, the end nodes have no priority. To set priority, click on the `give priority" option. The priority goes as follows: East>South>North <br>
       Choose an algorithm from the right-hand panel. <br>
-      Select number of destinations from the same panel. <br>
+      Choose weights/ heuristic/ don't cross corners options from the panel. <br>
       Click Start Search in the lower-right corner to start the animation.
     </div>
 
@@ -46,6 +48,13 @@
       <header><h2 class="header_title">Select Algorithm</h2></header>
 
       <div class="accordion">
+        <h3 id="info_header"><a href="#">Introduction</a></h3>
+        <div id = "info_section" class="finder_section">
+          <h2>Batman and Robin are working on their most daring enterprise yet: Mars colonization! </h2>
+          <h2>As a first step, they have made a pathfinding visualizer software to help them plan out paths for their Mars rover. Always dedicated to serving Gotham city, they have made this software publicly available for anyone's perusal. Check it out and let us know what you think!</h2>
+            </div>
+        
+        
         <h3 id="astar_header"><a href="#">A*</a></h3>
         <div id="astar_section" class="finder_section">
           <header class="option_header">
@@ -154,9 +163,9 @@
                     <label class="option_label">3</label> <br>
                 </div>
                 <div class="options">
-                    <input type="radio" name="priority" value=1 checked>
+                    <input type="radio" name="priority" value=1 >
                     <label class="option_label">Give priority</label> <br>
-                    <input type="radio" name="priority" value=0>
+                    <input type="radio" name="priority" value=0 checked>
                     <label class="option_label">No priority</label> <br>
                     <!-- <input type="radio" name="dest" value="Four"/>
                     <label class="option_label">4</label> <br> -->

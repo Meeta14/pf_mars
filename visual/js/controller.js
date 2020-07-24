@@ -381,26 +381,105 @@ $.extend(Controller, {
 
         console.log('ending drawing maze')
 },
+getPath: function(mask,gr,pos,n, path){
+        if (mask === ((1<<n)-1)) {
+            path.p.push(pos);
+            return 0;
+        }
+
+        var min_len = Number.MAX_VALUE;
+
+        for (var i = 1; i < n; i++) {
+            if (!(mask & (1<<i))) {
+                var new_o = {p: new Array};
+
+                if(!gr[pos][i][0]){
+                    path.p = new_o.p;
+                    return 0;
+                }
+
+                var new_len = Controller.getPath(mask|(1<<i), gr, i, n, new_o);
+                new_len += gr[pos][i][0] ;
+
+                if(new_len < min_len) {
+                    min_len = new_len;
+                    path.p = new_o.p;
+                }
+            }
+        }
+        path.p.push(pos);
+        return min_len;
+    },
 
     onsearch: function(event, from, to) {
         var timeStart, timeEnd;
-            // finder = Panel.getFinder();
-             timeStart = window.performance ? performance.now() : Date.now();
-             var temp = 0;
-            par = [];
-            for(var i = 0; i < this.endNodes.length-1; i++){
-                    j = i+1
+        timeStart = window.performance ? performance.now() : Date.now();
+        // console.log(this.getpriority());
+        let priority=$('input[name=priority]:checked').val();
+        switch(priority){
+            case "1":
+                var temp = 0;
+                par = [];
+                for(var i = 0; i < this.endNodes.length-1; i++){
+                        j = i+1
+                            var Grid = this.grid.clone();
+                            var finder = Panel.getFinder();
+                            var dist = finder.findPath(
+                                    this.endNodes[i][0], this.endNodes[i][1], this.endNodes[j][0], this.endNodes[j][1], Grid
+                                );
+                                par=par.concat(dist);
+                                temp = temp + PF.Util.pathLength(dist)
+                    }
+                this.path = par;
+                this.len = temp;
+                break;
+            
+            case "0":
+                size=this.endNodes.length;
+                // var graph_dist=new Array(size);
+                var graph_nodes=new Array(size);
+                for(let i=0;i<graph_nodes.length;++i){
+                    // graph_dist[i]=new Array(size);
+                    graph_nodes[i]=new Array(size);
+
+                }
+
+                for(var i=0;i<graph_nodes.length;i++){
+                    for(var j=i;j<graph_nodes.length;j++){
                         var Grid = this.grid.clone();
                         var finder = Panel.getFinder();
-                        // console.log(this.endNodes);
                         var dist = finder.findPath(
                                 this.endNodes[i][0], this.endNodes[i][1], this.endNodes[j][0], this.endNodes[j][1], Grid
                             );
-                            par=par.concat(dist);
-                            temp = temp + PF.Util.pathLength(dist);
+                        var len = PF.Util.pathLength(dist);
+                        graph_nodes[i][j]=new Array(2);
+                        graph_nodes[j][i]=new Array(2);
+                        graph_nodes[j][i][0]=len;
+                        graph_nodes[j][i][1]=dist;
+                        graph_nodes[i][j][0]=len;
+                        graph_nodes[i][j][1]= dist.reverse();
+
+                    }
                 }
-                this.path = par;
-                this.len = temp;
+
+
+
+                pathArray = new Array();
+                path=new Array();
+                len = this.getPath(1,graph_nodes,0,size, path);
+                f = path.p.reverse();
+                l = f.length;
+
+                for(var j=0; j<l-1; j++){
+                     if(f[j+1] > f[j] ) graph_nodes[f[j]][f[j+1]][1].reverse();
+                     pathArray = pathArray.concat(graph_nodes[f[j]][f[j+1]][1]); 
+                }   
+
+                this.path = pathArray;
+
+                break;
+
+        }
 
         this.operationCount = this.operations.length;
         timeEnd = window.performance ? performance.now() : Date.now();
@@ -409,6 +488,7 @@ $.extend(Controller, {
         this.loop();
         // => searching
     },
+
 
     onrestart: function() {
         // When clearing the colorized nodes, there may be

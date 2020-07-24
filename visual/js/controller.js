@@ -410,7 +410,21 @@ getPath: function(mask,gr,pos,n, path){
         path.p.push(pos);
         return min_len;
     },
-
+    
+    pathlength : function(path){
+        var i, sum = 0, a, b, dx, dy;
+        for (i = 1; i < path.length; ++i) {
+        		a = path[i - 1];
+        		b = path[i];
+        		dx = a[0] - b[0];
+        		dy = a[1] - b[1];
+                node = new PF.Node(b[0], b[1]);
+                factor = this.grid.calcweight(a[0],a[1],node);
+        		sum += Math.sqrt(dx * dx + dy * dy) * factor * 0.2;
+        }
+        return sum;
+    },
+    
     onsearch: function(event, from, to) {
         var timeStart, timeEnd;
         timeStart = window.performance ? performance.now() : Date.now();
@@ -429,7 +443,7 @@ getPath: function(mask,gr,pos,n, path){
                                 );
                                 
                                 par=par.concat(dist);
-                                temp = temp + PF.Util.pathLength(dist)
+                                temp = temp + this.pathlength(dist)
                     }
                 this.path = par;
                 this.len = temp;

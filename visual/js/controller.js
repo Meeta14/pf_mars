@@ -126,7 +126,7 @@ $.extend(Controller, {
     operationsPerSecond: 300,
 
 
-    getDest: function(){. // returns number of destinations
+    getDest: function(){ // returns number of destinations
         var destattr = Panel.getnumdest();
         return destattr;
     },

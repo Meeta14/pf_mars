@@ -34,12 +34,11 @@
         <h2 class="header_title">Instructions</h2>
         <span id="hide_instructions">hide</span>
       </header>
-      Select landscape and click within the <span class="white">white</span> grid and drag your mouse to draw blocks/hill/valleys <br>
+      Click within the <span class="white">white</span> grid and drag your mouse to draw obstacles. <br>
       Drag the <span class="green">green</span> node to set the start position. <br>
       Drag the <span class="red">red</span> node to set the end position. <br>
-      Select number of destinations from the same panel. Incase of multiple destinations it goes to East->South->North<br>
-      Select Mazes from the panel to generate maze <br> 
       Choose an algorithm from the right-hand panel. <br>
+      Select number of destinations from the same panel. <br>
       Click Start Search in the lower-right corner to start the animation.
     </div>
 
@@ -153,9 +152,16 @@
                     <label class="option_label">2</label> <br>
                     <input type="radio" name="dest" value="Three"/>
                     <label class="option_label">3</label> <br>
+                </div>
+                <div class="options">
+                    <input type="radio" name="priority" value=1 checked>
+                    <label class="option_label">Give priority</label> <br>
+                    <input type="radio" name="priority" value=0>
+                    <label class="option_label">No priority</label> <br>
                     <!-- <input type="radio" name="dest" value="Four"/>
                     <label class="option_label">4</label> <br> -->
                  </div>
+
              <button id="button1" class="control_button" onclick="myFunction()" >Set dest</button>
              <script>function myFunction() {alert("plz select algo to continue");}</script>
             </div>
@@ -165,9 +171,9 @@
              <!-- <header><h2 class = "header_title">No. of destinations</h2></header> -->
                 <div class="options">
                     <input type="radio" name="maze" value=1  />
-                    <label class="option_label">DFS</label> <br>
+                    <label class="option_label">Lorem</label> <br>
                     <input type="radio" name="maze" value=2>
-                    <label class="option_label">Prim</label> <br>
+                    <label class="option_label">Ipsum</label> <br>
                  </div>
              <button id="button2" class="control_button"  >Set maze</button>
             </div>
@@ -213,8 +219,7 @@
     <div id="stats"></div>
 
     <footer>
-      
-      Project Hosted on <a href="https://github.com/Meeta14/pf_mars">Github</a>
+      Project Info.
     </footer>
 
   </body>

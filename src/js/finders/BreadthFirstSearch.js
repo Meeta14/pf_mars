@@ -25,7 +25,7 @@ BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
     if(sourceNode.x == endNode.x && sourceNode.y == endNode.y){return [];}
 
     var openList = [];
-    var foundDest = false;
+    // var foundDest = false;
     // making 2d array for visited list
     var values = grid.dimention();
     closedList=[];
@@ -60,31 +60,25 @@ BreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
          idx = idx+1;
          closedList[cell.x][cell.y] = true;
          cell.closed = true;
-
+         //if dest is found
+         if(cell.x == endNode.x && cell.y == endNode.y ){
+             return Util.backtrace(cellDetails, endNode);
+         }
          //get neighbours
          [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners)
          for (var i = 0; i < weights.length; i++) {
-            // check if the neighbour is the endnode
-            if(neighbours[i].x == endNode.x && neighbours[i].y == endNode.y){
-               neighbours[i].closed = true;
-               cellDetails[neighbours[i].x][neighbours[i].y].parent = cell;
-               foundDest = true;
-            }
-            // if it is not blocked(get neighbour func takes care of it) and not visited yet
-            else if(!(closedList[neighbours[i].x][neighbours[i].y] == true || neighbours[i].opened == true)){
+            //if it's in closed list or already in open list then ignore, else upsate it's parameter and push in open list
+            if(!(closedList[neighbours[i].x][neighbours[i].y] == true || neighbours[i].opened == true)){
                openList.push(neighbours[i]);
                neighbours[i].opened = true;
                cellDetails[neighbours[i].x][neighbours[i].y].parent = cell;
-            }
-
-
+            }//if
          }// end for loop
-             if(foundDest){break}
          cond = openList.length != idx;
     } //end while loop
 
-      if (foundDest == 0) {return 'not found'}
-      else{return Util.backtrace(cellDetails, endNode)}
+      console.log('not found');
+      return 0;
     };
 
 module.exports = BreadthFS;

@@ -169,7 +169,9 @@ AstarSearchBi.prototype.findPath = function(startX, startY, endX, endY, grid){
 
     } //end while loop
 
-     if (foundDest == 0) {return 'not found'}
+     if (foundDest == 0) {
+    console.log('not found');
+         return 0;}
      else{ console.log('error')};
 }
 module.exports = AstarSearchBi;

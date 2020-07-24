@@ -3,10 +3,9 @@ var Util     = require('../core/Util.js')
 var PriorityQueue=require('./PQ.js')
 
 class CellAttributes {
-    constructor(f, i, j,visitedby){
+    constructor(f, node ,visitedby){
       this.f = f;
-      this.parent_i = i
-      this.parent_j = j
+      this.parent = node;
       this.visitedby=visitedby;
     }
 }
@@ -43,13 +42,11 @@ BiDijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
     }
     // parameters of starting node
     cellDetails[sourceNode.x][sourceNode.y].f = 0.0;
-    cellDetails[sourceNode.x][sourceNode.y].parent_i = sourceNode.x;
-    cellDetails[sourceNode.x][sourceNode.y].parent_j = sourceNode.y;
+    cellDetails[sourceNode.x][sourceNode.y].parent = sourceNode;
     cellDetails[sourceNode.x][sourceNode.y].visitedby = 1;
     // parameters of end node
     cellDetails[endNode.x][endNode.y].f = 0.0;
-    cellDetails[endNode.x][endNode.y].parent_i = endNode.x;
-    cellDetails[endNode.x][endNode.y].parent_j = endNode.y;
+    cellDetails[endNode.x][endNode.y].parent = endNode;
     cellDetails[endNode.x][endNode.y].visitedby = 2;
 
 // // TODO: check if same node is being pushed (can it be pushed?)
@@ -71,8 +68,8 @@ BiDijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
           if(!neighbours[i].closed){
 
               if(cellDetails[neighbours[i].x][neighbours[i].y].visitedby==2){
-                  let path1= Util.backtrace2(cellDetails, neighbours[i]);   //path from endNode to neighbour
-                  let path2=Util.backtrace2(cellDetails, cell);    //path from sourceNode to cell
+                  let path1= Util.backtrace(cellDetails, neighbours[i]);   //path from endNode to neighbour
+                  let path2=Util.backtrace(cellDetails, cell);    //path from sourceNode to cell
                   let path=path2.concat(path1.reverse());
                   console.log("check1",path[0][0]==sourceNode.x && path[0][1]==sourceNode.y);
                   return path;
@@ -86,8 +83,7 @@ BiDijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
                   neighbours[i].opened=true;
                   cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
                   openList_source.push(neighbours[i]);
-                  cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
-                  cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
+                  cellDetails[neighbours[i].x][neighbours[i].y].parent=cell;
                     }//if
                   }//else
             }//if
@@ -115,15 +111,15 @@ BiDijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
                         neighbours[i].opened=true;
                         cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
                         openList_end.push(neighbours[i]);
-                        cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
-                        cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
+                        cellDetails[neighbours[i].x][neighbours[i].y].parent=cell;
                   }
                 }
             }//if
         }// end for loop
     } //end while loop
 
-return "not found";
+    console.log('not found');
+    return 0;
 
 }
 module.exports=BiDijkstra;

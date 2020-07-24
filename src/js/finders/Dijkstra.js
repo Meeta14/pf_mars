@@ -3,10 +3,9 @@ var Util     = require('../core/Util.js')
 var PriorityQueue=require('./PQ.js')
 
 class CellAttributes {
-    constructor(f, i, j){
+    constructor(f, node){
       this.f = f;
-      this.parent_i = i
-      this.parent_j = j
+      this.parent = node;
     }
 }
 
@@ -36,65 +35,55 @@ Dijkstra.prototype.findPath = function(startX, startY, endX, endY, grid){
     for(let i = 0; i < values[1]; i++) {
         for (let j = 0; j < values[0]; j++){
             cellDetails[i] = [...(cellDetails[i] ? cellDetails[i] : []),
-                new CellAttributes(Number.MAX_VALUE , -1, -1)
+                new CellAttributes(Number.MAX_VALUE ,-1)
         ];
       }
   }
     // parameters of starting node
     cellDetails[sourceNode.x][sourceNode.y].f = 0.0;
-    cellDetails[sourceNode.x][sourceNode.y].parent_i = sourceNode.x;
-    cellDetails[sourceNode.x][sourceNode.y].parent_j = sourceNode.y;
+    cellDetails[sourceNode.x][sourceNode.y].parent = sourceNode;
 
-// // TODO: check if same node is being pushed (can it be pushed?)
     openList.push(sourceNode);
 
     sourceNode.opened=true;
-
-    var foundDest = false; //flag variable to check if destination has been found
-
 
     while(!openList.isEmpty()){
         cell=openList.pop();
         cell.opened=false;
         cell.closed = true;
 
+//if dest is found then return
+        if(cell.x == endNode.x && cell.y == endNode.y ){
+            return Util.backtrace(cellDetails, endNode);
+        }
         //get neighbours
         [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners)
         for (var i = 0; i < weights.length; i++) {
-        	if(!neighbours[i].closed){
 
-        	if(neighbours[i].x==endNode.x && neighbours[i].y == endNode.y){
-        	foundDest=true;
-        	cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
-        	cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
-        	break;
-        }
-        else{
+            //if dest is still in open list
+        if(!neighbours[i].closed){
         	newf=cellDetails[cell.x][cell.y].f+weights[i];
+
+            //if the node is still un inspected
             if(cellDetails[neighbours[i].x][neighbours[i].y].f==Number.MAX_VALUE){
                 neighbours[i].opened=true;
                 cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
                 openList.push(neighbours[i]);
-                cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
-                cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
+                cellDetails[neighbours[i].x][neighbours[i].y].parent=cell;
             }
+            // or if there is a path that leads to same node with less number of steps
             else if(newf<cellDetails[neighbours[i].x][neighbours[i].y].f){
                 neighbours[i].opened=true;
                 cellDetails[neighbours[i].x][neighbours[i].y].f=newf;
                 openList._siftUp();
-                cellDetails[neighbours[i].x][neighbours[i].y].parent_i=cell.x;
-                cellDetails[neighbours[i].x][neighbours[i].y].parent_j=cell.y;
+                cellDetails[neighbours[i].x][neighbours[i].y].parent=cell;
 
-            }
-        }
-            if(foundDest){break}
-            }
+                }//else
+            }//if
         }// end for loop
-            if(foundDest){break}
     } //end while loop
 
-     if (foundDest == 0) {return 'not found'}
-     else{
-         return Util.backtrace2(cellDetails, endNode)}
+    console.log('not found');
+    return 0;
  };
 module.exports=Dijkstra;

@@ -116,7 +116,8 @@ BiBreadthFS.prototype.findPath = function(startX, startY, endX, endY, grid){
          cond2 = openListend.length != idx2;
     } //end while loop
 
-      return 'not found'
+    console.log('not found');
+    return 0;
     };
 
 module.exports = BiBreadthFS;

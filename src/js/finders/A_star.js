@@ -2,12 +2,11 @@ var Distance = require('./distance.js')
 var Util     = require('../core/Util.js')
 
 class CellAttributes {
-    constructor(f, g, h, i, j){
+    constructor(f, g, h,node){
       this.g = g;
       this.f = f;
       this.h = h;
-      this.parent_i = i
-      this.parent_j = j
+      this.parent = node;
     }
 }
 
@@ -54,14 +53,8 @@ AstarSearch.prototype.minFscore = function(openList,cellDetails){
 
 AstarSearch.prototype.successor = function(cellDetails, cell, parentNode, endNode, weight, closedList, grid, openList){
     htype = this.htype;
-    if(cell.x == endNode.x && cell.y == endNode.y){
-    cellDetails[cell.x][cell.y].parent_i = parentNode.x;
-    cellDetails[cell.x][cell.y].parent_j = parentNode.y;
-    return true;
-    // break;
-    }
 // If the successor is already on the closed list or if it is blocked(the get neighbors fun takes care of it ie, does not return blocked neighbours), then ignore it. Else do the following
-    else if (closedList[cell.x][cell.y] == false ) {
+     if (closedList[cell.x][cell.y] == false ) {
         gnew = cellDetails[parentNode.x][parentNode.y].g + weight;
         if(grid.isValleyAt(cell.x, cell.y) || grid.isValleyAt( parentNode.x,  parentNode.y)) { factor = grid.valleyweight}
         else{factor = grid.normal}
@@ -76,11 +69,9 @@ AstarSearch.prototype.successor = function(cellDetails, cell, parentNode, endNod
             cellDetails[cell.x][cell.y].f = fnew;
             cellDetails[cell.x][cell.y].g = gnew;
             cellDetails[cell.x][cell.y].h = hnew;
-            cellDetails[cell.x][cell.y].parent_i = parentNode.x;
-            cellDetails[cell.x][cell.y].parent_j = parentNode.y;
+            cellDetails[cell.x][cell.y].parent = parentNode;
             }
         }
-    return false;
 };
 
 AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
@@ -94,7 +85,6 @@ AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
     if(sourceNode.x == endNode.x && sourceNode.y == endNode.y){return [];}
 
     var openList = [];
-    var foundDest = false;
     // making 2d array for closed list
     var values = grid.dimention();
     closedList=[];
@@ -111,7 +101,7 @@ AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
     for(let i = 0; i < values[1]; i++) {
         for (let j = 0; j < values[0]; j++){
             cellDetails[i] = [...(cellDetails[i] ? cellDetails[i] : []),
-                new CellAttributes(Number.MAX_VALUE , Number.MAX_VALUE , Number.MAX_VALUE , -1, -1)
+                new CellAttributes(Number.MAX_VALUE , Number.MAX_VALUE , Number.MAX_VALUE , -1, )
         ];
       }
   }
@@ -119,8 +109,7 @@ AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
     cellDetails[sourceNode.x][sourceNode.y].f = 0.0;
     cellDetails[sourceNode.x][sourceNode.y].g = 0.0;
     cellDetails[sourceNode.x][sourceNode.y].h = 0.0;
-    cellDetails[sourceNode.x][sourceNode.y].parent_i = sourceNode.x;
-    cellDetails[sourceNode.x][sourceNode.y].parent_j = sourceNode.y;
+    cellDetails[sourceNode.x][sourceNode.y].parent = sourceNode;
 
 // // TODO: check if same node is being pushed (can it be pushed?)
     openList.push(sourceNode);
@@ -133,18 +122,21 @@ AstarSearch.prototype.findPath = function(startX, startY, endX, endY, grid){
         if(index>-1){openList.splice(index, 1)}
         closedList[cell.x][cell.y] = true;
         cell.closed = true;
+
+        if(cell.x == endNode.x && cell.y == endNode.y ){
+            return Util.backtrace(cellDetails, endNode);
+        }
+
         //get neighbours
         [neighbours,weights] = grid.getNeighbours(cell,this.diagonal, true, this.dontCrossCorners);
         for (var i = 0; i < weights.length; i++) {
-            foundDest = this.successor(cellDetails, neighbours[i], cell, endNode, weights[i], closedList, grid, openList);
-            if(foundDest){break}
+            this.successor(cellDetails, neighbours[i], cell, endNode, weights[i], closedList, grid, openList);
         }// end for loop
-            if(foundDest){break}
     } //end while loop
 
-     if (foundDest == 0) {return []}
-     else{
-         return Util.backtrace2(cellDetails, endNode);}
+//if not found
+    console.log('not found');
+    return 0;
  };
 
 module.exports = AstarSearch;

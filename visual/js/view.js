@@ -34,7 +34,7 @@ var View = {
             'stroke-opacity': 0.2,
         },
         hill: {
-            fill: '#ff8533',  //orange
+            fill: '#662900',  //brown
             'stroke-opacity': 0.2,
         },
         valley: {

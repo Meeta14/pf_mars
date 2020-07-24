@@ -427,7 +427,7 @@ getPath: function(mask,gr,pos,n, path){
                             var dist = finder.findPath(
                                     this.endNodes[i][0], this.endNodes[i][1], this.endNodes[j][0], this.endNodes[j][1], Grid
                                 );
-                                if(dist==0){continue;}
+                                
                                 par=par.concat(dist);
                                 temp = temp + PF.Util.pathLength(dist)
                     }
@@ -452,7 +452,6 @@ getPath: function(mask,gr,pos,n, path){
                         var dist = finder.findPath(
                                 this.endNodes[i][0], this.endNodes[i][1], this.endNodes[j][0], this.endNodes[j][1], Grid
                             );
-                        if(dist==0){continue;}
                         var len = PF.Util.pathLength(dist);
                         graph_nodes[i][j]=new Array(2);
                         graph_nodes[j][i]=new Array(2);

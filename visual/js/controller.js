@@ -476,6 +476,7 @@ getPath: function(mask,gr,pos,n, path){
                 }   
 
                 this.path = pathArray;
+                this.len=len;
 
                 break;
 

@@ -1,9 +1,4 @@
-/**
- * The visualization controller will works as a state machine.
- * See files under the `doc` folder for transition descriptions.
- * See https://github.com/jakesgordon/javascript-state-machine
- * for the document of the StateMachine module.
- */
+
 var Controller = StateMachine.create({
     initial: 'none',
     events: [
@@ -131,12 +126,11 @@ $.extend(Controller, {
     operationsPerSecond: 300,
 
 
-    getDest: function(){
-            // var destattr =$('input[name=dest]:checked').val();
+    getDest: function(){. // returns number of destinations
         var destattr = Panel.getnumdest();
         return destattr;
     },
-    getchoice: function(){
+    getchoice: function(){ //returns type of terrain chosen
       var selected_choice= $('input[name=terrain]:checked').val();
       return selected_choice;
     },
@@ -185,7 +179,7 @@ $.extend(Controller, {
     },
     ondrawValley: function(event, from, to, gridX, gridY) {
         this.setValleyAt(gridX, gridY, true);
-        // => drawingWall
+        // => drawingValley
     },
     Connect : function(x,y, dir){
         if(dir == 1){ //east
@@ -210,17 +204,15 @@ $.extend(Controller, {
         }
     },
 
-    GetNeighbours : function(x , y, visited, value){
+    GetNeighbours : function(x , y, visited, value){  //for maze
     	neighbours_x=[];
         neighbours_y=[];
     	dir = [];
         s4 = false; s1 = false;
         s2 = false; s3 = false;
-    	// var node =new Node(0,0);
     	// ↑
     	if(y-2 >= 0) {
             if(visited[x][y-2] == value){
-    		// node.x = x;node.y = y-2;	neighbours.push(node);
             neighbours_x.push(x);
             neighbours_y.push(y-2);
     		dir.push(4);
@@ -230,7 +222,6 @@ $.extend(Controller, {
     	// →
     	if(x+2 < this.gridSize[0] ){
             if( visited[x+2][y] == value) {
-    		// node.x = x+2;node.y = y;neighbours.push(node);
             neighbours_x.push(x+2);
             neighbours_y.push(y);
     		dir.push(1);
@@ -239,7 +230,6 @@ $.extend(Controller, {
     	}
     	if(y+2 < this.gridSize[1]){
             if(visited[x][y+2] == value) {
-    		// node.x = x;node.y = y+2;neighbours.push(node);
             neighbours_x.push(x);
             neighbours_y.push(y+2);
     		dir.push(2);
@@ -248,7 +238,6 @@ $.extend(Controller, {
     	}
     	if(x-2 >= 0){
             if(visited[x-2][y] == value) {
-    		// node.x = x-2;node.y = y;neighbours.push(node);
             neighbours_x.push(x-2);
             neighbours_y.push(y);
     		dir.push(3);
@@ -294,8 +283,8 @@ $.extend(Controller, {
     				this.grid.setWalkableAt(neighbours_x[i], neighbours_y[i] ,true);
     				View.setAttributeAt(neighbours_x[i], neighbours_y[i], 'walkable', true);
     				this.Connect(cell[0], cell[1], dir[i]);
-    			}//if
-    		}//for
+    			}//end of if
+    		}//end of for
     		openList.push([neighbours_x[idx],neighbours_y[idx]]);
             visited[neighbours_x[idx]][neighbours_y[idx]] = true;
     		this.grid.setWalkableAt(neighbours_x[idx], neighbours_y[idx] ,true);
@@ -381,34 +370,33 @@ $.extend(Controller, {
 
         console.log('ending drawing maze')
 },
-getPath: function(mask,gr,pos,n, path){
+getPath: function(graph,mask,pos,n, path){  //Uses Bellman-Held-Karp algorithm 
         if (mask === ((1<<n)-1)) {
             path.p.push(pos);
             return 0;
         }
+        let min = Number.MAX_VALUE;
 
-        var min_len = Number.MAX_VALUE;
-
-        for (var i = 1; i < n; i++) {
+        for (let i = 1; i < n; i++) {
             if (!(mask & (1<<i))) {
-                var new_o = {p: new Array};
+                let new_path = {p: new Array};
 
-                if(!gr[pos][i][0]){
-                    path.p = new_o.p;
+                if(!graph[pos][i][0]){
+                    path.p = new_path.p;
                     return 0;
                 }
 
-                var new_len = Controller.getPath(mask|(1<<i), gr, i, n, new_o);
-                new_len += gr[pos][i][0] ;
+                let new_dist = Controller.getPath(graph,mask|(1<<i), i, n, new_path);
+                new_dist += graph[pos][i][0] ;
 
-                if(new_len < min_len) {
-                    min_len = new_len;
-                    path.p = new_o.p;
+                if(new_dist < min) {
+                    min = new_dist;
+                    path.p = new_path.p;
                 }
             }
         }
         path.p.push(pos);
-        return min_len;
+        return min;
     },
     
     pathlength : function(path){
@@ -428,13 +416,12 @@ getPath: function(mask,gr,pos,n, path){
     onsearch: function(event, from, to) {
         var timeStart, timeEnd;
         timeStart = window.performance ? performance.now() : Date.now();
-        // console.log(this.getpriority());
         let priority=$('input[name=priority]:checked').val();
         switch(priority){
             case "1":
                 var temp = 0;
                 par = [];
-                for(var i = 0; i < this.endNodes.length-1; i++){
+                for(var i = 0; i < this.endNodes.length-1; i++){.  
                         j = i+1
                             var Grid = this.grid.clone();
                             var finder = Panel.getFinder();
@@ -452,47 +439,41 @@ getPath: function(mask,gr,pos,n, path){
             
             case "0":
                 size=this.endNodes.length;
-                // var graph_dist=new Array(size);
                 var graph_nodes=new Array(size);
                 for(let i=0;i<graph_nodes.length;++i){
-                    // graph_dist[i]=new Array(size);
                     graph_nodes[i]=new Array(size);
 
                 }
 
-                for(var i=0;i<graph_nodes.length;i++){
-                    for(var j=i;j<graph_nodes.length;j++){
+                for(let i=0;i<graph_nodes.length;i++){   // Finds distance between every pair of nodes
+                    for(let j=i;j<graph_nodes.length;j++){
                         var Grid = this.grid.clone();
                         var finder = Panel.getFinder();
                         if(finder ==  undefined ){ window.alert("Please select search Algo");}
-                        var dist = finder.findPath(
+                        let path = finder.findPath(
                                 this.endNodes[i][0], this.endNodes[i][1], this.endNodes[j][0], this.endNodes[j][1], Grid
                             );
                         var len = PF.Util.pathLength(dist);
                         graph_nodes[i][j]=new Array(2);
                         graph_nodes[j][i]=new Array(2);
                         graph_nodes[j][i][0]=len;
-                        graph_nodes[j][i][1]=dist;
+                        graph_nodes[j][i][1]=path;
                         graph_nodes[i][j][0]=len;
-                        graph_nodes[i][j][1]= dist.reverse();
+                        graph_nodes[i][j][1]= path.reverse();
 
                     }
                 }
-
-
-
-                pathArray = new Array();
-                path=new Array();
-                len = this.getPath(1,graph_nodes,0,size, path);
-                f = path.p.reverse();
-                l = f.length;
-
-                for(var j=0; j<l-1; j++){
-                     if(f[j+1] > f[j] ) graph_nodes[f[j]][f[j+1]][1].reverse();
-                     pathArray = pathArray.concat(graph_nodes[f[j]][f[j+1]][1]); 
+                let path=new Array();
+                let min_distance = this.getPath(graph_nodes,1,0,size, path);
+                let f = path.p.reverse();
+                let l = f.length;
+                let final_path=new Array();
+                for(let j=0; j<l-1; j++){
+                     if(f[j+1] > f[j] ){ graph_nodes[f[j]][f[j+1]][1].reverse();};
+                     final_path = final_path.concat(graph_nodes[f[j]][f[j+1]][1]); 
                 }   
 
-                this.path = pathArray;
+                this.path = final_path;
                 this.len=len;
 
                 break;
